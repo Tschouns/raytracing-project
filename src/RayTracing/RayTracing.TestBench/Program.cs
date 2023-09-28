@@ -2,6 +2,7 @@
 using RayTracing.CanvasClient;
 using System.Drawing;
 using System.Net.Sockets;
+using System.Numerics;
 
 Console.WriteLine("Hello, World!");
 

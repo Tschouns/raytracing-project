@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RayTracing.CanvasClient", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RayTracing.Base", "RayTracing.Base\RayTracing.Base.csproj", "{FEC33976-108B-4B14-8972-3B3CB5930100}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RayTracing.Math", "RayTracing.Math\RayTracing.Math.csproj", "{84D7659A-39C8-4B4D-96F4-AF1064B11C81}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{FEC33976-108B-4B14-8972-3B3CB5930100}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FEC33976-108B-4B14-8972-3B3CB5930100}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FEC33976-108B-4B14-8972-3B3CB5930100}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84D7659A-39C8-4B4D-96F4-AF1064B11C81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84D7659A-39C8-4B4D-96F4-AF1064B11C81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84D7659A-39C8-4B4D-96F4-AF1064B11C81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84D7659A-39C8-4B4D-96F4-AF1064B11C81}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
