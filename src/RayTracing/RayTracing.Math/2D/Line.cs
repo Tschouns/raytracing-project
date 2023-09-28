@@ -1,10 +1,12 @@
 ﻿
 namespace RayTracing.Math._2D
 {
-    public class Line
+    public struct Line
     {
         public Line()
         {
+            this.PointA = new Vector2();
+            this.PointB = new Vector2();
         }
 
         public Line(Vector2 pointA, Vector2 pointB)
