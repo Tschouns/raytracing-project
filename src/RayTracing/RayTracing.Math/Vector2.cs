@@ -1,5 +1,4 @@
-﻿
-namespace RayTracing.Math
+﻿namespace RayTracing.Math
 {
     public struct Vector2
     {
@@ -25,6 +24,13 @@ namespace RayTracing.Math
                 this.Y + b.Y);
         }
 
+        public Vector2 Invert()
+        {
+            return new Vector2(
+                -this.X,
+                -this.Y);
+        }
+
         public Vector2 Scale(float c)
         {
             return new Vector2(
@@ -32,9 +38,19 @@ namespace RayTracing.Math
                 this.Y * c);
         }
 
+        public static Vector2 operator - (Vector2 v)
+        {
+            return v.Invert();
+        }
+
         public static Vector2 operator + (Vector2 a, Vector2 b)
         {
             return a.Add(b);
+        }
+
+        public static Vector2 operator - (Vector2 a, Vector2 b)
+        {
+            return a.Add(-b);
         }
 
         public static Vector2 operator * (Vector2 v, float c)
