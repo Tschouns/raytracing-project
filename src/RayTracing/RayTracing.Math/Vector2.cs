@@ -38,6 +38,16 @@
                 this.Y * c);
         }
 
+        public float Length()
+        {
+            return (float)System.Math.Sqrt(this.LengthSquared());
+        }
+
+        public float LengthSquared()
+        {
+            return this.X * this.X + this.Y * this.Y;
+        }
+
         public static Vector2 operator - (Vector2 v)
         {
             return v.Invert();
