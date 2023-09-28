@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34031.279
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RayTracing.TestBench", "RayTracing.TestBench\RayTracing.TestBench.csproj", "{87F42393-284E-46C6-A89A-FB51CE92CAE0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{87F42393-284E-46C6-A89A-FB51CE92CAE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87F42393-284E-46C6-A89A-FB51CE92CAE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87F42393-284E-46C6-A89A-FB51CE92CAE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87F42393-284E-46C6-A89A-FB51CE92CAE0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {27089744-0FAB-4214-BAB7-513F25F50800}
+	EndGlobalSection
+EndGlobal
