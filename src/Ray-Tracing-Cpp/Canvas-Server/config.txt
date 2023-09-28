@@ -1,0 +1,5 @@
+position     609 56
+size         798 567
+tcp-port     9012
+web-port     9013
+image-path   C:/Users/jw/Desktop

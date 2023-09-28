@@ -1,0 +1,5 @@
+position     670 225
+size         600 400
+tcp-port     9012
+web-port     9013
+image-path   .
