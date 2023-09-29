@@ -11,6 +11,7 @@ tcpClient.Connect("127.0.0.1", 9012);
 
 var canvasClient = new CanvasTcpClient(tcpClient);
 
-Examples.DrawLine(canvasClient);
+//Examples.DrawLine(canvasClient);
+Examples.DrawIntersectingLines(canvasClient);
 
 tcpClient.Close();
