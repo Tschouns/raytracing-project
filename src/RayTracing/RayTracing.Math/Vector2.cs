@@ -17,6 +17,11 @@
         public float X { get; set; }
         public float Y { get; set; }
 
+        public override string ToString()
+        {
+            return $"({this.X};{this.Y})";
+        }
+
         public Vector2 Add(Vector2 b)
         {
             return new Vector2(
