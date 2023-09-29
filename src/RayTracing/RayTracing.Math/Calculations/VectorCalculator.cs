@@ -8,7 +8,7 @@ namespace RayTracing.Math.Calculations
             return u.X * v.Y - u.Y * v.X;
         }
 
-        public static Vector2 Intersect(Line2D line1, Line2D line2)
+        public static Vector2? Intersect(Line2D line1, Line2D line2)
         {
             var lineVector1 = line1.PointB - line1.PointA;
             var lineVector2 = line2.PointB - line2.PointA;
@@ -18,6 +18,10 @@ namespace RayTracing.Math.Calculations
             var c = line2.PointA - line1.PointA;
 
             var denom = Determinant(a, b);
+            if (denom == 0)
+            {
+                return null;
+            }
 
             var x = Determinant(c, b) / denom;
             var y = Determinant(a, c) / denom;

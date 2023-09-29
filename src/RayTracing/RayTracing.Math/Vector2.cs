@@ -43,6 +43,11 @@
                 this.Y * c);
         }
 
+        public Vector2 Norm()
+        {
+            return this.Scale(1 / this.Length());
+        }
+
         public float Length()
         {
             return (float)System.Math.Sqrt(this.LengthSquared());
