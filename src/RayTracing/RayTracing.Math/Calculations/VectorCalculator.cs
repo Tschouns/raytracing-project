@@ -23,10 +23,10 @@ namespace RayTracing.Math.Calculations
                 return null;
             }
 
-            var x = Determinant(c, b) / denom;
-            var y = Determinant(a, c) / denom;
+            var lambda = Determinant(c, b) / denom;
+            var intersection = line1.PointA + lambda * lineVector1;
 
-            return new Vector2(x, y);
+            return intersection;
         }
     }
 }
