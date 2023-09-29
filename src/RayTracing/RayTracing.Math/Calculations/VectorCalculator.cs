@@ -5,7 +5,7 @@ namespace RayTracing.Math.Calculations
     {
         public static float Determinant(Vector2 u, Vector2 v)
         {
-            return u.X * v.Y - u.Y * v.X;
+            return (u.X * v.Y) - (u.Y * v.X);
         }
 
         public static Vector2? Intersect(Line2D line1, Line2D line2)

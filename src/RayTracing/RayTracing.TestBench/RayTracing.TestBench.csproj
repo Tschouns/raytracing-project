@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\RayTracing.CanvasClient\RayTracing.CanvasClient.csproj" />
+    <ProjectReference Include="..\RayTracing.Math\RayTracing.Math.csproj" />
   </ItemGroup>
 
 </Project>
