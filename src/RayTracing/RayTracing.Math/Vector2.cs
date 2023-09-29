@@ -19,7 +19,7 @@
 
         public override string ToString()
         {
-            return $"({this.X};{this.Y})";
+            return $"{this.X};{this.Y}";
         }
 
         public Vector2 Add(Vector2 b)
@@ -43,11 +43,6 @@
                 this.Y * c);
         }
 
-        public Vector2 Norm()
-        {
-            return this.Scale(1 / this.Length());
-        }
-
         public float Length()
         {
             return (float)System.Math.Sqrt(this.LengthSquared());
@@ -56,6 +51,11 @@
         public float LengthSquared()
         {
             return this.X * this.X + this.Y * this.Y;
+        }
+
+        public Vector2 Norm()
+        {
+            return this.Scale(1 / this.Length());
         }
 
         public static Vector2 operator - (Vector2 v)
