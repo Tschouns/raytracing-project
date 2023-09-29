@@ -8,23 +8,34 @@ namespace RayTracing.Math.Calculations
             return (u.X * v.Y) - (u.Y * v.X);
         }
 
+        /// <summary>
+        /// Calculates the intersection of the two specified lines.
+        /// </summary>
         public static Vector2? Intersect(Line2D line1, Line2D line2)
         {
-            var lineVector1 = line1.PointB - line1.PointA;
-            var lineVector2 = line2.PointB - line2.PointA;
+            return Intersect(
+                line1.PointA,
+                line1.PointB - line1.PointA,
+                line2.PointA,
+                line2.PointB - line2.PointA);
+        }
 
-            var a = lineVector1;
-            var b = -lineVector2;
-            var c = line2.PointA - line1.PointA;
-
-            var denom = Determinant(a, b);
+        /// <summary>
+        /// Calculates the intersection of two lines, represented as:
+        /// A: r = p + lambda * u
+        /// B: r = q + mu * v
+        /// </summary>
+        public static Vector2? Intersect(Vector2 p, Vector2 u, Vector2 q, Vector2 v)
+        {
+            var denom = Determinant(u, -v);
             if (denom == 0)
             {
                 return null;
             }
 
-            var lambda = Determinant(c, b) / denom;
-            var intersection = line1.PointA + lambda * lineVector1;
+            var r = q - p;
+            var lambda = Determinant(r, -v) / denom;
+            var intersection = p + lambda * u;
 
             return intersection;
         }
