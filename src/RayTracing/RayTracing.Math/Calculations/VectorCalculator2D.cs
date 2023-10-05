@@ -1,7 +1,7 @@
 ﻿
 namespace RayTracing.Math.Calculations
 {
-    public static class VectorCalculator
+    public static class VectorCalculator2D
     {
         public static float Determinant(Vector2 u, Vector2 v)
         {

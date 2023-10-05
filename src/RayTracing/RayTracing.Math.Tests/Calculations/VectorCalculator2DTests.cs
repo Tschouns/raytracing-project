@@ -2,7 +2,7 @@ using RayTracing.Math.Calculations;
 
 namespace RayTracing.Math.Tests.Calculations
 {
-    public class VectorCalculatorTests
+    public class VectorCalculator2DTests
     {
         [Fact]
         public void Intersect_45DegLeftRight_ReturnsExpectedResult()
@@ -55,7 +55,7 @@ namespace RayTracing.Math.Tests.Calculations
             Vector2? expectedIntersection)
         {
             // Act
-            var actualIntersection = VectorCalculator.Intersect(line1, line2);
+            var actualIntersection = VectorCalculator2D.Intersect(line1, line2);
 
             // Assert
             Assert.Equal(expectedIntersection, actualIntersection);

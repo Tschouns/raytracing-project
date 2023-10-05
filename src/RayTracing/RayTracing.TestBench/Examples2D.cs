@@ -49,7 +49,7 @@ namespace RayTracing.TestBench
                 canvas.Pixel((int)r.X, (int)r.Y, Color.GreenYellow);
             }
 
-            var i = VectorCalculator.Intersect(p, u, q, v)!;
+            var i = VectorCalculator2D.Intersect(p, u, q, v)!;
             canvas.Pixel((int)i.Value.X, (int)i.Value.Y, Color.Red);
         }
     }
