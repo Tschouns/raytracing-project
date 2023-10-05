@@ -5,7 +5,7 @@ namespace RayTracing.Math.Tests.Calculations
     public class VectorCalculator2DTests
     {
         [Fact]
-        public void Intersect_45DegLeftRight_ReturnsExpectedResult()
+        public void Intersect_45DegLeftRight_ReturnsExpectedIntersection()
         {
             this.Intersect_GivenLines_ReturnsExpectedResult(
                 new Line2D(0, 0, 1, 1),
@@ -14,7 +14,7 @@ namespace RayTracing.Math.Tests.Calculations
         }
 
         [Fact]
-        public void Intersect_45DegRightLeft_ReturnsExpectedResult()
+        public void Intersect_45DegRightLeft_ReturnsExpectedIntersection()
         {
             this.Intersect_GivenLines_ReturnsExpectedResult(
                 new Line2D(1, 1, 0, 0),
@@ -23,7 +23,7 @@ namespace RayTracing.Math.Tests.Calculations
         }
 
         [Fact]
-        public void Intersect_90Deg_ReturnsExpectedResult()
+        public void Intersect_90Deg_ReturnsExpectedIntersection()
         {
             this.Intersect_GivenLines_ReturnsExpectedResult(
                 new Line2D(0, 0, 1, 0),
@@ -32,7 +32,7 @@ namespace RayTracing.Math.Tests.Calculations
         }
 
         [Fact]
-        public void Intersect_NegativeSpace_ReturnsExpectedResult()
+        public void Intersect_NegativeSpace_ReturnsExpectedIntersection()
         {
             this.Intersect_GivenLines_ReturnsExpectedResult(
                 new Line2D(-1, -1, -8, -1),
@@ -41,7 +41,7 @@ namespace RayTracing.Math.Tests.Calculations
         }
 
         [Fact]
-        public void Intersect_ParallelLines_ReturnsExpectedResult()
+        public void Intersect_ParallelLines_ReturnsNull()
         {
             this.Intersect_GivenLines_ReturnsExpectedResult(
                 new Line2D(1, 1, 2, 2),

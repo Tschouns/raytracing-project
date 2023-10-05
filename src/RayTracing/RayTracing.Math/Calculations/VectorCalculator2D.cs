@@ -1,4 +1,6 @@
 ﻿
+using RayTracing.Base;
+
 namespace RayTracing.Math.Calculations
 {
     public static class VectorCalculator2D
@@ -13,6 +15,9 @@ namespace RayTracing.Math.Calculations
         /// </summary>
         public static Vector2? Intersect(Line2D line1, Line2D line2)
         {
+            Argument.AssertNotNull(line1, nameof(line1));
+            Argument.AssertNotNull(line2, nameof(line2));
+
             return Intersect(
                 line1.PointA,
                 line1.PointB - line1.PointA,
@@ -22,19 +27,19 @@ namespace RayTracing.Math.Calculations
 
         /// <summary>
         /// Calculates the intersection of two lines, represented as:
-        /// A: r = p + lambda * u
-        /// B: r = q + mu * v
+        /// 1: r = p + lambda * u
+        /// 2: r = q + mu * v
         /// </summary>
         public static Vector2? Intersect(Vector2 p, Vector2 u, Vector2 q, Vector2 v)
         {
-            var denom = Determinant(u, -v);
-            if (denom == 0)
+            var d = Determinant(u, -v);
+            if (d == 0)
             {
                 return null;
             }
 
             var r = q - p;
-            var lambda = Determinant(r, -v) / denom;
+            var lambda = Determinant(r, -v) / d;
             var intersection = p + lambda * u;
 
             return intersection;
