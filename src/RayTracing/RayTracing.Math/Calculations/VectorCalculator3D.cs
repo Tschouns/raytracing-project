@@ -45,7 +45,7 @@ namespace RayTracing.Math.Calculations
                 return null;
             }
 
-            throw new Exception();
+            var mu = Determinant()
         }
     }
 }
