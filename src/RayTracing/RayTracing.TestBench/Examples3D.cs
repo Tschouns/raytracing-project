@@ -22,6 +22,22 @@ namespace RayTracing.TestBench
                 new Vector3 (194, 298, 294),
                 new Vector3 (152, 34, 212),
                 new Vector3 (206, 150, 366),
+
+                new Vector3 (362, 218, 259),
+                new Vector3 (206, 150, 366),
+                new Vector3 (152, 34, 212),
+
+                new Vector3 (362, 218, 259),
+                new Vector3 (152, 34, 212),
+                new Vector3 (307, 102, 106),
+
+                new Vector3 (307, 102, 106),
+                new Vector3 (152, 34, 212),
+                new Vector3 (38, 182, 141),
+
+                new Vector3 (307, 102, 106),
+                new Vector3 (38, 182, 141),
+                new Vector3 (194, 250, 34),
             };
 
             for (int i = 0; i < points.Length / 3; i++)
