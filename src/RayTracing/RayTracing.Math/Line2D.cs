@@ -1,6 +1,6 @@
 ﻿namespace RayTracing.Math
 {
-    public struct Line2D
+    public class Line2D
     {
         public Line2D()
         {
