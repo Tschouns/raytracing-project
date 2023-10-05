@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace RayTracing.TestBench
 {
-    internal static class Examples
+    internal static class Examples2D
     {
         public static void DrawLine(ICanvas canvas)
         {
