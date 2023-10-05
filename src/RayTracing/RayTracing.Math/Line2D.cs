@@ -1,5 +1,8 @@
 ﻿namespace RayTracing.Math
 {
+    /// <summary>
+    /// Represents a line in 2D space, going through two points A and B.
+    /// </summary>
     public class Line2D
     {
         public Line2D()

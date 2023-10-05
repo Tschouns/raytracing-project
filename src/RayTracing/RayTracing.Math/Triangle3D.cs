@@ -1,6 +1,9 @@
 ﻿
 namespace RayTracing.Math
 {
+    /// <summary>
+    /// Represents a triangle in 3D space, specifying three corners A, B, and C.
+    /// </summary>
     public class Triangle3D
     {
         public Triangle3D()

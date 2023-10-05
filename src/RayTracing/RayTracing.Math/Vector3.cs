@@ -1,6 +1,9 @@
 ﻿
 namespace RayTracing.Math
 {
+    /// <summary>
+    /// Represents a vector in 3D space.
+    /// </summary>
     public struct Vector3
     {
         public Vector3()
