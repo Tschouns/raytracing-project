@@ -39,13 +39,18 @@ namespace RayTracing.Math.Calculations
         /// </summary>
         public static Vector3? Intersect(Vector3 p, Vector3 u, Vector3 q, Vector3 v, Vector3 w)
         {
+            // lambda * u - mu * v - nu * w = q - p
+
             var d = Determinant(u, -v, -w);
             if (d == 0)
             {
                 return null;
             }
 
-            var mu = Determinant()
+            var lambda = Determinant(q - p, -v, -w);
+            var intersection = p + lambda * u;
+
+            return intersection;
         }
     }
 }
