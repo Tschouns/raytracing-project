@@ -10,13 +10,27 @@ namespace RayTracing.Math.Tests.Calculations
         {
             this.Intersect_GivenLines_ReturnsExpectedResult(
                 new Line3D(
-                    pointA: new Vector3(1, 1, -1),
-                    pointB: new Vector3(1, 1, 1)),
+                    pointA: new Vector3(1, 1, -10),
+                    pointB: new Vector3(1, 1, -9)),
                 new Plane3D(
                     pointP: new Vector3(0, 0, 0),
                     vectorU: new Vector3(3, 0, 0),
                     vectorV: new Vector3(0, 5, 0)),
                 new Vector3(1, 1, 0));
+        }
+
+        [Fact]
+        public void Intersect_AngledLineThroughTiltedPlane_ReturnsExpectedIntersection()
+        {
+            this.Intersect_GivenLines_ReturnsExpectedResult(
+                new Line3D(
+                    pointA: new Vector3(-5, 5, 30),
+                    pointB: new Vector3(-5, 5, 29)),
+                new Plane3D(
+                    pointP: new Vector3(-2, 3, 7),
+                    vectorU: new Vector3(1, 2, -1),
+                    vectorV: new Vector3(-1, 2, -1)),
+                new Vector3(-5, 5, 6));
         }
 
         [Fact]
