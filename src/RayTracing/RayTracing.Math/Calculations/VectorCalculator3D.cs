@@ -32,6 +32,22 @@ namespace RayTracing.Math.Calculations
         }
 
         /// <summary>
+        /// Calculates the intersection between a specified line with a specified triangle.
+        /// </summary>
+        public static Vector3? IntersectTriangle(Line3D line, Triangle3D triangle)
+        {
+            Argument.AssertNotNull(line, nameof(line));
+            Argument.AssertNotNull(triangle, nameof(triangle));
+
+            return IntersectTriangle(
+                line.PointA,
+                line.PointB - line.PointA,
+                triangle.CornerA,
+                triangle.CornerB - triangle.CornerA,
+                triangle.CornerC - triangle.CornerA);
+        }
+
+        /// <summary>
         /// Calculates the intersection between a specified line with a specified plane, represented
         /// as follows:
         /// Line: r = p + lambda * u
@@ -48,6 +64,46 @@ namespace RayTracing.Math.Calculations
             }
 
             var lambda = Determinant(q - p, -v, -w) / d;
+            var intersection = p + lambda * u;
+
+            return intersection;
+        }
+
+        /// <summary>
+        /// Calculates the intersection between a specified line with a specified triangle area, represented
+        /// as follows:
+        /// Line: r = p + lambda * u
+        /// Triangle: corner point q, edge vector v, edge vector w
+        /// </summary>
+        public static Vector3? IntersectTriangle(Vector3 p, Vector3 u, Vector3 q, Vector3 v, Vector3 w)
+        {
+            // lambda * u - mu * v - nu * w = q - p
+
+            var d = Determinant(u, -v, -w);
+            if (d == 0)
+            {
+                return null;
+            }
+
+            var qp = q - p;
+            var mu = Determinant(u, qp, -w) / d;
+            if (mu < 0)
+            {
+                return null;
+            }
+
+            var nu = Determinant(u, -v, qp) / d;
+            if (nu < 0)
+            {
+                return null;
+            }
+
+            if (mu + nu > 1)
+            {
+                return null;
+            }
+
+            var lambda = Determinant(qp, -v, -w) / d;
             var intersection = p + lambda * u;
 
             return intersection;

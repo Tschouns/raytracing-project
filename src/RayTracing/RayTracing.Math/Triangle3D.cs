@@ -8,16 +8,16 @@ namespace RayTracing.Math
     {
         public Triangle3D()
         {
-            this.PointA = new Vector3();
-            this.PointB = new Vector3();
-            this.PointC = new Vector3();
+            this.CornerA = new Vector3();
+            this.CornerB = new Vector3();
+            this.CornerC = new Vector3();
         }
 
-        public Triangle3D(Vector3 pointA, Vector3 pointB, Vector3 pointC)
+        public Triangle3D(Vector3 cornerA, Vector3 cornerB, Vector3 cornerC)
         {
-            this.PointA = pointA;
-            this.PointB = pointB;
-            this.PointC = pointC;
+            this.CornerA = cornerA;
+            this.CornerB = cornerB;
+            this.CornerC = cornerC;
         }
 
         public Triangle3D(
@@ -31,8 +31,8 @@ namespace RayTracing.Math
         {
         }
 
-        public Vector3 PointA { get; set; }
-        public Vector3 PointB { get; set; }
-        public Vector3 PointC { get; set; }
+        public Vector3 CornerA { get; set; }
+        public Vector3 CornerB { get; set; }
+        public Vector3 CornerC { get; set; }
     }
 }

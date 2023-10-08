@@ -56,9 +56,9 @@ namespace RayTracing.TestBench
             Argument.AssertNotNull(canvas, nameof(canvas));
             Argument.AssertNotNull(triangle, nameof(triangle));
 
-            DrawLine(canvas, triangle.PointA, triangle.PointB);
-            DrawLine(canvas, triangle.PointB, triangle.PointC);
-            DrawLine(canvas, triangle.PointC, triangle.PointA);
+            DrawLine(canvas, triangle.CornerA, triangle.CornerB);
+            DrawLine(canvas, triangle.CornerB, triangle.CornerC);
+            DrawLine(canvas, triangle.CornerC, triangle.CornerA);
         }
 
         private static void DrawLine(ICanvas canvas, Vector3 a, Vector3 b)
