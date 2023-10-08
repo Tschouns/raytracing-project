@@ -54,7 +54,9 @@ namespace RayTracing.Rendering
                 return null;
             }
 
-            return new RayHit(firstHit.Value);
+            var distance = (firstHit.Value - Origin).Length();
+
+            return new RayHit(firstHit.Value, distance);
         }
     }
 }

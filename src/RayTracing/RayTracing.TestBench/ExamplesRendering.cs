@@ -30,12 +30,12 @@ namespace RayTracing.TestBench
                 new Triangle3D(v4, v1, v8),
             };
 
-            ushort resX = 800;
-            ushort resY = 600;
+            ushort resX = 1200;
+            ushort resY = 1200;
 
             // Setup camera.
             var camera = new Camera(resX, resY);
-            camera.Position = new Vector3(5, 4, -12);
+            camera.Position = new Vector3(4, 5, -15);
             camera.LookingDirection = new Vector3(-1, -2, 7);
             camera.FocalLength *= 2;
 
@@ -43,21 +43,26 @@ namespace RayTracing.TestBench
 
             // Render image.
             canvas.Size(resX, resY);
-            var viewDistance = 20f;
 
             foreach (var pixel in pixelRays)
             {
-                var hit = pixel.Ray.DetectNearestHit(triables);
-                if (hit == null)
-                {
-                    canvas.Pixel(pixel.X, pixel.Y, Color.White);
-                    continue;
-                }
-
-                var distance = (camera.Position - hit.Position).Length();
-                var color = FogColor(Color.Red, distance, viewDistance);
-                canvas.Pixel(pixel.X, pixel.Y, color);
+                SetPixel(triables, pixel, canvas);
             }
+        }
+
+        private static void SetPixel(
+            IEnumerable<Triangle3D> triangles,
+            PixelRay pixel, ICanvas canvas)
+        {
+            var hit = pixel.Ray.DetectNearestHit(triangles);
+            if (hit == null)
+            {
+                canvas.Pixel(pixel.X, pixel.Y, Color.White);
+                return;
+            }
+
+            var color = FogColor(Color.Red, hit.Distance, 20f);
+            canvas.Pixel(pixel.X, pixel.Y, color);
         }
 
         private static Color FogColor(Color baseColor, float distance, float maxDistance)
