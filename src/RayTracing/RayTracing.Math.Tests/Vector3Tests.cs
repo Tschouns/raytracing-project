@@ -40,5 +40,18 @@ namespace RayTracing.Math.Tests
             Assert.Equal(vector.X / vector.Y, norm.Value.X / norm.Value.Y, 0.00001f);
             Assert.Equal(vector.Y / vector.Z, norm.Value.Y / norm.Value.Z, 0.00001f);
         }
+
+        [Fact]
+        public void Norm_GivenZeroVector_ReturnsNull()
+        {
+            // Arrange
+            var vector = new Vector3(0, 0, 0);
+
+            // Act
+            var norm = vector.Norm();
+
+            // Assert
+            Assert.Null(norm);
+        }
     }
 }
