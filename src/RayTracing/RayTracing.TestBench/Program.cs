@@ -13,6 +13,7 @@ var canvasClient = new CanvasTcpClient(tcpClient);
 
 //Examples.DrawLine(canvasClient);
 //Examples2D.DrawIntersectingLines(canvasClient);
-Examples3D.DrawTriangles(canvasClient);
+//Examples3D.DrawTriangles(canvasClient);
+ExamplesRendering.Camera(canvasClient);
 
 tcpClient.Close();

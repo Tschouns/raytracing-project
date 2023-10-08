@@ -70,7 +70,7 @@ namespace RayTracing.Rendering
             }
 
             // Find raster X and Y directions -- already flipped to account for the "lense".
-            var rasterDirectionX = Vector3.Up.Cross(this.LookingDirection).Norm()!.Value;
+            var rasterDirectionX = this.LookingDirection.Cross(Vector3.Up).Norm()!.Value;
             var rasterDirectionY = rasterDirectionX.Cross(this.LookingDirection).Norm()!.Value;
 
             // Scale to the right size.
