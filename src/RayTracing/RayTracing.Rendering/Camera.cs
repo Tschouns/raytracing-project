@@ -6,7 +6,7 @@ namespace RayTracing.Rendering
     /// <summary>
     /// Represents a camera which is placed in space, and produces the rays.
     /// </summary>
-    public class Camera : ICameraFixedProperties, ICameraSettings
+    public class Camera : ICameraFixedProperties, ICameraSettings, ICamera
     {
         private static readonly Vector2 defaultSize = new Vector2(0.008f, 0.006f);
         private static readonly ushort defaultHorizontalResolution = 800;
@@ -59,10 +59,7 @@ namespace RayTracing.Rendering
         public Vector3 Position { get; set; } = defaultPosition;
         public Vector3 LookingDirection { get; set; } = defaultLookingDirection;
 
-        /// <summary>
-        /// Produces the rays, associated with pixel coordinates, based on the camera's settings.
-        /// </summary>
-        public IEnumerable<PixelRay> GetRasterRays()
+        public IEnumerable<PixelRay> GeneratePixelRays()
         {
             if (this.LookingDirection.LengthSquared() == 0)
             {

@@ -20,7 +20,7 @@ namespace RayTracing.Rendering.Tests
                 lookingDirection: new Vector3(0, 0, 1));
 
             // Act
-            var rays = candidate.GetRasterRays();
+            var rays = candidate.GeneratePixelRays();
 
             // Assert
             Assert.Equal(xRes * yRes, rays.Count());

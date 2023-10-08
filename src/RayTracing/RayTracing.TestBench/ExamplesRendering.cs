@@ -2,7 +2,6 @@
 using RayTracing.CanvasClient;
 using RayTracing.Math;
 using RayTracing.Rendering;
-using System.Drawing;
 
 namespace RayTracing.TestBench
 {
@@ -39,41 +38,13 @@ namespace RayTracing.TestBench
             camera.LookingDirection = new Vector3(-1, -2, 7);
             camera.FocalLength *= 2;
 
-            var pixelRays = camera.GetRasterRays();
-
-            // Render image.
+            // Setup canvas.
             canvas.Size(resX, resY);
 
-            foreach (var pixel in pixelRays)
-            {
-                SetPixel(triables, pixel, canvas);
-            }
-        }
-
-        private static void SetPixel(
-            IEnumerable<Triangle3D> triangles,
-            PixelRay pixel, ICanvas canvas)
-        {
-            var hit = pixel.Ray.DetectNearestHit(triangles);
-            if (hit == null)
-            {
-                canvas.Pixel(pixel.X, pixel.Y, Color.White);
-                return;
-            }
-
-            var color = FogColor(Color.Red, hit.Distance, 20f);
-            canvas.Pixel(pixel.X, pixel.Y, color);
-        }
-
-        private static Color FogColor(Color baseColor, float distance, float maxDistance)
-        {
-            var f = 1 - System.Math.Clamp(distance / maxDistance, 0, 1);
-            var newColor = Color.FromArgb(
-                (byte)(baseColor.R * f),
-                (byte)(baseColor.G * f),
-                (byte)(baseColor.B * f));
-
-            return newColor;
+            // Render image.
+            var canvasTarget = new CanvasRenderTarget(canvas);
+            var renderer = new SimpleRenderer();
+            renderer.Render(triables, camera, canvasTarget);
         }
     }
 }
