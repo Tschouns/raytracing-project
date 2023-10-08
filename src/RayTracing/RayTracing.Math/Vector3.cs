@@ -60,7 +60,10 @@ namespace RayTracing.Math
 
         public float LengthSquared()
         {
-            return (this.X * this.X) + (this.Y * this.Y) + (this.Z * this.Z);
+            return 
+                  (this.X * this.X)
+                + (this.Y * this.Y)
+                + (this.Z * this.Z);
         }
 
         public Vector3? Norm()
