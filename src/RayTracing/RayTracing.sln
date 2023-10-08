@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RayTracing.Math", "RayTraci
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RayTracing.Math.Tests", "RayTracing.Math.Tests\RayTracing.Math.Tests.csproj", "{1780D3BB-11FE-4B0A-B93E-D30E85EC88A0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RayTracing.Rendering", "RayTracing.Rendering\RayTracing.Rendering.csproj", "{D8CCC781-93C5-4619-87B3-C1E3CF3CB4C5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,10 +41,10 @@ Global
 		{1780D3BB-11FE-4B0A-B93E-D30E85EC88A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1780D3BB-11FE-4B0A-B93E-D30E85EC88A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1780D3BB-11FE-4B0A-B93E-D30E85EC88A0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{276EF828-89FC-46DE-812B-B6506C48B5DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{276EF828-89FC-46DE-812B-B6506C48B5DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{276EF828-89FC-46DE-812B-B6506C48B5DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{276EF828-89FC-46DE-812B-B6506C48B5DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8CCC781-93C5-4619-87B3-C1E3CF3CB4C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8CCC781-93C5-4619-87B3-C1E3CF3CB4C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8CCC781-93C5-4619-87B3-C1E3CF3CB4C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8CCC781-93C5-4619-87B3-C1E3CF3CB4C5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
