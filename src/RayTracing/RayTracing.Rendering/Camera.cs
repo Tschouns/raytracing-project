@@ -89,7 +89,7 @@ namespace RayTracing.Rendering
 
             for (var x = 0; x < this.HorizontalResolution; x++)
             {
-                for (var y = 0; x < this.VerticalResolution; y++)
+                for (var y = 0; y < this.VerticalResolution; y++)
                 {
                     var rasterPos = rasterOrigin
                         + rasterDirectionX * x * stepX

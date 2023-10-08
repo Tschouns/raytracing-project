@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RayTracing.Math.Tests", "Ra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RayTracing.Rendering", "RayTracing.Rendering\RayTracing.Rendering.csproj", "{D8CCC781-93C5-4619-87B3-C1E3CF3CB4C5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RayTracing.Rendering.Tests", "RayTracing.Rendering.Tests\RayTracing.Rendering.Tests.csproj", "{310F2C95-1330-4F4F-98C9-6ACB19C1B696}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{D8CCC781-93C5-4619-87B3-C1E3CF3CB4C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D8CCC781-93C5-4619-87B3-C1E3CF3CB4C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D8CCC781-93C5-4619-87B3-C1E3CF3CB4C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{310F2C95-1330-4F4F-98C9-6ACB19C1B696}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{310F2C95-1330-4F4F-98C9-6ACB19C1B696}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{310F2C95-1330-4F4F-98C9-6ACB19C1B696}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{310F2C95-1330-4F4F-98C9-6ACB19C1B696}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
