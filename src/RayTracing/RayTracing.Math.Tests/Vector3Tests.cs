@@ -3,6 +3,38 @@ namespace RayTracing.Math.Tests
 {
     public class Vector3Tests
     {
+        [Fact]
+        public void Cross_GivenTwoAxisVectors_ReturnsRemainingAxisVector()
+        {
+            // Arrange
+            var a = new Vector3(1, 0, 0);
+            var b = new Vector3(0, 1, 0);
+
+            var expected = new Vector3(0, 0, 1);
+
+            // Act
+            var actual = a.Cross(b);
+
+            // Assert
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void Cross_GivenTwoArbitraryVectors_ReturnsPerpendicularVector()
+        {
+            // Arrange
+            var a = new Vector3(1, 2, 3);
+            var b = new Vector3(3, 4, 5);
+
+            var expected = new Vector3(-2, 4, -2);
+
+            // Act
+            var actual = a.Cross(b);
+
+            // Assert
+            Assert.Equal(expected, actual);
+        }
+
         [Theory]
         [InlineData(0, 3, 4, 5)]
         [InlineData(1, 1, 1, 1.7320)]
