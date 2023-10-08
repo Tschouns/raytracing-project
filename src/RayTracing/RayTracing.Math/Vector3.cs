@@ -63,9 +63,15 @@ namespace RayTracing.Math
             return (this.X * this.X) + (this.Y * this.Y) + (this.Z * this.Z);
         }
 
-        public Vector3 Norm()
+        public Vector3? Norm()
         {
-            return this.Scale(1 / this.Length());
+            var length = this.Length();
+            if (length == 0)
+            {
+                return null;
+            }
+
+            return this.Scale(1 / length);
         }
 
         public static Vector3 operator -(Vector3 v)
