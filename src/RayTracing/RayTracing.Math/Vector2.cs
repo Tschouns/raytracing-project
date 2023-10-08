@@ -56,9 +56,15 @@
             return this.X * this.X + this.Y * this.Y;
         }
 
-        public Vector2 Norm()
+        public Vector2? Norm()
         {
-            return this.Scale(1 / this.Length());
+            var length = this.Length();
+            if (length == 0)
+            {
+                return null;
+            }
+
+            return this.Scale(1 / length);
         }
 
         public static Vector2 operator - (Vector2 v)

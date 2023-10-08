@@ -29,6 +29,10 @@ namespace RayTracing.Math
             return $"{this.X};{this.Y};{this.Z}";
         }
 
+        public static Vector3 Right { get; } = new Vector3(1, 0, 0);
+        public static Vector3 Up { get; } = new Vector3(0, 1, 0);
+        public static Vector3 Forward { get; } = new Vector3(0, 0, 1);
+
         public Vector3 Add(Vector3 b)
         {
             return new Vector3(
@@ -53,6 +57,17 @@ namespace RayTracing.Math
                 this.Z * c);
         }
 
+        public Vector3 Cross(Vector3 b)
+        {
+            var a = this;
+
+            var x = a.Y * b.Z - a.Z * b.Y;
+            var y = a.Z * b.X - a.X * b.Z;
+            var z = a.X * b.Y - a.Y * b.X;
+
+            return new Vector3(x, y, z);
+        }
+
         public float Length()
         {
             return (float)System.Math.Sqrt(this.LengthSquared());
@@ -60,12 +75,21 @@ namespace RayTracing.Math
 
         public float LengthSquared()
         {
-            return (this.X * this.X) + (this.Y * this.Y) + (this.Z * this.Z);
+            return 
+                  (this.X * this.X)
+                + (this.Y * this.Y)
+                + (this.Z * this.Z);
         }
 
-        public Vector3 Norm()
+        public Vector3? Norm()
         {
-            return this.Scale(1 / this.Length());
+            var length = this.Length();
+            if (length == 0)
+            {
+                return null;
+            }
+
+            return this.Scale(1 / length);
         }
 
         public static Vector3 operator -(Vector3 v)
@@ -91,6 +115,11 @@ namespace RayTracing.Math
         public static Vector3 operator *(float c, Vector3 v)
         {
             return v.Scale(c);
+        }
+
+        public static Vector3 operator /(Vector3 v, float c)
+        {
+            return v.Scale(1/c);
         }
     }
 }

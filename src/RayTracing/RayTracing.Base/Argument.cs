@@ -1,10 +1,16 @@
-﻿using System.Security.Cryptography.X509Certificates;
+﻿using System.Diagnostics.CodeAnalysis;
 
 namespace RayTracing.Base
 {
+    /// <summary>
+    /// Performs runtime checks on arguments, and throws appropriate exceptions.
+    /// </summary>
     public class Argument
     {
-        public static void AssertNotNull(object arg, string argName)
+        /// <summary>
+        /// Asserts that the specified argument not be null; throws an exception if it is.
+        /// </summary>
+        public static void AssertNotNull([NotNull] object arg, string argName)
         {
             if (arg == null)
             {
