@@ -19,6 +19,11 @@ namespace RayTracing.TestBench
             this.canvas = canvas;
         }
 
+        public void Fill(Color color)
+        {
+            this.canvas.Fill(color);
+        }
+
         public void SetPixel(int x, int y, Color color)
         {
             this.canvas.Pixel(x, y, color);

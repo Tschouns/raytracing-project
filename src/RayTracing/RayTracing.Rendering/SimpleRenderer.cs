@@ -4,6 +4,9 @@ using System.Drawing;
 
 namespace RayTracing.Rendering
 {
+    /// <summary>
+    /// A very simple implementation of <see cref="IRender"/>.
+    /// </summary>
     public class SimpleRenderer : IRender
     {
         public void Render(IEnumerable<Triangle3D> triangles, ICamera camera, IRenderTarget target)
@@ -13,11 +16,31 @@ namespace RayTracing.Rendering
             Argument.AssertNotNull(target, nameof(target));
 
             var pixelRays = camera.GeneratePixelRays();
+            var pixelRaysList = pixelRays.ToList();
+            Shuffle(pixelRaysList);
+            pixelRays = pixelRaysList;
 
             // Render image.
-            foreach (var pixel in pixelRays)
+            target.Fill(Color.CornflowerBlue);
+            var tasks = pixelRays
+                .Select(pixel => Task.Run(() => SetPixel(triangles, pixel, target)))
+                .ToArray();
+
+            Task.WaitAll(tasks);
+        }
+
+        private static void Shuffle<T>(IList<T> list)
+        {
+            var rng = new Random();
+            int n = list.Count;
+
+            while (n > 1)
             {
-                SetPixel(triangles, pixel, target);
+                n--;
+                int k = rng.Next(n + 1);
+                T value = list[k];
+                list[k] = list[n];
+                list[n] = value;
             }
         }
 
