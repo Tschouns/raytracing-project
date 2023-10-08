@@ -29,6 +29,10 @@ namespace RayTracing.Math
             return $"{this.X};{this.Y};{this.Z}";
         }
 
+        public static Vector3 Right { get; } = new Vector3(1, 0, 0);
+        public static Vector3 Up { get; } = new Vector3(0, 1, 0);
+        public static Vector3 Forward { get; } = new Vector3(0, 0, 1);
+
         public Vector3 Add(Vector3 b)
         {
             return new Vector3(
@@ -111,6 +115,11 @@ namespace RayTracing.Math
         public static Vector3 operator *(float c, Vector3 v)
         {
             return v.Scale(c);
+        }
+
+        public static Vector3 operator /(Vector3 v, float c)
+        {
+            return v.Scale(1/c);
         }
     }
 }
