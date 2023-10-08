@@ -13,9 +13,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RayTracing.Math", "RayTraci
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RayTracing.Math.Tests", "RayTracing.Math.Tests\RayTracing.Math.Tests.csproj", "{1780D3BB-11FE-4B0A-B93E-D30E85EC88A0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RayTracing.Rendering", "RayTracing.Rendering\RayTracing.Rendering.csproj", "{D8CCC781-93C5-4619-87B3-C1E3CF3CB4C5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RayTracing.Rendering", "RayTracing.Rendering\RayTracing.Rendering.csproj", "{D8CCC781-93C5-4619-87B3-C1E3CF3CB4C5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RayTracing.Rendering.Tests", "RayTracing.Rendering.Tests\RayTracing.Rendering.Tests.csproj", "{310F2C95-1330-4F4F-98C9-6ACB19C1B696}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RayTracing.Rendering.Tests", "RayTracing.Rendering.Tests\RayTracing.Rendering.Tests.csproj", "{310F2C95-1330-4F4F-98C9-6ACB19C1B696}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RayTracing.ModelFiles", "RayTracing.ModelFiles\RayTracing.ModelFiles.csproj", "{FA74517C-7475-4646-BC80-7057ACE1D6C8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RayTracing.ModelFiles.Tests", "RayTracing.ModelFiles.Tests\RayTracing.ModelFiles.Tests.csproj", "{331B5844-4C78-4E1C-BE50-6A598F93AAD0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RayTracing.Model", "RayTracing.Model\RayTracing.Model.csproj", "{86F8CDE7-52B8-4CC6-A9D9-74D79D1AA63D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +57,18 @@ Global
 		{310F2C95-1330-4F4F-98C9-6ACB19C1B696}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{310F2C95-1330-4F4F-98C9-6ACB19C1B696}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{310F2C95-1330-4F4F-98C9-6ACB19C1B696}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA74517C-7475-4646-BC80-7057ACE1D6C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA74517C-7475-4646-BC80-7057ACE1D6C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA74517C-7475-4646-BC80-7057ACE1D6C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA74517C-7475-4646-BC80-7057ACE1D6C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{331B5844-4C78-4E1C-BE50-6A598F93AAD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{331B5844-4C78-4E1C-BE50-6A598F93AAD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{331B5844-4C78-4E1C-BE50-6A598F93AAD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{331B5844-4C78-4E1C-BE50-6A598F93AAD0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{86F8CDE7-52B8-4CC6-A9D9-74D79D1AA63D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86F8CDE7-52B8-4CC6-A9D9-74D79D1AA63D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86F8CDE7-52B8-4CC6-A9D9-74D79D1AA63D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86F8CDE7-52B8-4CC6-A9D9-74D79D1AA63D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

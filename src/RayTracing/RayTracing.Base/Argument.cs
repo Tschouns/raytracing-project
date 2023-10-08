@@ -10,7 +10,7 @@ namespace RayTracing.Base
         /// <summary>
         /// Asserts that the specified argument not be null; throws an exception if it is.
         /// </summary>
-        public static void AssertNotNull([NotNull] object arg, string argName)
+        public static void AssertNotNull([NotNull] object? arg, string argName)
         {
             if (arg == null)
             {

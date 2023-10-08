@@ -1,5 +1,6 @@
 ﻿using RayTracing.Base;
 using RayTracing.Math;
+using RayTracing.Model;
 using System.Drawing;
 
 namespace RayTracing.Rendering
@@ -9,11 +10,16 @@ namespace RayTracing.Rendering
     /// </summary>
     public class SimpleRenderer : IRender
     {
-        public void Render(IEnumerable<Triangle3D> triangles, ICamera camera, IRenderTarget target)
+        public void Render(Scene scene, ICamera camera, IRenderTarget target)
         {
-            Argument.AssertNotNull(triangles, nameof(triangles));
+            Argument.AssertNotNull(scene, nameof(scene));
             Argument.AssertNotNull(camera, nameof(camera));
             Argument.AssertNotNull(target, nameof(target));
+
+            var triangles = scene.Geometries
+                .SelectMany(g => g.Faces)
+                .Select(f => f.Triangle)
+                .ToList();
 
             var pixelRays = camera.GeneratePixelRays();
             var pixelRaysList = pixelRays.ToList();
