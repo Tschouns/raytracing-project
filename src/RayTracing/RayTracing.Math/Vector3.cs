@@ -57,6 +57,11 @@ namespace RayTracing.Math
                 this.Z * c);
         }
 
+        public float Dot(Vector3 b)
+        {
+            return this.X * b.X + this.Y * b.Y + this.Z * b.Z;
+        }
+
         public Vector3 Cross(Vector3 b)
         {
             var a = this;

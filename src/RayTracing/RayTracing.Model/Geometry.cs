@@ -1,5 +1,6 @@
 ﻿using RayTracing.Base;
 using RayTracing.Math;
+using System.Drawing;
 
 namespace RayTracing.Model
 {
@@ -8,12 +9,26 @@ namespace RayTracing.Model
     /// </summary>
     public class Geometry
     {
-        public Geometry(IReadOnlyList<Face> faces)
+        public Geometry(string name, Material material, IReadOnlyList<Face> faces)
         {
+            Argument.AssertNotNull(name, nameof(name));
+            Argument.AssertNotNull(material, nameof(material));
             Argument.AssertNotNull(faces, nameof(faces));
 
+            Name = name;
+            Material = material;
             Faces = faces;
         }
+
+        /// <summary>
+        /// Gets the geometry name (mainly for debugging purposes).
+        /// </summary>
+        public string Name { get; }
+
+        /// <summary>
+        /// Gets the material.
+        /// </summary>
+        public Material Material { get; }
 
         /// <summary>
         /// Gets all the mesh's faces.
@@ -31,6 +46,7 @@ namespace RayTracing.Model
             var newFaces = this.Faces
                 .Select(f =>
                     new Face(
+                        this,
                         new Triangle3D(
                             t.ApplyTo(f.Triangle.CornerA),
                             t.ApplyTo(f.Triangle.CornerB),

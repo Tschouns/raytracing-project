@@ -1,6 +1,7 @@
 ﻿using RayTracing.Base;
 using RayTracing.Math;
 using RayTracing.Model;
+using System.Drawing;
 
 namespace RayTracing.ModelFiles.ObjFormat
 {
@@ -31,10 +32,21 @@ namespace RayTracing.ModelFiles.ObjFormat
                 lineNumber++;
             }
 
-            var faces = objData.Triangles.Select(t => new Face(t, new Vector3())).ToList();
-            var geometry = new Geometry(faces);
+            var facesList = new List<Face>();
+            var material = new Material(
+                "dummy-material",
+                Color.DeepPink,
+                reflectivity: 0.5f,
+                glossyness: 0.5f,
+                transparency: 0f,
+                indexOfRefraction: 1.3f);
 
-            return new Scene(new List<Geometry> { geometry });
+            var geometry = new Geometry("unknown", material, facesList);
+
+            var faces = objData.Triangles.Select(t => new Face(geometry, t, new Vector3())).ToList();
+            facesList.AddRange(faces);
+
+            return new Scene(new List<Material> { material }, new List<Geometry> { geometry }, new List<LightSource>());
         }
 
         private void ProcessLine(string line, ObjData data)

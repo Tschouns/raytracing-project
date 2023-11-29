@@ -178,10 +178,11 @@ namespace RayTracing.Math.Tests.Calculations
             Vector3? expectedIntersection)
         {
             // Act
-            var actualIntersection = VectorCalculator3D.IntersectTriangle(line, triangle);
+            var result = VectorCalculator3D.IntersectTriangle(line, triangle);
 
             // Assert
-            Assert.Equal(expectedIntersection, actualIntersection);
+            Assert.Equal(expectedIntersection != null, result.HasIntersection);
+            Assert.Equal(expectedIntersection, result.IntersectionPoint);
         }
     }
 }

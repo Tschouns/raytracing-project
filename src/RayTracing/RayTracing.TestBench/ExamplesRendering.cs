@@ -1,69 +1,94 @@
-﻿using RayTracing.Base;
-using RayTracing.CanvasClient;
+﻿using RayTracing.CanvasClient;
 using RayTracing.Math;
-using RayTracing.ModelFiles.ColladaFormat;
-using RayTracing.ModelFiles.ObjFormat;
-using RayTracing.Rendering;
+using RayTracing.Rendering.Settings;
+using System.Drawing;
 
 namespace RayTracing.TestBench
 {
     public static class ExamplesRendering
     {
-        public static void Camera(ICanvas canvas)
+        public static void DummyScene(ICanvas canvas)
         {
-            Argument.AssertNotNull(canvas, nameof(canvas));
-
-            // Create a "model".
-            var v1 = new Vector3(1, 0, -1);
-            var v2 = new Vector3(3, 0, -2);
-            var v3 = new Vector3(4, 0, 0);
-            var v4 = new Vector3(2, 0, 1);
-            var v5 = new Vector3(1, 2, -1);
-            var v6 = new Vector3(3, 2, -2);
-            var v7 = new Vector3(4, 2, 0);
-            var v8 = new Vector3(2, 2, 1);
-
-            var triangles = new List<Triangle3D>
-            {
-                new Triangle3D(v1, v2, v5),
-                new Triangle3D(v2, v3, v6),
-                new Triangle3D(v3, v4, v7),
-                new Triangle3D(v4, v1, v8),
-            };
-
-            // Load a model.
-            //var parser = new ObjFileParser();
-            var parser = new ColladaFileParser();
-            //var scene = parser.LoadFromFile(@"..\..\..\..\..\..\models\plant\indoor plant_02.obj");
-            var scene = parser.LoadFromFile(@"..\..\..\..\..\..\models\dummy\dummy.dae");
-
-            // Setup camera.
-            ushort resX = 300;
-            ushort resY = 300;
-
-            var camera = new Camera(resX, resY);
-            camera.Position = new Vector3(0, 1, -4f);
-            camera.LookingDirection = new Vector3(0, 0, 2);
-            camera.FocalLength /= 2.5f;
-
-            // Setup canvas.
-            canvas.Size(resX, resY);
-
-            // Render image.
-            var canvasTarget = new CanvasRenderTarget(canvas);
-            var renderer = new SimpleRenderer();
-
-            while (true)
-            {
-                var rotate = Matrix4x4.RotateY(0.523599f);
-                //rotate = Matrix4x4.RotateX(0.2f).Multiply(rotate);
-
-                foreach (var g in scene.Geometries)
+            ExampleUtils.RenderToCanvas(
+                canvas,
+                @"..\..\..\..\..\..\models\dummy\dummy.dae",
+                scene =>
                 {
-                    g.Transform(rotate);
-                }
-                renderer.Render(scene, camera, canvasTarget);
-            }
+                    var planeMaterial = scene.Materials.Single(m => m.Name.Contains("Plane"));
+                    planeMaterial.BaseColor = Color.White;
+                    planeMaterial.Reflectivity = 0.1f;
+
+                    var cubeMaterial = scene.Materials.Single(m => m.Name.Contains("Cube"));
+                    cubeMaterial.Transparency = 0.3f;
+
+                    var cylinderMaterial = scene.Materials.Single(m => m.Name.Contains("Cylinder"));
+                    cylinderMaterial.Reflectivity = 0.8f;
+                    cylinderMaterial.Transparency = 0.5f;
+                },
+                resX: 400,
+                resY: 300,
+                camera =>
+                {
+                    camera.Position = new Vector3(0, 2.5f, -4f);
+                    camera.LookingDirection = new Vector3(0, -0.3f, 0.8f);
+                    camera.FocalLength /= 2.5f;
+                },
+                new RenderSettings
+                {
+                    FillBackground = false,
+                    //ApplyDepthCueing = false,
+                    //ApplyNormalShading = false,
+                    //ApplyShadows = false,
+                    //ApplyReflections = false,
+                    //ApplyTransmission = false,
+                    ApplyGloss = true,
+                    DepthCueingMaxDistance = 100f,
+                    MaxRecursionDepth = 5,
+                });
+        }
+
+        public static void GlassScene(ICanvas canvas)
+        {
+            ExampleUtils.RenderToCanvas(
+                canvas,
+                @"..\..\..\..\..\..\models\glass\glass.dae",
+                scene =>
+                {
+                    var tableMaterial = scene.Materials.Single(m => m.Name.Contains("Table"));
+                    tableMaterial.BaseColor = Color.LightSteelBlue;
+                    tableMaterial.Reflectivity = 0.5f;
+
+                    var glassMaterial = scene.Materials.Single(m => m.Name.Contains("Glass"));
+                    glassMaterial.Reflectivity = 0.8f;
+                    glassMaterial.Glossyness = 0.9f;
+                    glassMaterial.Transparency = 0.8f;
+
+                    var bottleMaterial = scene.Materials.Single(m => m.Name.Contains("Bottle"));
+                    bottleMaterial.Reflectivity = 0.6f;
+                    bottleMaterial.Glossyness = 0.9f;
+                    bottleMaterial.Transparency = 0.5f;
+                },
+                resX: 200,
+                resY: 240,
+                camera =>
+                {
+                    camera.Position = new Vector3(0, 1f, -1.3f);
+                    camera.LookingDirection = new Vector3(0, -0.5f, 1f);
+                    //camera.FocalLength *= 1.1f;
+                },
+                new RenderSettings
+                {
+                    //FillBackground = false,
+                    //ApplyDepthCueing = false,
+                    //ApplyNormalShading = false,
+                    //ApplyShadows = false,
+                    //ApplyReflections = false,
+                    //ApplyTransmission = false,
+                    //ApplyGloss = false,
+                    //UseFancyLighting = false,
+                    DepthCueingMaxDistance = 20f,
+                    MaxRecursionDepth = 5,
+                });
         }
     }
 }

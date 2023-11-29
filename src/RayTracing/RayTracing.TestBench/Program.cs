@@ -5,15 +5,12 @@ using System.Net.Sockets;
 
 Console.WriteLine("Hello, World!");
 
+// Connect to canvas server.
 using var tcpClient = new TcpClient();
 tcpClient.Connect("127.0.0.1", 9012);
-//tcpClient.Connect("192.168.0.100", 9012);
-
 var canvasClient = new CanvasTcpClient(tcpClient);
 
-//Examples.DrawLine(canvasClient);
-//Examples2D.DrawIntersectingLines(canvasClient);
-//Examples3D.DrawTriangles(canvasClient);
-ExamplesRendering.Camera(canvasClient);
+// Perform example rendering.
+ExamplesRendering.GlassScene(canvasClient);
 
 tcpClient.Close();

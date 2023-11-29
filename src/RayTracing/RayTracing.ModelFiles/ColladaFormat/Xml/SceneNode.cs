@@ -18,6 +18,9 @@ namespace RayTracing.ModelFiles.ColladaFormat.Xml
         public string? MatrixString { get; set; }
 
         [XmlElement("instance_geometry")]
-        public InstanceGeometry? InstanceGeometry { get; set; }
+        public Instance? InstanceGeometry { get; set; }
+
+        [XmlElement("instance_light")]
+        public Instance? InstanceLight { get; set; }
     }
 }
