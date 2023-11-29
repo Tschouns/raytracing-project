@@ -1,5 +1,4 @@
 ﻿using RayTracing.Base;
-using RayTracing.Math;
 using RayTracing.Model;
 using System.Drawing;
 
@@ -16,9 +15,8 @@ namespace RayTracing.Rendering
             Argument.AssertNotNull(camera, nameof(camera));
             Argument.AssertNotNull(target, nameof(target));
 
-            var triangles = scene.Geometries
+            var faces = scene.Geometries
                 .SelectMany(g => g.Faces)
-                .Select(f => f.Triangle)
                 .ToList();
 
             var pixelRays = camera.GeneratePixelRays();
@@ -29,7 +27,7 @@ namespace RayTracing.Rendering
             // Render image.
             target.Fill(Color.CornflowerBlue);
             var tasks = pixelRays
-                .Select(pixel => Task.Run(() => SetPixel(triangles, pixel, target)))
+                .Select(pixel => Task.Run(() => SetPixel(faces, pixel, target)))
                 .ToArray();
 
             Task.WaitAll(tasks);
@@ -51,11 +49,11 @@ namespace RayTracing.Rendering
         }
 
         private static void SetPixel(
-            IEnumerable<Triangle3D> triangles,
+            IEnumerable<Face> faces,
             PixelRay pixel,
             IRenderTarget target)
         {
-            var hit = pixel.Ray.DetectNearestHit(triangles);
+            var hit = pixel.Ray.DetectNearestHit(faces);
             if (hit == null)
             {
                 target.SetPixel(pixel.X, pixel.Y, Color.White);

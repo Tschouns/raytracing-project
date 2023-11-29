@@ -2,6 +2,7 @@
 using RayTracing.Base;
 using RayTracing.Math;
 using RayTracing.Math.Calculations;
+using RayTracing.Model;
 
 namespace RayTracing.Rendering
 {
@@ -19,18 +20,18 @@ namespace RayTracing.Rendering
         public Vector3 Origin { get; set; }
         public Vector3 Direction { get; set; }
 
-        public RayHit? DetectNearestHit(IEnumerable<Triangle3D> triangles)
+        public RayHit? DetectNearestHit(IEnumerable<Face> faces)
         {
-            Argument.AssertNotNull(triangles, nameof(triangles));
+            Argument.AssertNotNull(faces, nameof(faces));
 
             var hitLine = new Line3D(Origin, Origin + Direction);
             Vector3? firstHit = null;
 
             // TODO: filter out trianlges behind the camera.
 
-            foreach (var triangle in triangles)
+            foreach (var face in faces)
             {
-                var intersect = VectorCalculator3D.IntersectTriangle(hitLine, triangle);
+                var intersect = VectorCalculator3D.IntersectTriangle(hitLine, face.Triangle);
                 if (intersect == null)
                 {
                     continue;
