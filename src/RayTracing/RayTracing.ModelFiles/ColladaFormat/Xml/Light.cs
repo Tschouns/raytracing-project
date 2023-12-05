@@ -11,7 +11,7 @@ namespace RayTracing.ModelFiles.ColladaFormat.Xml
         [XmlAttribute("name")]
         public string? Name { get; set; }
 
-        [XmlElement("triangles")]
+        [XmlElement("technique_common")]
         public LightTechniqueCommon? TechniqueCommon { get; set; }
     }
 }

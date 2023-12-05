@@ -9,7 +9,7 @@ namespace RayTracing.ModelFiles.ColladaFormat.Xml
         [XmlElement("color")]
         public string? ColorString { get; set; }
 
-        [XmlElement("fall_off_angle")]
-        public string? FallOffAngleString { get; set; }
+        [XmlElement("falloff_angle")]
+        public string? FalloffAngleString { get; set; }
     }
 }
