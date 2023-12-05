@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace RayTracing.ModelFiles.ColladaFormat.Xml
+namespace RayTracing.ModelFiles.ColladaFormat.Xml.Geometries
 {
     [XmlType("input")]
     public class MeshInput

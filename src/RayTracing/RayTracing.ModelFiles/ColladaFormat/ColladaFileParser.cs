@@ -2,6 +2,7 @@
 using RayTracing.Math;
 using RayTracing.Model;
 using RayTracing.ModelFiles.ColladaFormat.Xml;
+using RayTracing.ModelFiles.ColladaFormat.Xml.Geometries;
 using System.Drawing;
 using System.Xml.Serialization;
 
@@ -109,7 +110,7 @@ namespace RayTracing.ModelFiles.ColladaFormat
             return null;
         }
 
-        private static Model.Geometry PrepGeometry(Xml.Geometry xmlGeometry, Matrix4x4 transform)
+        private static Model.Geometry PrepGeometry(Xml.Geometries.Geometry xmlGeometry, Matrix4x4 transform)
         {
             Argument.AssertNotNull(xmlGeometry, nameof(xmlGeometry));
             Argument.AssertNotNull(xmlGeometry.Mesh, nameof(xmlGeometry.Mesh));

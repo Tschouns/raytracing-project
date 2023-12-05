@@ -1,5 +1,6 @@
 ﻿using System.Xml.Serialization;
 using RayTracing.ModelFiles.ColladaFormat.Xml.Effects;
+using RayTracing.ModelFiles.ColladaFormat.Xml.Geometries;
 
 namespace RayTracing.ModelFiles.ColladaFormat.Xml
 {

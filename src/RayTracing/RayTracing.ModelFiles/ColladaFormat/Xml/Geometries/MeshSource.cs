@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using System.Xml.Serialization;
 
-namespace RayTracing.ModelFiles.ColladaFormat.Xml
+namespace RayTracing.ModelFiles.ColladaFormat.Xml.Geometries
 {
     [XmlType("source")]
     public class MeshSource
