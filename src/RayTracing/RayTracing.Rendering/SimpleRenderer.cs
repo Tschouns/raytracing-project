@@ -30,7 +30,7 @@ namespace RayTracing.Rendering
             // Render image.
             target.Fill(Color.CornflowerBlue);
             var tasks = pixelRays
-                .Select(pixel => Task.Run(() => SetPixel(faces, pixel, target)))
+                .Select(pixel => Task.Run(() => SetPixel(faces, scene.LightSources, pixel, target)))
                 .ToArray();
 
             Task.WaitAll(tasks);
@@ -53,17 +53,28 @@ namespace RayTracing.Rendering
 
         private static void SetPixel(
             IEnumerable<Face> faces,
+            IEnumerable<LightSource> lightSources,
             PixelRay pixel,
             IRenderTarget target)
         {
-            var color = DetermineColorRecursive(pixel.Ray, faces);
+            Argument.AssertNotNull(faces, nameof(faces));
+            Argument.AssertNotNull(lightSources, nameof(lightSources));
+            Argument.AssertNotNull(pixel, nameof(pixel));
+            Argument.AssertNotNull(target, nameof(target));
+
+            var color = DetermineColorRecursive(pixel.Ray, faces, lightSources);
             target.SetPixel(pixel.X, pixel.Y, color);
         }
 
-        private static Color DetermineColorRecursive(Ray ray, IEnumerable<Face> faces, int depth = 0)
+        private static Color DetermineColorRecursive(
+            Ray ray,
+            IEnumerable<Face> faces,
+            IEnumerable<LightSource> lightSources,
+            int depth = 0)
         {
             Argument.AssertNotNull(ray, nameof(ray));
             Argument.AssertNotNull(faces, nameof(faces));
+            Argument.AssertNotNull(lightSources, nameof(lightSources));
 
             if (depth > 10)
             {
@@ -77,6 +88,10 @@ namespace RayTracing.Rendering
             }
 
             var baseColor = hit.Face.ParentGeometry.Material.BaseColor;
+
+            // Check light sources.
+
+
             var color = FogColor(baseColor, hit.Distance, 20f);
 
             return color;

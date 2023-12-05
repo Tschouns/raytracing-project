@@ -19,6 +19,25 @@ namespace RayTracing.Rendering.Rays
         public Vector3 Origin { get; set; }
         public Vector3 Direction { get; set; }
 
+        public bool HasAnyHit(IEnumerable<Face> faces)
+        {
+            Argument.AssertNotNull(faces, nameof(faces));
+
+            var hitLine = new Line3D(Origin, Origin + Direction);
+
+            foreach (var face in faces)
+            {
+                var intersect = VectorCalculator3D.IntersectTriangle(hitLine, face.Triangle);
+                if (intersect.HasIntersection &&
+                    intersect.Lambda > 0)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public RayHit? DetectNearestHit(IEnumerable<Face> faces)
         {
             Argument.AssertNotNull(faces, nameof(faces));
