@@ -53,15 +53,30 @@ namespace RayTracing.Rendering
             PixelRay pixel,
             IRenderTarget target)
         {
-            var hit = pixel.Ray.DetectNearestHit(faces);
-            if (hit == null)
+            var color = DetermineColorRecursive(pixel.Ray, faces);
+            target.SetPixel(pixel.X, pixel.Y, color);
+        }
+
+        private static Color DetermineColorRecursive(Ray ray, IEnumerable<Face> faces, int depth = 0)
+        {
+            Argument.AssertNotNull(ray, nameof(ray));
+            Argument.AssertNotNull(faces, nameof(faces));
+
+            if (depth > 10)
             {
-                target.SetPixel(pixel.X, pixel.Y, Color.White);
-                return;
+                return Color.Black;
             }
 
-            var color = FogColor(hit.Face.ParentGeometry.Material.BaseColor, hit.Distance, 20f);
-            target.SetPixel(pixel.X, pixel.Y, color);
+            var hit = ray.DetectNearestHit(faces);
+            if (hit == null)
+            {
+                return Color.White;
+            }
+
+            var baseColor = hit.Face.ParentGeometry.Material.BaseColor;
+            var color = FogColor(baseColor, hit.Distance, 20f);
+
+            return color;
         }
 
         private static Color FogColor(Color baseColor, float distance, float maxDistance)
