@@ -2,6 +2,7 @@
 using RayTracing.Math;
 using RayTracing.Model;
 using RayTracing.ModelFiles.ColladaFormat.Xml;
+using System.Drawing;
 using System.Xml.Serialization;
 
 namespace RayTracing.ModelFiles.ColladaFormat
@@ -59,30 +60,53 @@ namespace RayTracing.ModelFiles.ColladaFormat
                 var xmlLight = colladaRoot.LibraryLights.Single(g => g.Id == lightUrl);
                 var transform = PrepTransformMatrix(node.MatrixString);
 
-                //var modelGeometry = PrepGeometry(xmlLight, transform);
-                //geometries.Add(modelGeometry);
+                var modelLightSource = PrepLightSource(xmlLight, transform);
+                lightSources.Add(modelLightSource);
             }
 
             return new Scene(geometries, lightSources);
         }
 
-        private static Matrix4x4 PrepTransformMatrix(string matrixValues)
+        private static LightSource PrepLightSource(Xml.Light xmlLight, Matrix4x4 transform)
         {
-            Argument.AssertNotNull(matrixValues, nameof(matrixValues));
+            Argument.AssertNotNull(xmlLight, nameof(xmlLight));
 
-            var valuesArray = matrixValues.Split(' ');
-            if (valuesArray.Length != 16)
+            var location = transform.ApplyTo(new Vector3(0, 0, 0));
+
+            var colorString = GetColorString(xmlLight);
+            if (colorString == null)
             {
-                throw new ArgumentException("The matrix must have 16 values.");
+                throw new ArgumentException("No color found.", nameof(xmlLight));
             }
 
-            var m = valuesArray.Select(float.Parse).ToArray();
+            var color = GetColorFromColorString(colorString);
 
-            return new Matrix4x4(
-                m[0], m[1], m[2], m[3],
-                m[4], m[5], m[6], m[7],
-                m[8], m[9], m[10], m[11],
-                m[12], m[13], m[14], m[15]);
+            Spot? spot = null;
+            if (xmlLight.TechniqueCommon?.Spot != null)
+            {
+                var pointingDirection = transform.ApplyTo(-Vector3.Up);
+                var falloffAngle = float.Parse(xmlLight.TechniqueCommon.Spot.FalloffAngleString);
+                spot = new Spot(pointingDirection, falloffAngle);
+            }
+
+            return new LightSource(xmlLight.Name, location, color, spot);
+        }
+
+        private static string? GetColorString(Light light)
+        {
+            Argument.AssertNotNull(light, nameof(light));
+
+            if (light.TechniqueCommon?.Point != null)
+            {
+                return light.TechniqueCommon.Point.ColorString;
+            }
+
+            if (light.TechniqueCommon?.Spot != null)
+            {
+                return light.TechniqueCommon.Spot.ColorString;
+            }
+
+            return null;
         }
 
         private static Model.Geometry PrepGeometry(Xml.Geometry xmlGeometry, Matrix4x4 transform)
@@ -148,6 +172,54 @@ namespace RayTracing.ModelFiles.ColladaFormat
             }
 
             return vertices;
+        }
+
+        private static Matrix4x4 PrepTransformMatrix(string matrixValues)
+        {
+            Argument.AssertNotNull(matrixValues, nameof(matrixValues));
+
+            var valuesArray = matrixValues.Split(' ');
+            if (valuesArray.Length != 16)
+            {
+                throw new ArgumentException("The matrix must have 16 values.");
+            }
+
+            var m = valuesArray.Select(float.Parse).ToArray();
+
+            return new Matrix4x4(
+                m[0], m[1], m[2], m[3],
+                m[4], m[5], m[6], m[7],
+                m[8], m[9], m[10], m[11],
+                m[12], m[13], m[14], m[15]);
+        }
+
+        private static Color GetColorFromColorString(string colorString)
+        {
+            Argument.AssertNotNull(colorString, nameof(colorString));
+
+            var splits = colorString.Split(' ').Select(s => s.Trim()).ToArray();
+            if (splits.Length != 3)
+            {
+                throw new ArgumentException("A color string must have 3 components.");
+            }
+
+            var color = Color.FromArgb(
+                red: GetColorValue(splits[0]),
+                green: GetColorValue(splits[1]),
+                blue: GetColorValue(splits[2]));
+
+            return color;
+        }
+
+        private static int GetColorValue(string valueString)
+        {
+            Argument.AssertNotNull(valueString, nameof(valueString));
+
+            var valueCollada = float.Parse(valueString);
+            var valueColor = valueCollada * 255 / 1000;
+            var valueInt = Convert.ToInt32(valueColor);
+
+            return valueInt;
         }
     }
 }
