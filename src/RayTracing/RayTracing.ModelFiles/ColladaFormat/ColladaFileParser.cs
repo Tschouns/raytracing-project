@@ -53,8 +53,9 @@ namespace RayTracing.ModelFiles.ColladaFormat
                 var geometryUrl = node.InstanceGeometry.Url.Substring(1);
                 var xmlGeometry = colladaRoot.LibraryGeometries.Single(g => g.Id == geometryUrl);
                 var transform = PrepTransformMatrix(node.MatrixString);
-
-                var modelGeometry = PrepGeometry(xmlGeometry, transform);
+                var material = materialsById[xmlGeometry.Mesh.Triangles.MaterialId];
+                
+                var modelGeometry = PrepGeometry(xmlGeometry, transform, material);
                 geometries.Add(modelGeometry);
             }
 
@@ -140,13 +141,18 @@ namespace RayTracing.ModelFiles.ColladaFormat
             return null;
         }
 
-        private static Model.Geometry PrepGeometry(Xml.Geometries.Geometry xmlGeometry, Matrix4x4 transform)
+        private static Model.Geometry PrepGeometry(
+            Xml.Geometries.Geometry xmlGeometry,
+            Matrix4x4 transform,
+            Material material)
         {
             Argument.AssertNotNull(xmlGeometry, nameof(xmlGeometry));
             Argument.AssertNotNull(xmlGeometry.Mesh, nameof(xmlGeometry.Mesh));
-            
+            Argument.AssertNotNull(material, nameof(material));
+
             var mesh = xmlGeometry.Mesh;
 
+            // Process vertices to faces.
             var vertices = GetVertices(mesh.Vertices, mesh.Sources);
             var verticesTransformed = vertices.Select(transform.ApplyTo).ToList();
 
@@ -159,8 +165,7 @@ namespace RayTracing.ModelFiles.ColladaFormat
 
             var vertexIndexes = indexes.Where((index, i) => i % nInputs == vertexOffset).ToList();
             var faces = new List<Face>();
-            // TODO: color.
-            var material = new Material("dummy-material", Color.DeepPink);
+
             var geometry = new Model.Geometry(xmlGeometry.Name, material, faces);
 
             for (var i = 0; i + 2 < vertexIndexes.Count; i = i + 3)
