@@ -18,7 +18,14 @@ namespace RayTracing.Model
             LightSources = lightSources;
         }
 
+        /// <summary>
+        /// Gets the geometries in the scene.
+        /// </summary>
         public IReadOnlyList<Geometry> Geometries { get; }
+
+        /// <summary>
+        /// Gets the light sources in the scene.
+        /// </summary>
         public IReadOnlyList<LightSource> LightSources { get; }
     }
 }

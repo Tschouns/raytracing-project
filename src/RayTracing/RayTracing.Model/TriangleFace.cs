@@ -16,7 +16,14 @@ namespace RayTracing.Model
             Normal = normal;
         }
 
+        /// <summary>
+        /// Gets the triangle describing the face.
+        /// </summary>
         public Triangle3D Triangle { get; }
+
+        /// <summary>
+        /// Gets the face normal vector.
+        /// </summary>
         public Vector3 Normal { get; }
     }
 }

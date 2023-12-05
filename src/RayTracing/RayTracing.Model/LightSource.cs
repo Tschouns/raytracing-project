@@ -6,7 +6,7 @@ using System.Drawing;
 namespace RayTracing.Model
 {
     /// <summary>
-    /// Represents a light source in 
+    /// Represents a light source in a scene.
     /// </summary>
     public class LightSource
     {
