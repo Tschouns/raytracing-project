@@ -9,13 +9,14 @@ namespace RayTracing.Model
     /// </summary>
     public class Geometry
     {
-        public Geometry(string name, Color baseColor, IReadOnlyList<Face> faces)
+        public Geometry(string name, Material material, IReadOnlyList<Face> faces)
         {
             Argument.AssertNotNull(name, nameof(name));
+            Argument.AssertNotNull(material, nameof(material));
             Argument.AssertNotNull(faces, nameof(faces));
 
             Name = name;
-            BaseColor = baseColor;
+            Material = material;
             Faces = faces;
         }
 
@@ -25,9 +26,9 @@ namespace RayTracing.Model
         public string Name { get; }
 
         /// <summary>
-        /// Gets the geometry base color.
+        /// Gets the material.
         /// </summary>
-        public Color BaseColor { get; }
+        public Material Material { get; }
 
         /// <summary>
         /// Gets all the mesh's faces.

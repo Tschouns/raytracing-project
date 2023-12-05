@@ -33,7 +33,8 @@ namespace RayTracing.ModelFiles.ObjFormat
             }
 
             var facesList = new List<Face>();
-            var geometry = new Geometry("unknown", Color.Pink, facesList);
+            var material = new Material("dummy-material", Color.DeepPink);
+            var geometry = new Geometry("unknown", material, facesList);
 
             var faces = objData.Triangles.Select(t => new Face(geometry, t, new Vector3())).ToList();
             facesList.AddRange(faces);

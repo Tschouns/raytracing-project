@@ -131,7 +131,8 @@ namespace RayTracing.ModelFiles.ColladaFormat
             var vertexIndexes = indexes.Where((index, i) => i % nInputs == vertexOffset).ToList();
             var faces = new List<Face>();
             // TODO: color.
-            var geometry = new Model.Geometry(xmlGeometry.Name, Color.Pink, faces);
+            var material = new Material("dummy-material", Color.DeepPink);
+            var geometry = new Model.Geometry(xmlGeometry.Name, material, faces);
 
             for (var i = 0; i + 2 < vertexIndexes.Count; i = i + 3)
             {
