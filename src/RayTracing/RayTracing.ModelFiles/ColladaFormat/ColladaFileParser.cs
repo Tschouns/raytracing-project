@@ -39,7 +39,7 @@ namespace RayTracing.ModelFiles.ColladaFormat
                 var xmlGeometry = colladaRoot.LibraryGeometries.Single(g => g.Id == geometryUrl);
                 var transform = PrepTransformMatrix(node.MatrixString);
 
-                var modelGeometry = PrepGeometry(xmlGeometry.Mesh!, transform);
+                var modelGeometry = PrepGeometry(xmlGeometry, transform);
                 geometries.Add(modelGeometry);
             }
 
@@ -65,9 +65,12 @@ namespace RayTracing.ModelFiles.ColladaFormat
                 m[12], m[13], m[14], m[15]);
         }
 
-        private static Model.Geometry PrepGeometry(Mesh mesh, Matrix4x4 transform)
+        private static Model.Geometry PrepGeometry(Xml.Geometry xmlGeometry, Matrix4x4 transform)
         {
-            Argument.AssertNotNull(mesh, nameof(mesh));
+            Argument.AssertNotNull(xmlGeometry, nameof(xmlGeometry));
+            Argument.AssertNotNull(xmlGeometry.Mesh, nameof(xmlGeometry.Mesh));
+            
+            var mesh = xmlGeometry.Mesh;
 
             var vertices = GetVertices(mesh.Vertices, mesh.Sources);
             var verticesTransformed = vertices.Select(transform.ApplyTo).ToList();
@@ -92,7 +95,7 @@ namespace RayTracing.ModelFiles.ColladaFormat
                 faces.Add(new Face(triangle, new Vector3()));
             }
 
-            return new Model.Geometry(faces);
+            return new Model.Geometry(xmlGeometry.Name, faces);
         }
 
         private static IReadOnlyList<Vector3> GetVertices(MeshVertices meshVertices, IEnumerable<MeshSource> sources)

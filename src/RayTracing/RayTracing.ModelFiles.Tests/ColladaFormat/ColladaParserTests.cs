@@ -21,7 +21,15 @@ public class ColladaParserTests
 
         // Assert
         Assert.NotNull(scene);
-        Assert.Equal(124, scene.Geometries[0].Faces.Count);
-        Assert.Equal(12, scene.Geometries[1].Faces.Count);
+
+        var cone = scene.Geometries.Single(g => g.Name == "Cone");
+        var cube = scene.Geometries.Single(g => g.Name == "Cube");
+        var cylinder = scene.Geometries.Single(g => g.Name == "Cylinder");
+        var plane = scene.Geometries.Single(g => g.Name == "Plane");
+
+        Assert.Equal(62, cone.Faces.Count);
+        Assert.Equal(12, cube.Faces.Count);
+        Assert.Equal(124, cylinder.Faces.Count);
+        Assert.Equal(2, plane.Faces.Count);
     }
 }

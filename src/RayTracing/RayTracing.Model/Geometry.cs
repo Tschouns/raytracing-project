@@ -8,12 +8,19 @@ namespace RayTracing.Model
     /// </summary>
     public class Geometry
     {
-        public Geometry(IReadOnlyList<Face> faces)
+        public Geometry(string name, IReadOnlyList<Face> faces)
         {
+            Argument.AssertNotNull(name, nameof(name));
             Argument.AssertNotNull(faces, nameof(faces));
 
+            Name = name;
             Faces = faces;
         }
+
+        /// <summary>
+        /// Gets the geometry name (mainly for debugging purposes).
+        /// </summary>
+        public string Name { get; }
 
         /// <summary>
         /// Gets all the mesh's faces.
