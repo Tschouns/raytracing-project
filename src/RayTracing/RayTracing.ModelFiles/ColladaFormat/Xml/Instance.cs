@@ -2,8 +2,8 @@
 
 namespace RayTracing.ModelFiles.ColladaFormat.Xml
 {
-    [XmlType("instance_light")]
-    public class InstanceLight
+    [XmlType("instance")]
+    public class Instance
     {
         [XmlAttribute("url")]
         public string? Url { get; set; }
