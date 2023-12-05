@@ -28,27 +28,31 @@ namespace RayTracing.Rendering
             Vector3? firstHit = null;
             Face? hitFace = null;
 
-            // TODO: filter out trianlges behind the camera.
-
             foreach (var face in faces)
             {
                 var intersect = VectorCalculator3D.IntersectTriangle(hitLine, face.Triangle);
-                if (intersect == null)
+                if (!intersect.HasIntersection)
+                {
+                    continue;
+                }
+
+                // Filter out trianlges behind the camera.
+                if (intersect.Lambda < 0)
                 {
                     continue;
                 }
 
                 if (firstHit == null)
                 {
-                    firstHit = intersect;
+                    firstHit = intersect.IntersectionPoint;
                     hitFace = face;
                     continue;
                 }
 
-                if ((intersect.Value-Origin).LengthSquared() < 
+                if ((intersect.IntersectionPoint!.Value - Origin).LengthSquared() < 
                     (firstHit.Value-Origin).LengthSquared())
                 {
-                    firstHit = intersect;
+                    firstHit = intersect.IntersectionPoint;
                     hitFace = face;
                 }
             }

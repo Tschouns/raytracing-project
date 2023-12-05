@@ -34,7 +34,7 @@ namespace RayTracing.Math.Calculations
         /// <summary>
         /// Calculates the intersection between a specified line with a specified triangle.
         /// </summary>
-        public static Vector3? IntersectTriangle(Line3D line, Triangle3D triangle)
+        public static IntersectionResult IntersectTriangle(Line3D line, Triangle3D triangle)
         {
             Argument.AssertNotNull(line, nameof(line));
             Argument.AssertNotNull(triangle, nameof(triangle));
@@ -75,38 +75,38 @@ namespace RayTracing.Math.Calculations
         /// Line: r = p + lambda * u
         /// Triangle: corner point q, edge vector v, edge vector w
         /// </summary>
-        public static Vector3? IntersectTriangle(Vector3 p, Vector3 u, Vector3 q, Vector3 v, Vector3 w)
+        public static IntersectionResult IntersectTriangle(Vector3 p, Vector3 u, Vector3 q, Vector3 v, Vector3 w)
         {
             // lambda * u - mu * v - nu * w = q - p
 
             var d = Determinant(u, -v, -w);
             if (d == 0)
             {
-                return null;
+                return IntersectionResult.NoIntersection();
             }
 
             var qp = q - p;
             var mu = Determinant(u, qp, -w) / d;
             if (mu < 0)
             {
-                return null;
+                return IntersectionResult.NoIntersection();
             }
 
             var nu = Determinant(u, -v, qp) / d;
             if (nu < 0)
             {
-                return null;
+                return IntersectionResult.NoIntersection();
             }
 
             if (mu + nu > 1)
             {
-                return null;
+                return IntersectionResult.NoIntersection();
             }
 
             var lambda = Determinant(qp, -v, -w) / d;
             var intersection = p + lambda * u;
 
-            return intersection;
+            return IntersectionResult.IntersectAt(intersection, lambda);
         }
     }
 }
