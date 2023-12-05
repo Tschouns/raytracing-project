@@ -7,7 +7,7 @@ namespace RayTracing.ModelFiles.ColladaFormat.Xml.Lights
     public class LightProperties
     {
         [XmlElement("color")]
-        public string? ColorString { get; set; }
+        public string? ColorString0To1000 { get; set; }
 
         [XmlElement("falloff_angle")]
         public string? FalloffAngleString { get; set; }

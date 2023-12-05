@@ -2,6 +2,7 @@
 using RayTracing.Math;
 using RayTracing.Model;
 using RayTracing.ModelFiles.ColladaFormat.Xml;
+using RayTracing.ModelFiles.ColladaFormat.Xml.Effects;
 using RayTracing.ModelFiles.ColladaFormat.Xml.Geometries;
 using RayTracing.ModelFiles.ColladaFormat.Xml.Lights;
 using System.Drawing;
@@ -29,6 +30,15 @@ namespace RayTracing.ModelFiles.ColladaFormat
             }
 
             var scene = colladaRoot.LibraryVisualScenes.Single();
+
+            // Process materials.
+            IDictionary<string, Material> materialsById = new Dictionary<string, Material>();
+            
+            foreach (var xmlMaterial in colladaRoot.LibraryMaterials)
+            {
+                var material = PrepMaterial(xmlMaterial, colladaRoot.LibraryEffects);
+                materialsById.Add(xmlMaterial.Id, material);
+            }
 
             // Process geometries.
             var geometries = new List<Model.Geometry>();
@@ -69,6 +79,25 @@ namespace RayTracing.ModelFiles.ColladaFormat
             return new Scene(geometries, lightSources);
         }
 
+        private static Material PrepMaterial(Xml.Materials.Material xmlMaterial, IEnumerable<Effect> xmlEffects)
+        {
+            Argument.AssertNotNull(xmlMaterial, nameof(xmlMaterial));
+            Argument.AssertNotNull(xmlEffects, nameof(xmlEffects));
+            
+            if (!xmlMaterial.InstanceEffect.Url.StartsWith('#'))
+            {
+                throw new ArgumentException($"The instance effect URL \"{xmlMaterial.InstanceEffect.Url}\" is not supported.");
+            }
+
+            var effectId = xmlMaterial.InstanceEffect.Url.Substring(1);
+            var effect = xmlEffects.Single(e => e.Id == effectId);
+
+            var colorString = effect.ProfileCommon.Technique.Lambert.Diffuse.ColorStringWithAlpha;
+            var color = GetColorFromColorStringWithAlpha(colorString);
+
+            return new Material(xmlMaterial.Name, color);
+        }
+
         private static LightSource PrepLightSource(Light xmlLight, Matrix4x4 transform)
         {
             Argument.AssertNotNull(xmlLight, nameof(xmlLight));
@@ -81,7 +110,7 @@ namespace RayTracing.ModelFiles.ColladaFormat
                 throw new ArgumentException("No color found.", nameof(xmlLight));
             }
 
-            var color = GetColorFromColorString(colorString);
+            var color = GetColorFromColorStringTriple(colorString);
 
             Spot? spot = null;
             if (xmlLight.TechniqueCommon?.Spot != null)
@@ -100,12 +129,12 @@ namespace RayTracing.ModelFiles.ColladaFormat
 
             if (light.TechniqueCommon?.Point != null)
             {
-                return light.TechniqueCommon.Point.ColorString;
+                return light.TechniqueCommon.Point.ColorString0To1000;
             }
 
             if (light.TechniqueCommon?.Spot != null)
             {
-                return light.TechniqueCommon.Spot.ColorString;
+                return light.TechniqueCommon.Spot.ColorString0To1000;
             }
 
             return null;
@@ -198,7 +227,7 @@ namespace RayTracing.ModelFiles.ColladaFormat
                 m[12], m[13], m[14], m[15]);
         }
 
-        private static Color GetColorFromColorString(string colorString)
+        private static Color GetColorFromColorStringTriple(string colorString)
         {
             Argument.AssertNotNull(colorString, nameof(colorString));
 
@@ -208,20 +237,40 @@ namespace RayTracing.ModelFiles.ColladaFormat
                 throw new ArgumentException("A color string must have 3 components.");
             }
 
+            var scale = 1 / 1000f;
             var color = Color.FromArgb(
-                red: GetColorValue(splits[0]),
-                green: GetColorValue(splits[1]),
-                blue: GetColorValue(splits[2]));
+                red: GetColorValue(splits[0], scale),
+                green: GetColorValue(splits[1], scale),
+                blue: GetColorValue(splits[2], scale));
 
             return color;
         }
 
-        private static int GetColorValue(string valueString)
+        private static Color GetColorFromColorStringWithAlpha(string colorString)
+        {
+            Argument.AssertNotNull(colorString, nameof(colorString));
+
+            var splits = colorString.Split(' ').Select(s => s.Trim()).ToArray();
+            if (splits.Length != 4)
+            {
+                throw new ArgumentException("A color string must have 4 components.");
+            }
+
+            var color = Color.FromArgb(
+                alpha: GetColorValue(splits[3], 1),
+                red: GetColorValue(splits[0], 1),
+                green: GetColorValue(splits[1], 1),
+                blue: GetColorValue(splits[2], 1));
+
+            return color;
+        }
+
+        private static int GetColorValue(string valueString, float scale)
         {
             Argument.AssertNotNull(valueString, nameof(valueString));
 
             var valueCollada = float.Parse(valueString);
-            var valueColor = valueCollada * 255 / 1000;
+            var valueColor = valueCollada * scale * 255;
             var valueInt = Convert.ToInt32(valueColor);
 
             return valueInt;

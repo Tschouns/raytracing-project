@@ -6,6 +6,6 @@ namespace RayTracing.ModelFiles.ColladaFormat.Xml.Effects
     public class Diffuse
     {
         [XmlElement("color")]
-        public string? ColorString { get; set; }
+        public string? ColorStringWithAlpha { get; set; }
     }
 }
