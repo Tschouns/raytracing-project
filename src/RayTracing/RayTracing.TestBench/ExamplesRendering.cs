@@ -22,7 +22,7 @@ namespace RayTracing.TestBench
             ushort resY = 200;
 
             var camera = new Camera(resX, resY);
-            camera.Position = new Vector3(0, 1, -4f);
+            camera.Position = new Vector3(0, 2, -4f);
             camera.LookingDirection = new Vector3(0, 0, 2);
             camera.FocalLength /= 2.5f;
 

@@ -3,6 +3,7 @@ using RayTracing.Math;
 using RayTracing.Model;
 using RayTracing.ModelFiles.ColladaFormat.Xml;
 using RayTracing.ModelFiles.ColladaFormat.Xml.Geometries;
+using RayTracing.ModelFiles.ColladaFormat.Xml.Lights;
 using System.Drawing;
 using System.Xml.Serialization;
 
@@ -68,7 +69,7 @@ namespace RayTracing.ModelFiles.ColladaFormat
             return new Scene(geometries, lightSources);
         }
 
-        private static LightSource PrepLightSource(Xml.Light xmlLight, Matrix4x4 transform)
+        private static LightSource PrepLightSource(Light xmlLight, Matrix4x4 transform)
         {
             Argument.AssertNotNull(xmlLight, nameof(xmlLight));
 

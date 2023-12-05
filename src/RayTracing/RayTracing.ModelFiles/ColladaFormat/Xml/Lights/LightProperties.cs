@@ -1,7 +1,7 @@
 ﻿
 using System.Xml.Serialization;
 
-namespace RayTracing.ModelFiles.ColladaFormat.Xml
+namespace RayTracing.ModelFiles.ColladaFormat.Xml.Lights
 {
     [XmlType("light_properties")]
     public class LightProperties
