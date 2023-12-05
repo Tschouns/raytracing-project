@@ -1,5 +1,6 @@
-﻿
-namespace RayTracing.Rendering
+﻿using RayTracing.Rendering.Rays;
+
+namespace RayTracing.Rendering.Cameras
 {
     /// <summary>
     /// Represents a camera.

@@ -4,6 +4,7 @@ using RayTracing.Math;
 using RayTracing.ModelFiles.ColladaFormat;
 using RayTracing.ModelFiles.ObjFormat;
 using RayTracing.Rendering;
+using RayTracing.Rendering.Cameras;
 
 namespace RayTracing.TestBench
 {

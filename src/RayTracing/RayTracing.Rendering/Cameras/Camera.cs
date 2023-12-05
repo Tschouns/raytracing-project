@@ -1,7 +1,7 @@
-﻿
-using RayTracing.Math;
+﻿using RayTracing.Math;
+using RayTracing.Rendering.Rays;
 
-namespace RayTracing.Rendering
+namespace RayTracing.Rendering.Cameras
 {
     /// <summary>
     /// Represents a camera which is placed in space, and produces the rays.
@@ -27,11 +27,11 @@ namespace RayTracing.Rendering
             VerticalResolution = verticalResolution;
 
             var ratio = (float)horizontalResolution / VerticalResolution;
-            this.Size = new Vector2 (
+            Size = new Vector2(
                 defaultSize.Y * ratio,
                 defaultSize.Y);
 
-            this.FocalLength = defaultFocalLength;
+            FocalLength = defaultFocalLength;
         }
 
         public Camera(
@@ -61,40 +61,40 @@ namespace RayTracing.Rendering
 
         public IEnumerable<PixelRay> GeneratePixelRays()
         {
-            if (this.LookingDirection.LengthSquared() == 0)
+            if (LookingDirection.LengthSquared() == 0)
             {
                 throw new InvalidOperationException("The looking direction vector has length 0.");
             }
 
             // Find raster X and Y directions -- already flipped to account for the "lense".
-            var rasterDirectionX = this.LookingDirection.Cross(Vector3.Up).Norm()!.Value;
-            var rasterDirectionY = rasterDirectionX.Cross(this.LookingDirection).Norm()!.Value;
+            var rasterDirectionX = LookingDirection.Cross(Vector3.Up).Norm()!.Value;
+            var rasterDirectionY = rasterDirectionX.Cross(LookingDirection).Norm()!.Value;
 
             // Scale to the right size.
-            var rasterVectorX = rasterDirectionX * this.Size.X;
-            var rasterVectorY = rasterDirectionY * this.Size.Y;
+            var rasterVectorX = rasterDirectionX * Size.X;
+            var rasterVectorY = rasterDirectionY * Size.Y;
 
             // Determine raster origin.
-            var rasterCenter = this.Position - this.LookingDirection.Norm()!.Value * this.FocalLength;
+            var rasterCenter = Position - LookingDirection.Norm()!.Value * FocalLength;
             var rasterOrigin = rasterCenter - rasterVectorX / 2 - rasterVectorY / 2;
 
             // Rasterize...
-            var stepX = this.Size.X / this.HorizontalResolution;
-            var stepY = this.Size.Y / this.VerticalResolution;
+            var stepX = Size.X / HorizontalResolution;
+            var stepY = Size.Y / VerticalResolution;
 
             var pixelRays = new List<PixelRay>();
 
-            for (var x = 0; x < this.HorizontalResolution; x++)
+            for (var x = 0; x < HorizontalResolution; x++)
             {
-                for (var y = 0; y < this.VerticalResolution; y++)
+                for (var y = 0; y < VerticalResolution; y++)
                 {
                     var rasterPos = rasterOrigin
                         + rasterDirectionX * x * stepX
                         + rasterDirectionY * y * stepY;
 
                     var ray = new Ray(
-                        origin: this.Position,
-                        direction: (this.Position - rasterPos).Norm()!.Value);
+                        origin: Position,
+                        direction: (Position - rasterPos).Norm()!.Value);
 
                     pixelRays.Add(new PixelRay(ray, x, y));
                 }

@@ -1,10 +1,9 @@
-﻿
-using RayTracing.Base;
+﻿using RayTracing.Base;
 using RayTracing.Math;
 using RayTracing.Math.Calculations;
 using RayTracing.Model;
 
-namespace RayTracing.Rendering
+namespace RayTracing.Rendering.Rays
 {
     /// <summary>
     /// Represents a single ray to send through a scene.
@@ -49,8 +48,8 @@ namespace RayTracing.Rendering
                     continue;
                 }
 
-                if ((intersect.IntersectionPoint!.Value - Origin).LengthSquared() < 
-                    (firstHit.Value-Origin).LengthSquared())
+                if ((intersect.IntersectionPoint!.Value - Origin).LengthSquared() <
+                    (firstHit.Value - Origin).LengthSquared())
                 {
                     firstHit = intersect.IntersectionPoint;
                     hitFace = face;

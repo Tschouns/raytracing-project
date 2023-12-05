@@ -1,7 +1,7 @@
 ﻿
 using System.Drawing;
 
-namespace RayTracing.Rendering
+namespace RayTracing.Rendering.Targets
 {
     /// <summary>
     /// Represents a render target which displays an image.

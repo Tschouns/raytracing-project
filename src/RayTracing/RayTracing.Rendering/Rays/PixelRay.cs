@@ -1,7 +1,6 @@
-﻿
-using RayTracing.Base;
+﻿using RayTracing.Base;
 
-namespace RayTracing.Rendering
+namespace RayTracing.Rendering.Rays
 {
     /// <summary>
     /// Contains a ray with the associated pixel coordinates.

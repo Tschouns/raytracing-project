@@ -1,4 +1,5 @@
 using RayTracing.Math;
+using RayTracing.Rendering.Cameras;
 
 namespace RayTracing.Rendering.Tests
 {

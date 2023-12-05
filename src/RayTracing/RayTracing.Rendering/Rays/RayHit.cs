@@ -1,7 +1,7 @@
 ﻿using RayTracing.Math;
 using RayTracing.Model;
 
-namespace RayTracing.Rendering
+namespace RayTracing.Rendering.Rays
 {
     /// <summary>
     /// Represents a ray hit.

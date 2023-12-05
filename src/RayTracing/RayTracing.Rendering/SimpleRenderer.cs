@@ -1,5 +1,8 @@
 ﻿using RayTracing.Base;
 using RayTracing.Model;
+using RayTracing.Rendering.Cameras;
+using RayTracing.Rendering.Rays;
+using RayTracing.Rendering.Targets;
 using System.Drawing;
 
 namespace RayTracing.Rendering

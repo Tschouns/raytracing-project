@@ -1,7 +1,6 @@
-﻿
-using RayTracing.Math;
+﻿using RayTracing.Math;
 
-namespace RayTracing.Rendering
+namespace RayTracing.Rendering.Cameras
 {
     /// <summary>
     /// Exposes a camera's fixed intrinsic properties.

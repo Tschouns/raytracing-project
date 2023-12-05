@@ -1,6 +1,6 @@
 ﻿using RayTracing.Base;
 using RayTracing.CanvasClient;
-using RayTracing.Rendering;
+using RayTracing.Rendering.Targets;
 using System.Drawing;
 
 namespace RayTracing.TestBench
