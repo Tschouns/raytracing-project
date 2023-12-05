@@ -1,7 +1,6 @@
 ﻿using RayTracing.ModelFiles.ColladaFormat;
 using RayTracing.ModelFiles.Tests.TestData;
 using RayTracing.ModelFiles.Tests.TestTools;
-using System.Net.NetworkInformation;
 
 namespace RayTracing.ModelFiles.Tests.ColladaFormat
 {

@@ -1,4 +1,5 @@
 ﻿using System.Xml.Serialization;
+using RayTracing.ModelFiles.ColladaFormat.Xml.Effects;
 
 namespace RayTracing.ModelFiles.ColladaFormat.Xml
 {
@@ -7,6 +8,12 @@ namespace RayTracing.ModelFiles.ColladaFormat.Xml
     {
         [XmlArray("library_lights")]
         public Light[]? LibraryLights { get; set; }
+
+        [XmlArray("library_effects")]
+        public Effect[]? LibraryEffects { get; set; }
+
+        [XmlArray("library_materials")]
+        public Material[]? LibraryMaterials { get; set; }
 
         [XmlArray("library_geometries")]
         public Geometry[]? LibraryGeometries { get; set; }

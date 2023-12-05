@@ -10,5 +10,8 @@ namespace RayTracing.ModelFiles.ColladaFormat.Xml
 
         [XmlAttribute("name")]
         public string? Name { get; set; }
+
+        [XmlElement("instance_effect")]
+        public Instance? InstanceEffect { get; set; }
     }
 }
