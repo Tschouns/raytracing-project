@@ -34,7 +34,7 @@ namespace RayTracing.ModelFiles.ObjFormat
             var faces = objData.Triangles.Select(t => new Face(t, new Vector3())).ToList();
             var geometry = new Geometry("unknown", faces);
 
-            return new Scene(new List<Geometry> { geometry });
+            return new Scene(new List<Geometry> { geometry }, new List<LightSource>());
         }
 
         private void ProcessLine(string line, ObjData data)

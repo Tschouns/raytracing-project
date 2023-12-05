@@ -26,11 +26,13 @@ namespace RayTracing.ModelFiles.ColladaFormat
             }
 
             var scene = colladaRoot.LibraryVisualScenes.Single();
+
+            // Process geometries.
             var geometries = new List<Model.Geometry>();
 
             foreach (var node in scene.SceneNodes.Where(n => n?.InstanceGeometry != null))
             {
-                if (!node.InstanceGeometry.Url.StartsWith('#'))
+                if (!node.InstanceGeometry!.Url.StartsWith('#'))
                 {
                     throw new ArgumentException($"The instance geometry URL \"{node.InstanceGeometry.Url}\" is not supported.");
                 }
@@ -43,7 +45,25 @@ namespace RayTracing.ModelFiles.ColladaFormat
                 geometries.Add(modelGeometry);
             }
 
-            return new Scene(geometries);
+            // Process lights.
+            var lightSources = new List<Model.LightSource>();
+
+            foreach (var node in scene.SceneNodes.Where(n => n?.InstanceLight != null))
+            {
+                if (!node.InstanceLight!.Url.StartsWith('#'))
+                {
+                    throw new ArgumentException($"The instance light source URL \"{node.InstanceLight.Url}\" is not supported.");
+                }
+
+                var lightUrl = node.InstanceLight.Url.Substring(1);
+                var xmlLight = colladaRoot.LibraryLights.Single(g => g.Id == lightUrl);
+                var transform = PrepTransformMatrix(node.MatrixString);
+
+                //var modelGeometry = PrepGeometry(xmlLight, transform);
+                //geometries.Add(modelGeometry);
+            }
+
+            return new Scene(geometries, lightSources);
         }
 
         private static Matrix4x4 PrepTransformMatrix(string matrixValues)
