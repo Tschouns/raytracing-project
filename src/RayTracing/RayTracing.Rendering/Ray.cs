@@ -26,6 +26,7 @@ namespace RayTracing.Rendering
 
             var hitLine = new Line3D(Origin, Origin + Direction);
             Vector3? firstHit = null;
+            Face? hitFace = null;
 
             // TODO: filter out trianlges behind the camera.
 
@@ -40,6 +41,7 @@ namespace RayTracing.Rendering
                 if (firstHit == null)
                 {
                     firstHit = intersect;
+                    hitFace = face;
                     continue;
                 }
 
@@ -47,6 +49,7 @@ namespace RayTracing.Rendering
                     (firstHit.Value-Origin).LengthSquared())
                 {
                     firstHit = intersect;
+                    hitFace = face;
                 }
             }
 
@@ -57,7 +60,7 @@ namespace RayTracing.Rendering
 
             var distance = (firstHit.Value - Origin).Length();
 
-            return new RayHit(firstHit.Value, distance);
+            return new RayHit(hitFace!, firstHit.Value, distance);
         }
     }
 }

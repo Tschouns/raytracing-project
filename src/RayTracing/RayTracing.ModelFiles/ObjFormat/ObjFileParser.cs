@@ -1,6 +1,7 @@
 ﻿using RayTracing.Base;
 using RayTracing.Math;
 using RayTracing.Model;
+using System.Drawing;
 
 namespace RayTracing.ModelFiles.ObjFormat
 {
@@ -31,8 +32,11 @@ namespace RayTracing.ModelFiles.ObjFormat
                 lineNumber++;
             }
 
-            var faces = objData.Triangles.Select(t => new Face(t, new Vector3())).ToList();
-            var geometry = new Geometry("unknown", faces);
+            var facesList = new List<Face>();
+            var geometry = new Geometry("unknown", Color.Pink, facesList);
+
+            var faces = objData.Triangles.Select(t => new Face(geometry, t, new Vector3())).ToList();
+            facesList.AddRange(faces);
 
             return new Scene(new List<Geometry> { geometry }, new List<LightSource>());
         }

@@ -13,33 +13,13 @@ namespace RayTracing.TestBench
         {
             Argument.AssertNotNull(canvas, nameof(canvas));
 
-            // Create a "model".
-            var v1 = new Vector3(1, 0, -1);
-            var v2 = new Vector3(3, 0, -2);
-            var v3 = new Vector3(4, 0, 0);
-            var v4 = new Vector3(2, 0, 1);
-            var v5 = new Vector3(1, 2, -1);
-            var v6 = new Vector3(3, 2, -2);
-            var v7 = new Vector3(4, 2, 0);
-            var v8 = new Vector3(2, 2, 1);
-
-            var triangles = new List<Triangle3D>
-            {
-                new Triangle3D(v1, v2, v5),
-                new Triangle3D(v2, v3, v6),
-                new Triangle3D(v3, v4, v7),
-                new Triangle3D(v4, v1, v8),
-            };
-
             // Load a model.
-            //var parser = new ObjFileParser();
             var parser = new ColladaFileParser();
-            //var scene = parser.LoadFromFile(@"..\..\..\..\..\..\models\plant\indoor plant_02.obj");
             var scene = parser.LoadFromFile(@"..\..\..\..\..\..\models\dummy\dummy.dae");
 
             // Setup camera.
-            ushort resX = 300;
-            ushort resY = 300;
+            ushort resX = 200;
+            ushort resY = 200;
 
             var camera = new Camera(resX, resY);
             camera.Position = new Vector3(0, 1, -4f);
@@ -55,8 +35,7 @@ namespace RayTracing.TestBench
 
             while (true)
             {
-                var rotate = Matrix4x4.RotateY(0.523599f);
-                //rotate = Matrix4x4.RotateX(0.2f).Multiply(rotate);
+                var rotate = Matrix4x4.RotateY(0.523599f / 2f);
 
                 foreach (var g in scene.Geometries)
                 {

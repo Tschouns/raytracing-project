@@ -8,13 +8,20 @@ namespace RayTracing.Model
     /// </summary>
     public class Face
     {
-        public Face(Triangle3D triangle, Vector3 normal)
+        public Face(Geometry parent, Triangle3D triangle, Vector3 normal)
         {
+            Argument.AssertNotNull(parent, nameof(parent));
             Argument.AssertNotNull(triangle, nameof(triangle));
 
+            ParentGeometry = parent;
             Triangle = triangle;
             Normal = normal;
         }
+
+        /// <summary>
+        /// Gets the geometry this face belongs to.
+        /// </summary>
+        public Geometry ParentGeometry { get; }
 
         /// <summary>
         /// Gets the triangle describing the face.

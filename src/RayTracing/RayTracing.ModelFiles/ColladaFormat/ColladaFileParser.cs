@@ -128,6 +128,8 @@ namespace RayTracing.ModelFiles.ColladaFormat
 
             var vertexIndexes = indexes.Where((index, i) => i % nInputs == vertexOffset).ToList();
             var faces = new List<Face>();
+            // TODO: color.
+            var geometry = new Model.Geometry(xmlGeometry.Name, Color.Pink, faces);
 
             for (var i = 0; i + 2 < vertexIndexes.Count; i = i + 3)
             {
@@ -136,10 +138,10 @@ namespace RayTracing.ModelFiles.ColladaFormat
                     verticesTransformed[vertexIndexes[i + 1]],
                     verticesTransformed[vertexIndexes[i + 2]]);
 
-                faces.Add(new Face(triangle, new Vector3()));
+                faces.Add(new Face(geometry, triangle, new Vector3()));
             }
 
-            return new Model.Geometry(xmlGeometry.Name, faces);
+            return geometry;
         }
 
         private static IReadOnlyList<Vector3> GetVertices(MeshVertices meshVertices, IEnumerable<MeshSource> sources)

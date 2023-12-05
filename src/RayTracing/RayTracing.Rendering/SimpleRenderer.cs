@@ -60,7 +60,7 @@ namespace RayTracing.Rendering
                 return;
             }
 
-            var color = FogColor(Color.Red, hit.Distance, 20f);
+            var color = FogColor(hit.Face.ParentGeometry.BaseColor, hit.Distance, 20f);
             target.SetPixel(pixel.X, pixel.Y, color);
         }
 
