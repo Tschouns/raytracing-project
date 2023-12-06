@@ -130,9 +130,10 @@ namespace RayTracing.Rendering
                 settings,
                 depth + 1);
 
+            // TODO: get the reflection property from the collada file...
             var colorWithReflection = ColorUtils.Add(
-                ColorUtils.Scale(litColor, 0.5f),
-                ColorUtils.Scale(reflectionColor, 0.5f));
+                ColorUtils.Scale(litColor, 0.8f),
+                ColorUtils.Scale(reflectionColor, 0.2f));
 
             // Add depth fog.
             var color = FogColor(colorWithReflection, settings.DepthCueingColor, hit.Distance, settings.DepthCueingMaxDistance);
