@@ -1,4 +1,5 @@
 ﻿using RayTracing.Base;
+using RayTracing.Math;
 using RayTracing.Model;
 using RayTracing.Rendering.Cameras;
 using RayTracing.Rendering.Helpers;
@@ -113,10 +114,27 @@ namespace RayTracing.Rendering
             var litColor = ColorUtils.Multiply(baseColor, totalLightColor);
 
             // Get reflection.
+            var n = AsMatrix(hit.Face.Normal);
+            var nT = n.Transpose();
+            var nnT = n.Multiply(nT);
+            var nnTm2 = nnT.Multiply(-2);
+            var reflectTransform = Matrix4x4.Identity.Add(nnTm2);
+            var outgoingDirection = reflectTransform.ApplyTo(ray.Direction);
 
+            var reflectionRay = new Ray(hit.Position, outgoingDirection);
+            var reflectionColor = DetermineColorRecursive(
+                reflectionRay,
+                allFaces,
+                lightSources,
+                settings,
+                depth + 1);
+
+            var colorWithReflection = ColorUtils.Add(
+                ColorUtils.Scale(litColor, 0.5f),
+                ColorUtils.Scale(reflectionColor, 0.5f));
 
             // Add depth fog.
-            var color = FogColor(litColor, settings.DepthCueingColor, hit.Distance, settings.DepthCueingMaxDistance);
+            var color = FogColor(colorWithReflection, settings.DepthCueingColor, hit.Distance, settings.DepthCueingMaxDistance);
 
             return color;
         }
@@ -131,6 +149,15 @@ namespace RayTracing.Rendering
             var newColor = ColorUtils.Add(baseColorFraction, fadeColorFraction);
 
             return newColor;
+        }
+
+        private static Matrix4x4 AsMatrix(Vector3 vector)
+        {
+            return new Matrix4x4(
+                vector.X, 0, 0, 0,
+                vector.Y, 0, 0, 0,
+                vector.Z, 0, 0, 0,
+                0, 0, 0, 0);
         }
     }
 }
