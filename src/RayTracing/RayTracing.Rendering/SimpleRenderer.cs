@@ -2,6 +2,7 @@
 using RayTracing.Model;
 using RayTracing.Rendering.Cameras;
 using RayTracing.Rendering.Rays;
+using RayTracing.Rendering.Settings;
 using RayTracing.Rendering.Targets;
 using System.Drawing;
 
@@ -14,11 +15,12 @@ namespace RayTracing.Rendering
     {
         private static float colorFactor = 1 / (255 * 255);
 
-        public void Render(Scene scene, ICamera camera, IRenderTarget target)
+        public void Render(Scene scene, ICamera camera, IRenderTarget target, IRenderSettings settings)
         {
             Argument.AssertNotNull(scene, nameof(scene));
             Argument.AssertNotNull(camera, nameof(camera));
             Argument.AssertNotNull(target, nameof(target));
+            Argument.AssertNotNull(settings, nameof(settings));
 
             var faces = scene.Geometries
                 .SelectMany(g => g.Faces)
@@ -32,7 +34,7 @@ namespace RayTracing.Rendering
             // Render image.
             target.Fill(Color.CornflowerBlue);
             var tasks = pixelRays
-                .Select(pixel => Task.Run(() => SetPixel(faces, scene.LightSources, pixel, target)))
+                .Select(pixel => Task.Run(() => SetPixel(faces, scene.LightSources, pixel, target, settings)))
                 .ToArray();
 
             Task.WaitAll(tasks);
@@ -57,14 +59,16 @@ namespace RayTracing.Rendering
             IEnumerable<Face> allFaces,
             IEnumerable<LightSource> lightSources,
             PixelRay pixel,
-            IRenderTarget target)
+            IRenderTarget target,
+            IRenderSettings settings)
         {
             Argument.AssertNotNull(allFaces, nameof(allFaces));
             Argument.AssertNotNull(lightSources, nameof(lightSources));
             Argument.AssertNotNull(pixel, nameof(pixel));
             Argument.AssertNotNull(target, nameof(target));
+            Argument.AssertNotNull(settings, nameof(settings));
 
-            var color = DetermineColorRecursive(pixel.Ray, allFaces, lightSources);
+            var color = DetermineColorRecursive(pixel.Ray, allFaces, lightSources, settings);
             target.SetPixel(pixel.X, pixel.Y, color);
         }
 
@@ -72,11 +76,13 @@ namespace RayTracing.Rendering
             Ray ray,
             IEnumerable<Face> allFaces,
             IEnumerable<LightSource> lightSources,
+            IRenderSettings settings,
             int depth = 0)
         {
             Argument.AssertNotNull(ray, nameof(ray));
             Argument.AssertNotNull(allFaces, nameof(allFaces));
             Argument.AssertNotNull(lightSources, nameof(lightSources));
+            Argument.AssertNotNull(settings, nameof(settings));
 
             if (depth > 10) // TODO settings -> max depth
             {
@@ -92,7 +98,8 @@ namespace RayTracing.Rendering
             var baseColor = hit.Face.ParentGeometry.Material.BaseColor;
 
             // Check light sources.
-            var totalLightColor = Color.FromArgb(50, 50, 50); // TODO: settings -> ambient light
+            var totalLightColor = settings.AmbientLightColor;
+
             foreach (var light in lightSources)
             {
                 var lightSourceCheckRay = new Ray(hit.Position, light.Location - hit.Position);
@@ -105,7 +112,7 @@ namespace RayTracing.Rendering
             var litColor = MultiplyColors(baseColor, totalLightColor);
 
             // Add depth fog.
-            var color = FogColor(litColor, hit.Distance, 20f); // TODO settings -> maxdistance
+            var color = FogColor(litColor, hit.Distance, settings.DepthCueingMaxDistance);
 
             return color;
         }

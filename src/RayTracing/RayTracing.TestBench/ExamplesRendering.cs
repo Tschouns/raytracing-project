@@ -2,9 +2,10 @@
 using RayTracing.CanvasClient;
 using RayTracing.Math;
 using RayTracing.ModelFiles.ColladaFormat;
-using RayTracing.ModelFiles.ObjFormat;
 using RayTracing.Rendering;
 using RayTracing.Rendering.Cameras;
+using RayTracing.Rendering.Settings;
+using System.Drawing;
 
 namespace RayTracing.TestBench
 {
@@ -42,7 +43,12 @@ namespace RayTracing.TestBench
                 {
                     g.Transform(rotate);
                 }
-                renderer.Render(scene, camera, canvasTarget);
+
+                renderer.Render(scene, camera, canvasTarget, new RenderSettings
+                {
+                    AmbientLightColor = Color.DarkSlateBlue,
+                    DepthCueingMaxDistance = 20,
+                });
 
                 Console.ReadLine();
             }
