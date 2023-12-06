@@ -24,11 +24,27 @@ namespace RayTracing.Rendering.Helpers
                 MultiplyColorValues(colorA.B, colorB.B));
         }
 
+        public static Color Scale(Color color, float scale)
+        {
+            return Color.FromArgb(
+                ScaleColorValue(color.R, scale),
+                ScaleColorValue(color.G, scale),
+                ScaleColorValue(color.B, scale));
+        }
+
         private static byte MultiplyColorValues(byte valueA, byte valueB)
         {
             var newValue = valueA * valueB * COLOR_MULTIPLICATION_FACTOR;
 
             return Convert.ToByte(newValue);
+        }
+
+        private static byte ScaleColorValue(byte value, float scale)
+        {
+            var scaledValue = value * scale;
+            var clampedValue = System.Math.Clamp(scaledValue, 0, 255);
+
+            return Convert.ToByte(clampedValue);
         }
     }
 }

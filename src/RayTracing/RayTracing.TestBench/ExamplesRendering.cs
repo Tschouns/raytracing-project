@@ -47,6 +47,7 @@ namespace RayTracing.TestBench
                 renderer.Render(scene, camera, canvasTarget, new RenderSettings
                 {
                     AmbientLightColor = Color.DarkSlateBlue,
+                    DepthCueingColor = Color.LightBlue,
                     DepthCueingMaxDistance = 20,
                 });
 

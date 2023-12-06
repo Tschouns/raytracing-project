@@ -111,18 +111,19 @@ namespace RayTracing.Rendering
             var litColor = ColorUtils.Multiply(baseColor, totalLightColor);
 
             // Add depth fog.
-            var color = FogColor(litColor, hit.Distance, settings.DepthCueingMaxDistance);
+            var color = FogColor(litColor, settings.DepthCueingColor, hit.Distance, settings.DepthCueingMaxDistance);
 
             return color;
         }
 
-        private static Color FogColor(Color baseColor, float distance, float maxDistance)
+        private static Color FogColor(Color baseColor, Color fadeColor, float distance, float maxDistance)
         {
-            var f = 1 - System.Math.Clamp(distance / maxDistance, 0, 1);
-            var newColor = Color.FromArgb(
-                (byte)(baseColor.R * f),
-                (byte)(baseColor.G * f),
-                (byte)(baseColor.B * f));
+            var fadeFactor = System.Math.Clamp(distance / maxDistance, 0, 1);
+            
+            var fadeColorFraction = ColorUtils.Scale(fadeColor, fadeFactor);
+            var baseColorFraction = ColorUtils.Scale(baseColor, 1 - fadeFactor);
+
+            var newColor = ColorUtils.Add(baseColorFraction, fadeColorFraction);
 
             return newColor;
         }
