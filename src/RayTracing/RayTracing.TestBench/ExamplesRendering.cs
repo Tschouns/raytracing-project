@@ -43,13 +43,17 @@ namespace RayTracing.TestBench
                     g.Transform(rotate);
                 }
 
+                var timeBefore = DateTime.Now;
                 renderer.Render(scene, camera, canvasTarget, new RenderSettings
                 {
                     //AmbientLightColor = Color.DarkSlateBlue,
                     //DepthCueingColor = Color.AliceBlue,
                     DepthCueingMaxDistance = 100,
-                    MaxRecursionDepth = 3,
+                    MaxRecursionDepth = 10,
                 });
+                var timeAfter = DateTime.Now;
+                var timeElapsed = timeAfter - timeBefore;
+                Console.WriteLine("time to render: " + timeElapsed);
 
                 Console.ReadLine();
             }
