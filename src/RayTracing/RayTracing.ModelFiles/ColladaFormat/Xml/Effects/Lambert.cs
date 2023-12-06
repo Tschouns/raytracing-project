@@ -7,5 +7,8 @@ namespace RayTracing.ModelFiles.ColladaFormat.Xml.Effects
     {
         [XmlElement("diffuse")]
         public Diffuse? Diffuse { get; set; }
+
+        [XmlElement("reflectivity")]
+        public FloatProperty? Reflectivity { get; set; }
     }
 }

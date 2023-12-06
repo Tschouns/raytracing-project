@@ -17,16 +17,17 @@ namespace RayTracing.TestBench
 
             // Load a model.
             var parser = new ColladaFileParser();
-            var scene = parser.LoadFromFile(@"..\..\..\..\..\..\models\dummy\dummy.dae");
+            //var scene = parser.LoadFromFile(@"..\..\..\..\..\..\models\dummy\dummy.dae");
+            var scene = parser.LoadFromFile(@"..\..\..\..\..\..\models\glass\glass.dae");
 
             // Setup camera.
-            ushort resX = 200;
-            ushort resY = 150;
+            ushort resX = 300;
+            ushort resY = 400;
 
             var camera = new Camera(resX, resY);
-            camera.Position = new Vector3(0, 3, -5f);
-            camera.LookingDirection = new Vector3(0, -0.5f, 2);
-            camera.FocalLength /= 2f;
+            camera.Position = new Vector3(0, 1f, -1.3f);
+            camera.LookingDirection = new Vector3(0, -0.5f, 0.8f);
+            //camera.FocalLength /= 1.5f;
 
             // Setup canvas.
             canvas.Size(resX, resY);
