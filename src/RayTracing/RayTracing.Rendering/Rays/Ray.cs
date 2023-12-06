@@ -10,16 +10,18 @@ namespace RayTracing.Rendering.Rays
     /// </summary>
     public class Ray
     {
-        public Ray(Vector3 origin, Vector3 direction)
+        public Ray(Vector3 origin, Vector3 direction, Face? originFace = null)
         {
             Origin = origin;
             Direction = direction;
+            OriginFace = originFace;
         }
 
-        public Vector3 Origin { get; set; }
-        public Vector3 Direction { get; set; }
+        public Vector3 Origin { get; }
+        public Vector3 Direction { get; }
+        public Face? OriginFace { get; }
 
-        public bool HasAnyHit(IEnumerable<Face> faces, Face exclude = null)
+        public bool HasAnyHit(IEnumerable<Face> faces)
         {
             Argument.AssertNotNull(faces, nameof(faces));
 
@@ -30,7 +32,7 @@ namespace RayTracing.Rendering.Rays
                 var intersect = VectorCalculator3D.IntersectTriangle(hitLine, face.Triangle);
                 if (intersect.HasIntersection &&
                     intersect.Lambda > 0 &&
-                    face != exclude)
+                    face != this.OriginFace)
                 {
                     return true;
                 }
@@ -49,6 +51,11 @@ namespace RayTracing.Rendering.Rays
 
             foreach (var face in faces)
             {
+                if (face == this.OriginFace)
+                {
+                    continue;
+                }
+
                 var intersect = VectorCalculator3D.IntersectTriangle(hitLine, face.Triangle);
                 if (!intersect.HasIntersection)
                 {

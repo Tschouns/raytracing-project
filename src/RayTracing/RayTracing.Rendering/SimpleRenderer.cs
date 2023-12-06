@@ -102,8 +102,9 @@ namespace RayTracing.Rendering
 
             foreach (var light in lightSources)
             {
-                var lightSourceCheckRay = new Ray(hit.Position, light.Location - hit.Position);
-                if (!lightSourceCheckRay.HasAnyHit(allFaces, exclude: hit.Face))
+                var lightSourceCheckRay = new Ray(hit.Position, light.Location - hit.Position, originFace: hit.Face);
+                
+                if (!lightSourceCheckRay.HasAnyHit(allFaces))
                 {
                     var lightFactor = hit.Face.Normal.Dot(lightSourceCheckRay.Direction.Norm()!.Value);
                     var additionalLight = ColorUtils.Scale(light.Color, lightFactor);
@@ -121,7 +122,7 @@ namespace RayTracing.Rendering
             var reflectTransform = Matrix4x4.Identity.Add(nnTm2);
             var outgoingDirection = reflectTransform.ApplyTo(ray.Direction);
 
-            var reflectionRay = new Ray(hit.Position, outgoingDirection);
+            var reflectionRay = new Ray(hit.Position, outgoingDirection, originFace: hit.Face);
             var reflectionColor = DetermineColorRecursive(
                 reflectionRay,
                 allFaces,
