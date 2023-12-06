@@ -3,6 +3,87 @@ namespace RayTracing.Math.Tests
 {
     public class Vector3Tests
     {
+        private static readonly float tolerance = 0.00001f;
+
+        [Fact]
+        public void Dot_GivenPerpendicularVectors_Returns0()
+        {
+            // Arrange
+            var a = new Vector3(1, 0, 0);
+            var b = new Vector3(0, 1, 5);
+
+            var expected = 0f;
+
+            // Act
+            var actual = a.Dot(b);
+
+            // Assert
+            Assert.Equal(expected, actual, tolerance);
+        }
+
+        [Fact]
+        public void Dot_GivenIdenticalNormVectors_Returns1()
+        {
+            // Arrange
+            var a = new Vector3(1, 6, 7).Norm()!.Value;
+
+            var expected = 1f;
+
+            // Act
+            var actual = a.Dot(a);
+
+            // Assert
+            Assert.Equal(expected, actual, tolerance);
+        }
+
+        [Fact]
+        public void Dot_FullLengthProjectionOntoNorm_Returns1()
+        {
+            // Arrange
+            var a = new Vector3(1, 0, 0);
+            var b = new Vector3(1, 3, 5);
+
+            var expected = 1f;
+
+            // Act
+            var actual = a.Dot(b);
+
+            // Assert
+            Assert.Equal(expected, actual, tolerance);
+        }
+
+        [Fact]
+        public void Dot_FullLengthProjectionOntoAnyA_ReturnsALengthSquared()
+        {
+            // Arrange
+            var a = new Vector3(0, 4, 0);
+            var b = new Vector3(1, 4, 5);
+
+            var expected = a.LengthSquared();
+
+            // Act
+            var actual = a.Dot(b);
+
+            // Assert
+            Assert.Equal(expected, actual, tolerance);
+        }
+
+        [Fact]
+        public void Dot_OpenAngle_ReturnsNegative()
+        {
+            // Arrange
+            var a = new Vector3(3, 0, 0);
+            var b = new Vector3(-2, 8, 0);
+
+            var expected = -6f;
+
+            // Act
+            var actual = a.Dot(b);
+
+            // Assert
+            Assert.Equal(expected, actual, tolerance);
+        }
+
         [Fact]
         public void Cross_GivenTwoAxisVectors_ReturnsRemainingAxisVector()
         {
