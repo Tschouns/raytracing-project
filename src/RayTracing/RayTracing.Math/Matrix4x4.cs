@@ -69,6 +69,15 @@ namespace RayTracing.Math
 
         #region operations
 
+        public Matrix4x4 Transpose()
+        {
+            return new Matrix4x4(
+                M00, M10, M20, M30,
+                M01, M11, M21, M31,
+                M02, M12, M22, M32,
+                M03, M13, M23, M33);
+        }
+
         public Matrix4x4 Add(Matrix4x4 b)
         {
             return new Matrix4x4(
@@ -119,6 +128,30 @@ namespace RayTracing.Math
                 this.M30 * b.M01 + this.M31 * b.M11 + this.M32 * b.M21 + this.M33 * b.M31,
                 this.M30 * b.M02 + this.M31 * b.M12 + this.M32 * b.M22 + this.M33 * b.M32,
                 this.M30 * b.M03 + this.M31 * b.M13 + this.M32 * b.M23 + this.M33 * b.M33);
+        }
+
+        public Matrix4x4 Multiply(float s)
+        {
+            return new Matrix4x4(
+                M00 * s,
+                M01 * s,
+                M02 * s,
+                M03 * s,
+
+                M10 * s,
+                M11 * s,
+                M12 * s,
+                M13 * s,
+
+                M20 * s,
+                M21 * s,
+                M22 * s,
+                M23 * s,
+
+                M30 * s,
+                M31 * s,
+                M32 * s,
+                M33 * s);
         }
 
         #endregion

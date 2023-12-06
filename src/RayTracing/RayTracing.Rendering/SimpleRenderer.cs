@@ -112,6 +112,9 @@ namespace RayTracing.Rendering
 
             var litColor = ColorUtils.Multiply(baseColor, totalLightColor);
 
+            // Get reflection.
+
+
             // Add depth fog.
             var color = FogColor(litColor, settings.DepthCueingColor, hit.Distance, settings.DepthCueingMaxDistance);
 
