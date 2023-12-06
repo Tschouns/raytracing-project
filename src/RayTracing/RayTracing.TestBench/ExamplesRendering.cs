@@ -5,7 +5,6 @@ using RayTracing.ModelFiles.ColladaFormat;
 using RayTracing.Rendering;
 using RayTracing.Rendering.Cameras;
 using RayTracing.Rendering.Settings;
-using System.Drawing;
 
 namespace RayTracing.TestBench
 {
@@ -33,7 +32,7 @@ namespace RayTracing.TestBench
 
             // Render image.
             var canvasTarget = new CanvasRenderTarget(canvas);
-            var renderer = new SimpleRenderer();
+            var renderer = new RayTracerRenderer();
 
             while (true)
             {

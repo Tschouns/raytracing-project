@@ -11,9 +11,9 @@ using System.Drawing;
 namespace RayTracing.Rendering
 {
     /// <summary>
-    /// A very simple implementation of <see cref="IRender"/>.
+    /// A very simple ray tracer <see cref="IRender"/>.
     /// </summary>
-    public class SimpleRenderer : IRender
+    public class RayTracerRenderer : IRender
     {
         public void Render(Scene scene, ICamera camera, IRenderTarget target, IRenderSettings settings)
         {
