@@ -5,6 +5,7 @@ using RayTracing.ModelFiles.ColladaFormat;
 using RayTracing.Rendering;
 using RayTracing.Rendering.Cameras;
 using RayTracing.Rendering.Settings;
+using System.Drawing;
 
 namespace RayTracing.TestBench
 {
@@ -19,8 +20,8 @@ namespace RayTracing.TestBench
             var scene = parser.LoadFromFile(@"..\..\..\..\..\..\models\dummy\dummy.dae");
 
             // Setup camera.
-            ushort resX = 600;
-            ushort resY = 450;
+            ushort resX = 200;
+            ushort resY = 150;
 
             var camera = new Camera(resX, resY);
             camera.Position = new Vector3(0, 3, -5f);
@@ -45,8 +46,10 @@ namespace RayTracing.TestBench
                 }
 
                 var timeBefore = DateTime.Now;
-                renderer.Render(scene, camera, inMemoryTarget, new RenderSettings
+                renderer.Render(scene, camera, canvasTarget, new RenderSettings
                 {
+                    FillBackground = false,
+                    FillBackgroundColor = Color.RebeccaPurple,
                     //AmbientLightColor = Color.DarkSlateBlue,
                     //DepthCueingColor = Color.AliceBlue,
                     DepthCueingMaxDistance = 100,
@@ -56,7 +59,7 @@ namespace RayTracing.TestBench
                 var timeElapsed = timeAfter - timeBefore;
                 Console.WriteLine("time to render: " + timeElapsed);
 
-                inMemoryTarget.ApplyImageToTarget(canvasTarget);
+                //inMemoryTarget.ApplyImageToTarget(canvasTarget);
 
                 Console.ReadLine();
             }

@@ -9,6 +9,17 @@ namespace RayTracing.Rendering.Settings
     public interface IRenderSettings
     {
         /// <summary>
+        /// Gets a value indicating whether the screen shall be filled with a background
+        /// color before rendering actual pixels.
+        /// </summary>
+        public bool FillBackground { get;}
+
+        /// <summary>
+        /// Gets the background color to fill the screen with.
+        /// </summary>
+        public Color FillBackgroundColor { get; }
+
+        /// <summary>
         /// Gets the ambient light color, i.e. the light before any light sources.
         /// </summary>
         Color AmbientLightColor { get; }

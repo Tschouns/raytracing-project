@@ -31,8 +31,13 @@ namespace RayTracing.Rendering
             Shuffle(pixelRaysList);
             pixelRays = pixelRaysList;
 
-            // Render image.
-            target.Fill(Color.CornflowerBlue);
+            // Fill background.
+            if (settings.FillBackground)
+            {
+                target.Fill(settings.FillBackgroundColor);
+            }
+
+            // Render image pixel by pixel.
             var tasks = pixelRays
                 .Select(pixel => Task.Run(() => SetPixel(faces, scene.LightSources, pixel, target, settings)))
                 .ToArray();
