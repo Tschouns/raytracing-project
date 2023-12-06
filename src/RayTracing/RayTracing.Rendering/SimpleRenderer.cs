@@ -78,7 +78,7 @@ namespace RayTracing.Rendering
             Argument.AssertNotNull(allFaces, nameof(allFaces));
             Argument.AssertNotNull(lightSources, nameof(lightSources));
 
-            if (depth > 10)
+            if (depth > 10) // TODO settings -> max depth
             {
                 return Color.Black;
             }
@@ -92,7 +92,7 @@ namespace RayTracing.Rendering
             var baseColor = hit.Face.ParentGeometry.Material.BaseColor;
 
             // Check light sources.
-            var totalLightColor = Color.Black;
+            var totalLightColor = Color.Black; // TODO: settings -> ambient light
             foreach (var light in lightSources)
             {
                 var lightSourceCheckRay = new Ray(hit.Position, light.Location - hit.Position);
@@ -105,7 +105,7 @@ namespace RayTracing.Rendering
             var litColor = MultiplyColors(baseColor, totalLightColor);
 
             // Add depth fog.
-            var color = FogColor(litColor, hit.Distance, 20f);
+            var color = FogColor(litColor, hit.Distance, 20f); // TODO settings -> maxdistance
 
             return color;
         }
