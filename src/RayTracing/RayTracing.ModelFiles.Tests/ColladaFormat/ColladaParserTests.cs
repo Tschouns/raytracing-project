@@ -7,7 +7,7 @@ namespace RayTracing.ModelFiles.Tests.ColladaFormat
     public class ColladaParserTests
     {
         [Fact]
-        public void LoadFromFile_ExampleColladaFile_ReturnsExpectedModel()
+        public void LoadFromFile_DummyExampleColladaFile_ReturnsExpectedModel()
         {
             // Arrange
             var candidate = new ColladaFileParser();
@@ -37,6 +37,33 @@ namespace RayTracing.ModelFiles.Tests.ColladaFormat
 
             Assert.Null(pointLight.Spot);
             Assert.NotNull(spotLight.Spot);
+        }
+
+        [Fact]
+        public void LoadFromFile_GlassExampleColladaFile_ReturnsExpectedModel()
+        {
+            // Arrange
+            var candidate = new ColladaFileParser();
+
+            using var workingDir = new TempDirectory();
+            var filePath = Path.Combine(workingDir.FullName, "test.dae");
+            File.WriteAllText(filePath, TestFiles.GlassDae);
+
+            // Act
+            var scene = candidate.LoadFromFile(filePath);
+
+            // Assert
+            Assert.NotNull(scene);
+
+            var tablePlane = scene.Geometries.Single(g => g.Name == "Plane");
+            var glass = scene.Geometries.Single(g => g.Name == "Cylinder");
+
+            Assert.Equal(2, tablePlane.Faces.Count);
+            Assert.Equal(3712, glass.Faces.Count);
+
+            var pointLight = scene.LightSources.Single(l => l.Name == "Light");
+
+            Assert.Null(pointLight.Spot);
         }
     }
 }

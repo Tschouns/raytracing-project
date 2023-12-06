@@ -66,16 +66,35 @@ namespace RayTracing.ModelFiles.Tests.TestData {
         ///  &lt;asset&gt;
         ///    &lt;contributor&gt;
         ///      &lt;author&gt;Blender User&lt;/author&gt;
-        ///      &lt;authoring_tool&gt;Blender 3.6.5 commit date:2023-10-16, commit time:14:30, hash:cf1e1ed46b7e&lt;/authoring_tool&gt;
+        ///      &lt;authoring_tool&gt;Blender 4.0.1 commit date:2023-11-16, commit time:16:40, hash:d0dd92834a08&lt;/authoring_tool&gt;
         ///    &lt;/contributor&gt;
-        ///    &lt;created&gt;2023-10-26T12:43:46&lt;/created&gt;
-        ///    &lt;modified&gt;2023-10-26T12:43:46&lt;/modified&gt;
+        ///    &lt;created&gt;2023-12-05T16:02:34&lt;/created&gt;
+        ///    &lt;modified&gt;2023-12-05T16:02:34&lt;/modified&gt;
         ///    &lt;unit name=&quot;meter&quot; meter=&quot;1&quot;/&gt;
-        ///    &lt;up_ax [rest of string was truncated]&quot;;.
+        ///    &lt;up_axis&gt;Z_UP&lt;/u [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string DummyDae {
             get {
                 return ResourceManager.GetString("DummyDae", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;COLLADA xmlns=&quot;http://www.collada.org/2005/11/COLLADASchema&quot; version=&quot;1.4.1&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;&gt;
+        ///  &lt;asset&gt;
+        ///    &lt;contributor&gt;
+        ///      &lt;author&gt;Blender User&lt;/author&gt;
+        ///      &lt;authoring_tool&gt;Blender 4.0.2 commit date:2023-12-05, commit time:07:41, hash:9be62e85b727&lt;/authoring_tool&gt;
+        ///    &lt;/contributor&gt;
+        ///    &lt;created&gt;2023-12-06T22:23:36&lt;/created&gt;
+        ///    &lt;modified&gt;2023-12-06T22:23:36&lt;/modified&gt;
+        ///    &lt;unit name=&quot;meter&quot; meter=&quot;1&quot;/&gt;
+        ///    &lt;up_axis&gt;Z_UP&lt;/u [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string GlassDae {
+            get {
+                return ResourceManager.GetString("GlassDae", resourceCulture);
             }
         }
         

@@ -253,9 +253,12 @@ namespace RayTracing.ModelFiles.ColladaFormat
             return color;
         }
 
-        private static Color GetColorFromColorStringWithAlpha(string colorString)
+        private static Color GetColorFromColorStringWithAlpha(string? colorString)
         {
-            Argument.AssertNotNull(colorString, nameof(colorString));
+            if (colorString == null)
+            {
+                return Color.White;
+            }
 
             var splits = colorString.Split(' ').Select(s => s.Trim()).ToArray();
             if (splits.Length != 4)
