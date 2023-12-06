@@ -170,12 +170,14 @@ namespace RayTracing.ModelFiles.ColladaFormat
 
             for (var i = 0; i + 2 < vertexIndexes.Count; i = i + 3)
             {
-                var triangle = new Triangle3D(
-                    verticesTransformed[vertexIndexes[i]],
-                    verticesTransformed[vertexIndexes[i + 1]],
-                    verticesTransformed[vertexIndexes[i + 2]]);
+                var a = verticesTransformed[vertexIndexes[i]];
+                var b = verticesTransformed[vertexIndexes[i + 1]];
+                var c = verticesTransformed[vertexIndexes[i + 2]];
 
-                faces.Add(new Face(geometry, triangle, new Vector3()));
+                var triangle = new Triangle3D(a, b, c);
+                var normal = ((b - a).Cross(c - a)).Norm();
+
+                faces.Add(new Face(geometry, triangle, normal.Value));
             }
 
             return geometry;

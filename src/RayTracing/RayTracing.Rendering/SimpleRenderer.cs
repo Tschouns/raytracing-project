@@ -104,7 +104,9 @@ namespace RayTracing.Rendering
                 var lightSourceCheckRay = new Ray(hit.Position, light.Location - hit.Position);
                 if (!lightSourceCheckRay.HasAnyHit(allFaces, exclude: hit.Face))
                 {
-                    totalLightColor = ColorUtils.Add(totalLightColor, light.Color);
+                    var lightFactor = hit.Face.Normal.Dot(lightSourceCheckRay.Direction.Norm()!.Value);
+                    var additionalLight = ColorUtils.Scale(light.Color, lightFactor);
+                    totalLightColor = ColorUtils.Add(totalLightColor, additionalLight);
                 }
             }
 

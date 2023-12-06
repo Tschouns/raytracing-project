@@ -20,8 +20,8 @@ namespace RayTracing.TestBench
             var scene = parser.LoadFromFile(@"..\..\..\..\..\..\models\dummy\dummy.dae");
 
             // Setup camera.
-            ushort resX = 600;
-            ushort resY = 400;
+            ushort resX = 300;
+            ushort resY = 200;
 
             var camera = new Camera(resX, resY);
             camera.Position = new Vector3(0, 2, -4f);
@@ -47,8 +47,8 @@ namespace RayTracing.TestBench
                 renderer.Render(scene, camera, canvasTarget, new RenderSettings
                 {
                     AmbientLightColor = Color.DarkSlateBlue,
-                    DepthCueingColor = Color.LightBlue,
-                    DepthCueingMaxDistance = 20,
+                    DepthCueingColor = Color.AliceBlue,
+                    DepthCueingMaxDistance = 10,
                 });
 
                 Console.ReadLine();
