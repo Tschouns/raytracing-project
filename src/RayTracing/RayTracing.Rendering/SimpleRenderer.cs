@@ -1,6 +1,7 @@
 ﻿using RayTracing.Base;
 using RayTracing.Model;
 using RayTracing.Rendering.Cameras;
+using RayTracing.Rendering.Helpers;
 using RayTracing.Rendering.Rays;
 using RayTracing.Rendering.Settings;
 using RayTracing.Rendering.Targets;
@@ -13,8 +14,6 @@ namespace RayTracing.Rendering
     /// </summary>
     public class SimpleRenderer : IRender
     {
-        private static float COLOR_MULTIPLICATION_FACTOR = 1 / 255f;
-
         public void Render(Scene scene, ICamera camera, IRenderTarget target, IRenderSettings settings)
         {
             Argument.AssertNotNull(scene, nameof(scene));
@@ -105,11 +104,11 @@ namespace RayTracing.Rendering
                 var lightSourceCheckRay = new Ray(hit.Position, light.Location - hit.Position);
                 if (!lightSourceCheckRay.HasAnyHit(allFaces, exclude: hit.Face))
                 {
-                    totalLightColor = AddColors(totalLightColor, light.Color);
+                    totalLightColor = ColorUtils.Add(totalLightColor, light.Color);
                 }
             }
 
-            var litColor = MultiplyColors(baseColor, totalLightColor);
+            var litColor = ColorUtils.Multiply(baseColor, totalLightColor);
 
             // Add depth fog.
             var color = FogColor(litColor, hit.Distance, settings.DepthCueingMaxDistance);
@@ -126,29 +125,6 @@ namespace RayTracing.Rendering
                 (byte)(baseColor.B * f));
 
             return newColor;
-        }
-
-        private static Color AddColors(Color colorA, Color colorB)
-        {
-            return Color.FromArgb(
-                System.Math.Min(colorA.R + colorB.R, 255),
-                System.Math.Min(colorA.G + colorB.G, 255),
-                System.Math.Min(colorA.B + colorB.B, 255));
-        }
-
-        private static Color MultiplyColors(Color colorA, Color colorB)
-        {
-            return Color.FromArgb(
-                MultiplyColorValues(colorA.R, colorB.R),
-                MultiplyColorValues(colorA.G, colorB.G),
-                MultiplyColorValues(colorA.B, colorB.B));
-        }
-
-        private static byte MultiplyColorValues(byte valueA, byte valueB)
-        {
-            var newValue = valueA * valueB * COLOR_MULTIPLICATION_FACTOR;
-
-            return Convert.ToByte(newValue);
         }
     }
 }
