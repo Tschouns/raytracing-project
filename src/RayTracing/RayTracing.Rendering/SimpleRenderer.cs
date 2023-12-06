@@ -13,7 +13,7 @@ namespace RayTracing.Rendering
     /// </summary>
     public class SimpleRenderer : IRender
     {
-        private static float colorFactor = 1 / (255 * 255);
+        private static float COLOR_MULTIPLICATION_FACTOR = 1 / 255f;
 
         public void Render(Scene scene, ICamera camera, IRenderTarget target, IRenderSettings settings)
         {
@@ -146,10 +146,7 @@ namespace RayTracing.Rendering
 
         private static byte MultiplyColorValues(byte valueA, byte valueB)
         {
-            var factorA = valueA / 255f;
-            var factorB = valueB / 255f;
-
-            var newValue = factorA * factorB * 255;
+            var newValue = valueA * valueB * COLOR_MULTIPLICATION_FACTOR;
 
             return Convert.ToByte(newValue);
         }

@@ -20,8 +20,8 @@ namespace RayTracing.TestBench
             var scene = parser.LoadFromFile(@"..\..\..\..\..\..\models\dummy\dummy.dae");
 
             // Setup camera.
-            ushort resX = 200;
-            ushort resY = 200;
+            ushort resX = 600;
+            ushort resY = 400;
 
             var camera = new Camera(resX, resY);
             camera.Position = new Vector3(0, 2, -4f);
