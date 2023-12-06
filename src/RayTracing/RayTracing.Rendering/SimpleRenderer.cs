@@ -12,6 +12,8 @@ namespace RayTracing.Rendering
     /// </summary>
     public class SimpleRenderer : IRender
     {
+        private static float colorFactor = 1 / (255 * 255);
+
         public void Render(Scene scene, ICamera camera, IRenderTarget target)
         {
             Argument.AssertNotNull(scene, nameof(scene));
@@ -90,9 +92,20 @@ namespace RayTracing.Rendering
             var baseColor = hit.Face.ParentGeometry.Material.BaseColor;
 
             // Check light sources.
+            var totalLightColor = Color.Black;
+            foreach (var light in lightSources)
+            {
+                var lightSourceCheckRay = new Ray(hit.Position, light.Location - hit.Position);
+                if (!lightSourceCheckRay.HasAnyHit(faces))
+                {
+                    totalLightColor = AddColors(totalLightColor, light.Color);
+                }
+            }
 
+            var litColor = MultiplyColors(baseColor, totalLightColor);
 
-            var color = FogColor(baseColor, hit.Distance, 20f);
+            // Add depth fog.
+            var color = FogColor(litColor, hit.Distance, 20f);
 
             return color;
         }
@@ -106,6 +119,32 @@ namespace RayTracing.Rendering
                 (byte)(baseColor.B * f));
 
             return newColor;
+        }
+
+        private static Color AddColors(Color colorA, Color colorB)
+        {
+            return Color.FromArgb(
+                System.Math.Min(colorA.R + colorB.R, 255),
+                System.Math.Min(colorA.G + colorB.G, 255),
+                System.Math.Min(colorA.B + colorB.B, 255));
+        }
+
+        private static Color MultiplyColors(Color colorA, Color colorB)
+        {
+            return Color.FromArgb(
+                MultiplyColorValues(colorA.R, colorB.R),
+                MultiplyColorValues(colorA.G, colorB.G),
+                MultiplyColorValues(colorA.B, colorB.B));
+        }
+
+        private static byte MultiplyColorValues(byte valueA, byte valueB)
+        {
+            var factorA = valueA / 255f;
+            var factorB = valueB / 255f;
+
+            var newValue = factorA * factorB * 255;
+
+            return Convert.ToByte(newValue);
         }
     }
 }

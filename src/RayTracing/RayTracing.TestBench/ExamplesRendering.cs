@@ -36,13 +36,15 @@ namespace RayTracing.TestBench
 
             while (true)
             {
-                var rotate = Matrix4x4.RotateY(0.523599f / 2f);
+                var rotate = Matrix4x4.RotateY(-0.523599f / 2f);
 
                 foreach (var g in scene.Geometries)
                 {
                     g.Transform(rotate);
                 }
                 renderer.Render(scene, camera, canvasTarget);
+
+                Thread.Sleep(3000);
             }
         }
     }
