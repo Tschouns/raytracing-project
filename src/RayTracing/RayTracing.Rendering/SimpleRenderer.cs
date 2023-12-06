@@ -83,15 +83,15 @@ namespace RayTracing.Rendering
             Argument.AssertNotNull(lightSources, nameof(lightSources));
             Argument.AssertNotNull(settings, nameof(settings));
 
-            if (depth > 10) // TODO settings -> max depth
+            if (depth > settings.MaxRecursionDepth)
             {
-                return Color.Black;
+                return settings.DepthCueingColor;
             }
 
             var hit = ray.DetectNearestHit(allFaces);
             if (hit == null)
             {
-                return Color.White;
+                return settings.DepthCueingColor;
             }
 
             var baseColor = hit.Face.ParentGeometry.Material.BaseColor;
