@@ -19,7 +19,7 @@ namespace RayTracing.Rendering.Rays
         public Vector3 Origin { get; set; }
         public Vector3 Direction { get; set; }
 
-        public bool HasAnyHit(IEnumerable<Face> faces)
+        public bool HasAnyHit(IEnumerable<Face> faces, Face exclude = null)
         {
             Argument.AssertNotNull(faces, nameof(faces));
 
@@ -29,7 +29,8 @@ namespace RayTracing.Rendering.Rays
             {
                 var intersect = VectorCalculator3D.IntersectTriangle(hitLine, face.Triangle);
                 if (intersect.HasIntersection &&
-                    intersect.Lambda > 0)
+                    intersect.Lambda > 0 &&
+                    face != exclude)
                 {
                     return true;
                 }

@@ -44,7 +44,7 @@ namespace RayTracing.TestBench
                 }
                 renderer.Render(scene, camera, canvasTarget);
 
-                Thread.Sleep(3000);
+                Console.ReadLine();
             }
         }
     }

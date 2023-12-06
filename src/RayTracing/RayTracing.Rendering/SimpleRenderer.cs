@@ -54,28 +54,28 @@ namespace RayTracing.Rendering
         }
 
         private static void SetPixel(
-            IEnumerable<Face> faces,
+            IEnumerable<Face> allFaces,
             IEnumerable<LightSource> lightSources,
             PixelRay pixel,
             IRenderTarget target)
         {
-            Argument.AssertNotNull(faces, nameof(faces));
+            Argument.AssertNotNull(allFaces, nameof(allFaces));
             Argument.AssertNotNull(lightSources, nameof(lightSources));
             Argument.AssertNotNull(pixel, nameof(pixel));
             Argument.AssertNotNull(target, nameof(target));
 
-            var color = DetermineColorRecursive(pixel.Ray, faces, lightSources);
+            var color = DetermineColorRecursive(pixel.Ray, allFaces, lightSources);
             target.SetPixel(pixel.X, pixel.Y, color);
         }
 
         private static Color DetermineColorRecursive(
             Ray ray,
-            IEnumerable<Face> faces,
+            IEnumerable<Face> allFaces,
             IEnumerable<LightSource> lightSources,
             int depth = 0)
         {
             Argument.AssertNotNull(ray, nameof(ray));
-            Argument.AssertNotNull(faces, nameof(faces));
+            Argument.AssertNotNull(allFaces, nameof(allFaces));
             Argument.AssertNotNull(lightSources, nameof(lightSources));
 
             if (depth > 10)
@@ -83,7 +83,7 @@ namespace RayTracing.Rendering
                 return Color.Black;
             }
 
-            var hit = ray.DetectNearestHit(faces);
+            var hit = ray.DetectNearestHit(allFaces);
             if (hit == null)
             {
                 return Color.White;
@@ -96,7 +96,7 @@ namespace RayTracing.Rendering
             foreach (var light in lightSources)
             {
                 var lightSourceCheckRay = new Ray(hit.Position, light.Location - hit.Position);
-                if (!lightSourceCheckRay.HasAnyHit(faces))
+                if (!lightSourceCheckRay.HasAnyHit(allFaces, exclude: hit.Face))
                 {
                     totalLightColor = AddColors(totalLightColor, light.Color);
                 }
