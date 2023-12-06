@@ -29,7 +29,15 @@ namespace RayTracing.Rendering.Rays
 
             foreach (var face in faces)
             {
+                // Back-face culling.
+                if (face.Normal.Dot(this.Direction) > 0)
+                {
+                    continue;
+                }
+
+                // Detect intersection.
                 var intersect = VectorCalculator3D.IntersectTriangle(hitLine, face.Triangle);
+                
                 if (intersect.HasIntersection &&
                     intersect.Lambda > 0 &&
                     face != this.OriginFace)
@@ -56,6 +64,13 @@ namespace RayTracing.Rendering.Rays
                     continue;
                 }
 
+                // Back-face culling.
+                if (face.Normal.Dot(this.Direction) > 0)
+                {
+                    continue;
+                }
+
+                // Detect intersection.
                 var intersect = VectorCalculator3D.IntersectTriangle(hitLine, face.Triangle);
                 if (!intersect.HasIntersection)
                 {
