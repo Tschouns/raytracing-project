@@ -31,6 +31,7 @@ namespace RayTracing.TestBench
             canvas.Size(resX, resY);
 
             // Render image.
+            var inMemoryTarget = new InMemoryRenderTarget(resX, resY);
             var canvasTarget = new CanvasRenderTarget(canvas);
             var renderer = new RayTracerRenderer();
 
@@ -44,7 +45,7 @@ namespace RayTracing.TestBench
                 }
 
                 var timeBefore = DateTime.Now;
-                renderer.Render(scene, camera, canvasTarget, new RenderSettings
+                renderer.Render(scene, camera, inMemoryTarget, new RenderSettings
                 {
                     //AmbientLightColor = Color.DarkSlateBlue,
                     //DepthCueingColor = Color.AliceBlue,
@@ -54,6 +55,8 @@ namespace RayTracing.TestBench
                 var timeAfter = DateTime.Now;
                 var timeElapsed = timeAfter - timeBefore;
                 Console.WriteLine("time to render: " + timeElapsed);
+
+                inMemoryTarget.ApplyImageToTarget(canvasTarget);
 
                 Console.ReadLine();
             }
