@@ -92,7 +92,7 @@ namespace RayTracing.Rendering
             var baseColor = hit.Face.ParentGeometry.Material.BaseColor;
 
             // Check light sources.
-            var totalLightColor = Color.Black; // TODO: settings -> ambient light
+            var totalLightColor = Color.FromArgb(50, 50, 50); // TODO: settings -> ambient light
             foreach (var light in lightSources)
             {
                 var lightSourceCheckRay = new Ray(hit.Position, light.Location - hit.Position);
