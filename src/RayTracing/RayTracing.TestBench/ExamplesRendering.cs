@@ -20,13 +20,13 @@ namespace RayTracing.TestBench
             var scene = parser.LoadFromFile(@"..\..\..\..\..\..\models\dummy\dummy.dae");
 
             // Setup camera.
-            ushort resX = 300;
-            ushort resY = 200;
+            ushort resX = 600;
+            ushort resY = 450;
 
             var camera = new Camera(resX, resY);
-            camera.Position = new Vector3(0, 2, -4f);
-            camera.LookingDirection = new Vector3(0, 0, 2);
-            camera.FocalLength /= 2.5f;
+            camera.Position = new Vector3(0, 3, -5f);
+            camera.LookingDirection = new Vector3(0, -0.5f, 2);
+            camera.FocalLength /= 2f;
 
             // Setup canvas.
             canvas.Size(resX, resY);
@@ -49,6 +49,7 @@ namespace RayTracing.TestBench
                     //AmbientLightColor = Color.DarkSlateBlue,
                     //DepthCueingColor = Color.AliceBlue,
                     DepthCueingMaxDistance = 100,
+                    MaxRecursionDepth = 3,
                 });
 
                 Console.ReadLine();
