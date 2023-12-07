@@ -279,7 +279,8 @@ namespace RayTracing.Rendering
                         normalFactor *
                         normalFactor *
                         hit.Face.ParentGeometry.Material.Glossyness *
-                        hit.Face.ParentGeometry.Material.Reflectivity;
+                        hit.Face.ParentGeometry.Material.Glossyness;
+                        //hit.Face.ParentGeometry.Material.Reflectivity;
 
                     var glossColor = ColorUtils.Scale(totalLightColor, glossFactor);
                     totalGlossColor = ColorUtils.Add(totalGlossColor, glossColor);

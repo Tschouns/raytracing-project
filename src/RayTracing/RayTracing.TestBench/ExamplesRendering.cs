@@ -56,17 +56,17 @@ namespace RayTracing.TestBench
                 {
                     var tableMaterial = scene.Materials.Single(m => m.Name.Contains("Table"));
                     tableMaterial.BaseColor = Color.LightSteelBlue;
-                    tableMaterial.Reflectivity = 0.4f;
+                    tableMaterial.Reflectivity = 0.5f;
 
                     var glassMaterial = scene.Materials.Single(m => m.Name.Contains("Glass"));
-                    glassMaterial.Reflectivity = 0.9f;
+                    glassMaterial.Reflectivity = 0.8f;
                     glassMaterial.Glossyness = 0.8f;
-                    glassMaterial.Transparency = 0.75f;
+                    glassMaterial.Transparency = 0.8f;
 
                     var bottleMaterial = scene.Materials.Single(m => m.Name.Contains("Bottle"));
-                    bottleMaterial.Reflectivity = 0.9f;
+                    bottleMaterial.Reflectivity = 0.6f;
                     bottleMaterial.Glossyness = 0.7f;
-                    bottleMaterial.Transparency = 0.6f;
+                    bottleMaterial.Transparency = 0.5f;
                 },
                 resX: 50,
                 resY: 60,
@@ -78,13 +78,14 @@ namespace RayTracing.TestBench
                 },
                 new RenderSettings
                 {
-                    FillBackground = true,
-                    ApplyDepthCueing = true,
-                    ApplyNormalShading = true,
-                    ApplyShadows = true,
-                    ApplyReflections = true,
-                    ApplyTransmission = true,
-                    UseFancyLighting = true,
+                    //FillBackground = false,
+                    //ApplyDepthCueing = false,
+                    //ApplyNormalShading = false,
+                    //ApplyShadows = false,
+                    //ApplyReflections = false,
+                    //ApplyTransmission = false,
+                    //ApplyGloss = false,
+                    //UseFancyLighting = false,
                     DepthCueingMaxDistance = 20f,
                     MaxRecursionDepth = 5,
                 });
