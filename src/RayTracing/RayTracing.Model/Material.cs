@@ -20,9 +20,9 @@ namespace RayTracing.Model
         }
 
         public string Name { get; }
-        public Color BaseColor { get; }
-        public float Reflectivity { get; }
-        public float Transparency { get; }
-        public float IndexOfRefraction { get; }
+        public Color BaseColor { get; set; }
+        public float Reflectivity { get; set; }
+        public float Transparency { get; set; }
+        public float IndexOfRefraction { get; set; }
     }
 }
