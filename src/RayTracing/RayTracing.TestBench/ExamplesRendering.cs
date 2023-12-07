@@ -15,14 +15,15 @@ namespace RayTracing.TestBench
                 scene =>
                 {
                     var planeMaterial = scene.Materials.Single(m => m.Name.Contains("Plane"));
-                    planeMaterial.Reflectivity = 0.2f;
+                    planeMaterial.BaseColor = Color.White;
+                    planeMaterial.Reflectivity = 0.1f;
 
                     var cubeMaterial = scene.Materials.Single(m => m.Name.Contains("Cube"));
-                    cubeMaterial.Transparency = 0.2f;
+                    cubeMaterial.Transparency = 0.8f;
 
                     var cylinderMaterial = scene.Materials.Single(m => m.Name.Contains("Cylinder"));
                     cylinderMaterial.Reflectivity = 0;
-                    cylinderMaterial.Transparency = 0;
+                    cylinderMaterial.Transparency = 0.5f;
                 },
                 resX: 400,
                 resY: 300,
@@ -34,12 +35,12 @@ namespace RayTracing.TestBench
                 },
                 new RenderSettings
                 {
-                    FillBackground = true,
-                    ApplyDepthCueing = true,
-                    ApplyNormalShading = true,
-                    ApplyShadows = true,
-                    ApplyReflections = true,
-                    ApplyTransmission = true,
+                    FillBackground = false,
+                    //ApplyDepthCueing = false,
+                    //ApplyNormalShading = false,
+                    //ApplyShadows = false,
+                    //ApplyReflections = false,
+                    //ApplyTransmission = false,
                     DepthCueingMaxDistance = 100f,
                     MaxRecursionDepth = 5,
                 });

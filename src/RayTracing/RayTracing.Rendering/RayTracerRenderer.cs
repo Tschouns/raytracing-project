@@ -73,11 +73,11 @@ namespace RayTracing.Rendering
             Argument.AssertNotNull(target, nameof(target));
             Argument.AssertNotNull(settings, nameof(settings));
 
-            var color = DetermineColorRecursive(pixel.Ray, allFaces, lightSources, settings);
+            var color = DeterminePixelColorRecursive(pixel.Ray, allFaces, lightSources, settings);
             target.SetPixel(pixel.X, pixel.Y, color);
         }
 
-        private static Color DetermineColorRecursive(
+        private static Color DeterminePixelColorRecursive(
             Ray ray,
             IEnumerable<Face> allFaces,
             IEnumerable<LightSource> lightSources,
@@ -176,7 +176,6 @@ namespace RayTracing.Rendering
 
             foreach (var light in lightSources)
             {
-                // TODO: allow for transparency??
                 var lightColor = DetermineLightColorRecursive(hit, light, allFaces, settings);
                 totalLightColor = ColorUtils.Add(totalLightColor, lightColor);
             }
@@ -243,7 +242,7 @@ namespace RayTracing.Rendering
             var reflectionRay = new Ray(hit.Position, outgoingDirection, originFace: hit.Face);
 
             // Recursive call.
-            var reflectionColor = DetermineColorRecursive(
+            var reflectionColor = DeterminePixelColorRecursive(
                 reflectionRay,
                 allFaces,
                 lightSources,
@@ -289,7 +288,7 @@ namespace RayTracing.Rendering
             var transmissionRay = new Ray(hit.Position, newDirection, originFace: hit.Face, insideObjects);
             
             // Recursive call.
-            var refractedColor = DetermineColorRecursive(
+            var refractedColor = DeterminePixelColorRecursive(
                 transmissionRay,
                 allFaces,
                 lightSources,
