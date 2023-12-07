@@ -65,8 +65,8 @@ namespace RayTracing.TestBench
                     glassMaterial.Reflectivity = 0.9f;
                     glassMaterial.Transparency = 0.6f;
                 },
-                resX: 250,
-                resY: 300,
+                resX: 500,
+                resY: 600,
                 camera =>
                 {
                     camera.Position = new Vector3(0, 1f, -1.3f);
