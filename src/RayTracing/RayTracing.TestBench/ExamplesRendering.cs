@@ -31,7 +31,7 @@ namespace RayTracing.TestBench
                 {
                     camera.Position = new Vector3(0, 2.5f, -4f);
                     camera.LookingDirection = new Vector3(0, -0.3f, 0.8f);
-                    camera.FocalLength /= 2f;
+                    camera.FocalLength /= 2.5f;
                 },
                 new RenderSettings
                 {
