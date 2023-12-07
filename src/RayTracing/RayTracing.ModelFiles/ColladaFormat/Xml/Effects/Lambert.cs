@@ -6,9 +6,12 @@ namespace RayTracing.ModelFiles.ColladaFormat.Xml.Effects
     public class Lambert
     {
         [XmlElement("diffuse")]
-        public Diffuse? Diffuse { get; set; }
+        public ColorProperty? Diffuse { get; set; }
 
         [XmlElement("reflectivity")]
         public FloatProperty? Reflectivity { get; set; }
+
+        [XmlElement("index_of_refraction")]
+        public FloatProperty? IndexOfRefraction { get; set; }
     }
 }

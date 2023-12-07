@@ -93,10 +93,27 @@ namespace RayTracing.ModelFiles.ColladaFormat
             var effectId = xmlMaterial.InstanceEffect.Url.Substring(1);
             var effect = xmlEffects.Single(e => e.Id == effectId);
 
-            var colorString = effect.ProfileCommon.Technique.Lambert.Diffuse.ColorStringWithAlpha;
+            var properties = effect.ProfileCommon?.Technique?.Lambert;
+            if (properties == null)
+            {
+                throw new ArgumentException("Shader properties are missing.");
+            }
+
+            var colorString = properties.Diffuse?.ColorStringWithAlpha;
             var color = GetColorFromColorStringWithAlpha(colorString);
 
-            return new Material(xmlMaterial.Name, color);
+            var reflectivityString = properties.Reflectivity?.FloatValueString;
+            var reflectivity = reflectivityString == null ? 0.5f : float.Parse(reflectivityString);
+
+            var indexOfRefractionString = properties.IndexOfRefraction?.FloatValueString;
+            var indexOfRefraction = indexOfRefractionString == null ? 1.3f : float.Parse(indexOfRefractionString);
+
+            return new Material(
+                xmlMaterial.Name,
+                color,
+                reflectivity,
+                transparency: 0f, // TODO: how to get?
+                indexOfRefraction);
         }
 
         private static LightSource PrepLightSource(Light xmlLight, Matrix4x4 transform)

@@ -2,8 +2,8 @@
 
 namespace RayTracing.ModelFiles.ColladaFormat.Xml.Effects
 {
-    [XmlType("diffuse")]
-    public class Diffuse
+    [XmlType("color_property")]
+    public class ColorProperty
     {
         [XmlElement("color")]
         public string? ColorStringWithAlpha { get; set; }
