@@ -108,6 +108,11 @@ namespace RayTracing.Rendering
                 pixelColor = ApplyDepthCueing(pixelColor, settings.DepthCueingColor, hit.Distance, settings.DepthCueingMaxDistance);
             }
 
+            if (settings.ApplyNormalShading)
+            {
+                pixelColor = ApplyNormalShading(pixelColor, hit, lightSources, settings);
+            }
+
             if (settings.ApplyShadows)
             {
                 pixelColor = ApplyShadows(pixelColor, hit, allFaces, lightSources, settings);
@@ -133,6 +138,28 @@ namespace RayTracing.Rendering
             return newColor;
         }
 
+        private static Color ApplyNormalShading(
+            Color baseColor,
+            RayHit hit,
+            IEnumerable<LightSource> lightSources,
+            IRenderSettings settings)
+        {
+            var totalLightColor = settings.AmbientLightColor;
+
+            foreach (var light in lightSources)
+            {
+                var lightSourceDirection = (light.Location - hit.Position).Norm()!.Value;
+                var lightFactor = hit.Face.Normal.Dot(lightSourceDirection);
+                var additionalLight = ColorUtils.Scale(light.Color, lightFactor);
+
+                totalLightColor = ColorUtils.Add(totalLightColor, additionalLight);
+            }
+
+            var litColor = ColorUtils.Multiply(baseColor, totalLightColor);
+
+            return litColor;
+        }
+
         private static Color ApplyShadows(
             Color baseColor,
             RayHit hit,
@@ -145,12 +172,9 @@ namespace RayTracing.Rendering
             foreach (var light in lightSources)
             {
                 var lightSourceCheckRay = new Ray(hit.Position, light.Location - hit.Position, originFace: hit.Face);
-
                 if (!lightSourceCheckRay.HasAnyHit(allFaces))
                 {
-                    var lightFactor = hit.Face.Normal.Dot(lightSourceCheckRay.Direction.Norm()!.Value);
-                    var additionalLight = ColorUtils.Scale(light.Color, lightFactor);
-                    totalLightColor = ColorUtils.Add(totalLightColor, additionalLight);
+                    totalLightColor = ColorUtils.Add(totalLightColor, light.Color);
                 }
             }
 

@@ -29,8 +29,9 @@ namespace RayTracing.TestBench
                 {
                     FillBackground = false,
                     ApplyDepthCueing = false,
-                    ApplyShadows = true,
-                    ApplyReflections = false,
+                    ApplyNormalShading = false,
+                    ApplyShadows = false,
+                    ApplyReflections = true,
                     DepthCueingMaxDistance = 100f,
                 });
         }

@@ -20,6 +20,11 @@ namespace RayTracing.Rendering.Settings
         public bool ApplyDepthCueing { get; }
 
         /// <summary>
+        /// Gets a value indicating whether the rendering shall apply normal shading.
+        /// </summary>
+        public bool ApplyNormalShading { get; }
+
+        /// <summary>
         /// Gets a value indicating whether the rendering shall apply shodows.
         /// </summary>
         public bool ApplyShadows { get; }
