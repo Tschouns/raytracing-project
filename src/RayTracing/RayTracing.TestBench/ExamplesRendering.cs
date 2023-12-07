@@ -60,12 +60,12 @@ namespace RayTracing.TestBench
 
                     var glassMaterial = scene.Materials.Single(m => m.Name.Contains("Glass"));
                     glassMaterial.Reflectivity = 0.8f;
-                    glassMaterial.Glossyness = 0.8f;
+                    glassMaterial.Glossyness = 0.9f;
                     glassMaterial.Transparency = 0.8f;
 
                     var bottleMaterial = scene.Materials.Single(m => m.Name.Contains("Bottle"));
                     bottleMaterial.Reflectivity = 0.6f;
-                    bottleMaterial.Glossyness = 0.7f;
+                    bottleMaterial.Glossyness = 0.9f;
                     bottleMaterial.Transparency = 0.5f;
                 },
                 resX: 200,
