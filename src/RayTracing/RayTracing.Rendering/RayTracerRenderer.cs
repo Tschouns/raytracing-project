@@ -113,11 +113,6 @@ namespace RayTracing.Rendering
                 pixelColor = ApplyNormalShading(pixelColor, hit, lightSources, settings);
             }
 
-            if (settings.ApplyShadows || settings.ApplyGloss)
-            {
-                pixelColor = ApplyLighting(pixelColor, hit, allFaces, lightSources, settings);
-            }
-
             if (settings.ApplyReflections)
             {
                 pixelColor = ApplyReflectionRecursive(pixelColor, hit, allFaces, lightSources, settings, depth);
@@ -126,6 +121,12 @@ namespace RayTracing.Rendering
             if (settings.ApplyTransmission)
             {
                 pixelColor = ApplyTransmissionRecursive(pixelColor, hit, ray, allFaces, lightSources, settings, depth);
+            }
+
+            // Gloss should be at the end (the rest should be irrelevant).
+            if (settings.ApplyShadows || settings.ApplyGloss)
+            {
+                pixelColor = ApplyLighting(pixelColor, hit, allFaces, lightSources, settings);
             }
 
             return pixelColor;
@@ -163,89 +164,6 @@ namespace RayTracing.Rendering
             var litColor = ColorUtils.Multiply(baseColor, totalLightColor);
 
             return litColor;
-        }
-
-        private static Color ApplyLighting(
-            Color baseColor,
-            RayHit hit,
-            IEnumerable<Face> allFaces,
-            IEnumerable<LightSource> lightSources,
-            IRenderSettings settings)
-        {
-            var litColor = baseColor;
-            var totalLightColor = settings.AmbientLightColor;
-            var totalGlossColor = Color.Black;
-
-            foreach (var light in lightSources)
-            {
-                var lightColor = DetermineLightColorRecursive(hit, light, allFaces, settings);
-                totalLightColor = ColorUtils.Add(totalLightColor, lightColor);
-
-                if (settings.ApplyGloss)
-                {
-                    var lightSourceDirection = (light.Location - hit.Position).Norm()!.Value;
-                    var normalFactor = System.Math.Abs(hit.Face.Normal.Dot(lightSourceDirection));
-                    var glossFactor =
-                        normalFactor *
-                        normalFactor *
-                        normalFactor *
-                        hit.Face.ParentGeometry.Material.Glossyness;
-
-                    var glossColor = ColorUtils.Scale(totalLightColor, glossFactor);
-                    totalGlossColor = ColorUtils.Add(litColor, glossColor);
-                }
-            }
-
-            // Apply shadow total.
-            if (settings.ApplyShadows)
-            {
-                litColor = ColorUtils.Multiply(litColor, totalLightColor);
-            }
-
-            // Apply - add on top - gloss.
-            litColor = ColorUtils.Add(litColor, totalGlossColor);
-
-            return litColor;
-        }
-
-        private static Color DetermineLightColorRecursive(RayHit hit, LightSource light, IEnumerable<Face> allFaces, IRenderSettings settings, int currentDepth = 0)
-        {
-            if (currentDepth >= settings.MaxRecursionDepth)
-            {
-                return Color.Black;
-            }
-
-            var toLight = light.Location - hit.Position;
-            var lightSourceCheckRay = new Ray(hit.Position, toLight, originFace: hit.Face);
-            var nearestHit = lightSourceCheckRay.DetectNearestHit(allFaces);
-
-            if (nearestHit == null ||
-                toLight.LengthSquared() < nearestHit.Distance * nearestHit.Distance) // TODO: add max distance to ray?
-            {
-                return light.Color;
-            }
-
-            // Use simple, non-fancy lighting?
-            if (!settings.UseFancyLighting)
-            {
-                return Color.Black;
-            }
-
-            var material = nearestHit.Face.ParentGeometry.Material;
-            if (material.Transparency <= 0)
-            {
-                // No light.
-                return Color.Black;
-            }
-
-            var colorBefore = DetermineLightColorRecursive(nearestHit, light, allFaces, settings, currentDepth + 1);
-            var colorHueAdjusted = ColorUtils.Add(
-                ColorUtils.Scale(colorBefore, material.Transparency),
-                ColorUtils.Scale(material.BaseColor, 1 - material.Transparency));
-
-            var colorDampened = ColorUtils.Scale(colorHueAdjusted, material.Transparency);
-
-            return colorDampened;
         }
 
         private static Color ApplyReflectionRecursive(
@@ -317,7 +235,7 @@ namespace RayTracing.Rendering
             }
 
             var transmissionRay = new Ray(hit.Position, newDirection, originFace: hit.Face, insideObjects);
-            
+
             // Recursive call.
             var refractedColor = DeterminePixelColorRecursive(
                 transmissionRay,
@@ -332,6 +250,92 @@ namespace RayTracing.Rendering
                 ColorUtils.Scale(refractedColor, transparency));
 
             return colorWithReflection;
+        }
+
+        private static Color ApplyLighting(
+            Color baseColor,
+            RayHit hit,
+            IEnumerable<Face> allFaces,
+            IEnumerable<LightSource> lightSources,
+            IRenderSettings settings)
+        {
+            var litColor = baseColor;
+            var totalLightColor = settings.AmbientLightColor;
+            var totalGlossColor = Color.Black;
+
+            foreach (var light in lightSources)
+            {
+                var lightColor = DetermineLightColorRecursive(hit, light, allFaces, settings);
+                totalLightColor = ColorUtils.Add(totalLightColor, lightColor);
+
+                if (settings.ApplyGloss)
+                {
+                    var lightSourceDirection = (light.Location - hit.Position).Norm()!.Value;
+                    var normalFactor = System.Math.Abs(hit.Face.Normal.Dot(lightSourceDirection));
+                    var glossFactor =
+                        normalFactor *
+                        normalFactor *
+                        normalFactor *
+                        normalFactor *
+                        normalFactor *
+                        hit.Face.ParentGeometry.Material.Glossyness *
+                        hit.Face.ParentGeometry.Material.Reflectivity;
+
+                    var glossColor = ColorUtils.Scale(totalLightColor, glossFactor);
+                    totalGlossColor = ColorUtils.Add(totalGlossColor, glossColor);
+                }
+            }
+
+            // Apply shadow total.
+            if (settings.ApplyShadows)
+            {
+                litColor = ColorUtils.Multiply(litColor, totalLightColor);
+            }
+
+            // Apply - add on top - gloss.
+            litColor = ColorUtils.Add(litColor, totalGlossColor);
+
+            return litColor;
+        }
+
+        private static Color DetermineLightColorRecursive(RayHit hit, LightSource light, IEnumerable<Face> allFaces, IRenderSettings settings, int currentDepth = 0)
+        {
+            if (currentDepth >= settings.MaxRecursionDepth)
+            {
+                return Color.Black;
+            }
+
+            var toLight = light.Location - hit.Position;
+            var lightSourceCheckRay = new Ray(hit.Position, toLight, originFace: hit.Face);
+            var nearestHit = lightSourceCheckRay.DetectNearestHit(allFaces);
+
+            if (nearestHit == null ||
+                toLight.LengthSquared() < nearestHit.Distance * nearestHit.Distance) // TODO: add max distance to ray?
+            {
+                return light.Color;
+            }
+
+            // Use simple, non-fancy lighting?
+            if (!settings.UseFancyLighting)
+            {
+                return Color.Black;
+            }
+
+            var material = nearestHit.Face.ParentGeometry.Material;
+            if (material.Transparency <= 0)
+            {
+                // No light.
+                return Color.Black;
+            }
+
+            var colorBefore = DetermineLightColorRecursive(nearestHit, light, allFaces, settings, currentDepth + 1);
+            var colorHueAdjusted = ColorUtils.Add(
+                ColorUtils.Scale(colorBefore, material.Transparency),
+                ColorUtils.Scale(material.BaseColor, 1 - material.Transparency));
+
+            var colorDampened = ColorUtils.Scale(colorHueAdjusted, material.Transparency);
+
+            return colorDampened;
         }
 
         private static Matrix4x4 AsMatrix(Vector3 vector)

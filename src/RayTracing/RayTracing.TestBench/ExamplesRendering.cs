@@ -59,14 +59,16 @@ namespace RayTracing.TestBench
 
                     var glassMaterial = scene.Materials.Single(m => m.Name.Contains("Glass"));
                     glassMaterial.Reflectivity = 0.9f;
+                    glassMaterial.Glossyness = 0.8f;
                     glassMaterial.Transparency = 0.75f;
 
                     var bottleMaterial = scene.Materials.Single(m => m.Name.Contains("Bottle"));
-                    glassMaterial.Reflectivity = 0.9f;
-                    glassMaterial.Transparency = 0.6f;
+                    bottleMaterial.Reflectivity = 0.9f;
+                    bottleMaterial.Glossyness = 0.7f;
+                    bottleMaterial.Transparency = 0.6f;
                 },
-                resX: 100,
-                resY: 120,
+                resX: 50,
+                resY: 60,
                 camera =>
                 {
                     camera.Position = new Vector3(0, 1f, -1.3f);
