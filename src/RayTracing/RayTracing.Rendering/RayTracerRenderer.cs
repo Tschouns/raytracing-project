@@ -101,23 +101,7 @@ namespace RayTracing.Rendering
             }
 
             var baseColor = hit.Face.ParentGeometry.Material.BaseColor;
-
-            // Check light sources.
-            var totalLightColor = settings.AmbientLightColor;
-
-            foreach (var light in lightSources)
-            {
-                var lightSourceCheckRay = new Ray(hit.Position, light.Location - hit.Position, originFace: hit.Face);
-                
-                if (!lightSourceCheckRay.HasAnyHit(allFaces))
-                {
-                    var lightFactor = hit.Face.Normal.Dot(lightSourceCheckRay.Direction.Norm()!.Value);
-                    var additionalLight = ColorUtils.Scale(light.Color, lightFactor);
-                    totalLightColor = ColorUtils.Add(totalLightColor, additionalLight);
-                }
-            }
-
-            var litColor = ColorUtils.Multiply(baseColor, totalLightColor);
+            var litColor = ApplyLight(baseColor, hit, allFaces, lightSources, settings);
 
             // Get reflection.
             var n = AsMatrix(hit.Face.Normal);
@@ -145,6 +129,34 @@ namespace RayTracing.Rendering
 
             return color;
         }
+
+        private static Color ApplyLight(
+            Color baseColor,
+            RayHit hit,
+            IEnumerable<Face> allFaces,
+            IEnumerable<LightSource> lightSources,
+            IRenderSettings settings)
+        {
+            var totalLightColor = settings.AmbientLightColor;
+
+            foreach (var light in lightSources)
+            {
+                var lightSourceCheckRay = new Ray(hit.Position, light.Location - hit.Position, originFace: hit.Face);
+
+                if (!lightSourceCheckRay.HasAnyHit(allFaces))
+                {
+                    var lightFactor = hit.Face.Normal.Dot(lightSourceCheckRay.Direction.Norm()!.Value);
+                    var additionalLight = ColorUtils.Scale(light.Color, lightFactor);
+                    totalLightColor = ColorUtils.Add(totalLightColor, additionalLight);
+                }
+            }
+
+            var litColor = ColorUtils.Multiply(baseColor, totalLightColor);
+
+            return litColor;
+        }
+
+
 
         private static Color FogColor(Color baseColor, Color fadeColor, float distance, float maxDistance)
         {
