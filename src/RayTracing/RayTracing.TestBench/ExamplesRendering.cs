@@ -41,6 +41,7 @@ namespace RayTracing.TestBench
                     //ApplyShadows = false,
                     //ApplyReflections = false,
                     //ApplyTransmission = false,
+                    ApplyGloss = true,
                     DepthCueingMaxDistance = 100f,
                     MaxRecursionDepth = 5,
                 });
