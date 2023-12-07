@@ -27,10 +27,10 @@ namespace RayTracing.TestBench
                 },
                 new RenderSettings
                 {
-                    FillBackground = false,
-                    ApplyDepthCueing = false,
-                    ApplyNormalShading = false,
-                    ApplyShadows = false,
+                    FillBackground = true,
+                    ApplyDepthCueing = true,
+                    ApplyNormalShading = true,
+                    ApplyShadows = true,
                     ApplyReflections = true,
                     DepthCueingMaxDistance = 100f,
                 });
@@ -45,14 +45,15 @@ namespace RayTracing.TestBench
                 {
                     var glassMaterial = scene.Materials.Single(m => m.Name.Contains("Glass"));
                     glassMaterial.BaseColor = Color.GreenYellow;
-                    glassMaterial.Reflectivity = 0.9f;
+                    glassMaterial.Reflectivity = 0.8f;
                 },
-                resX: 90,
-                resY: 120,
+                resX: 300,
+                resY: 300,
                 camera =>
                 {
                     camera.Position = new Vector3(0, 1f, -1.3f);
-                    camera.LookingDirection = new Vector3(0, -0.5f, 0.8f);
+                    camera.LookingDirection = new Vector3(0, -0.5f, 0.7f);
+                    camera.FocalLength *= 1.5f;
                 },
                 new RenderSettings
                 {
