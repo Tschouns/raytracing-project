@@ -11,6 +11,7 @@ namespace RayTracing.Rendering.Settings
         public bool ApplyNormalShading { get; set; } = true;
         public bool ApplyReflections { get; set; } = true;
         public bool ApplyTransmission { get; set; } = true;
+        public bool UseFancyLighting { get; set; } = true;
         public Color FillBackgroundColor { get; set; } = Color.CornflowerBlue;
         public Color AmbientLightColor { get; set; } = Color.DarkSlateGray;
         public Color DepthCueingColor { get; set; } = Color.AliceBlue;

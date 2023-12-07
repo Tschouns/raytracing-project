@@ -65,8 +65,8 @@ namespace RayTracing.TestBench
                     glassMaterial.Reflectivity = 0.9f;
                     glassMaterial.Transparency = 0.6f;
                 },
-                resX: 500,
-                resY: 600,
+                resX: 100,
+                resY: 120,
                 camera =>
                 {
                     camera.Position = new Vector3(0, 1f, -1.3f);
@@ -81,6 +81,7 @@ namespace RayTracing.TestBench
                     ApplyShadows = true,
                     ApplyReflections = true,
                     ApplyTransmission = true,
+                    UseFancyLighting = true,
                     DepthCueingMaxDistance = 20f,
                     MaxRecursionDepth = 5,
                 });

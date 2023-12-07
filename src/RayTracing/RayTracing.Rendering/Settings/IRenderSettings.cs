@@ -40,6 +40,11 @@ namespace RayTracing.Rendering.Settings
         public bool ApplyTransmission { get; }
 
         /// <summary>
+        /// Gets a value indicating whether the rendering shall use fancy lighting, i.e. take transparency into account when detecting light.
+        /// </summary>
+        public bool UseFancyLighting { get; }
+
+        /// <summary>
         /// Gets the background color to fill the screen with.
         /// </summary>
         public Color FillBackgroundColor { get; }

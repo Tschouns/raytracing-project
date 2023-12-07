@@ -202,6 +202,12 @@ namespace RayTracing.Rendering
                 return light.Color;
             }
 
+            // Use simple, non-fancy lighting?
+            if (!settings.UseFancyLighting)
+            {
+                return Color.Black;
+            }
+
             var material = nearestHit.Face.ParentGeometry.Material;
             if (material.Transparency <= 0)
             {
