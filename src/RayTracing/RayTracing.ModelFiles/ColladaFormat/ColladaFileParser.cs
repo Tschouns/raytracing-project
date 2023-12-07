@@ -117,6 +117,7 @@ namespace RayTracing.ModelFiles.ColladaFormat
                 xmlMaterial.Name,
                 color,
                 reflectivity,
+                glossyness: 0.5f, // TODO: how to get?
                 transparency: 0f, // TODO: how to get?
                 indexOfRefraction);
         }

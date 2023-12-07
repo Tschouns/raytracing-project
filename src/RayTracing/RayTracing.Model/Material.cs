@@ -9,12 +9,14 @@ namespace RayTracing.Model
             string name,
             Color color,
             float reflectivity,
+            float glossyness,
             float transparency,
             float indexOfRefraction)
         {
             Name = name;
             BaseColor = color;
             Reflectivity = reflectivity;
+            Glossyness = glossyness;
             Transparency = transparency;
             IndexOfRefraction = indexOfRefraction;
         }
@@ -22,6 +24,7 @@ namespace RayTracing.Model
         public string Name { get; }
         public Color BaseColor { get; set; }
         public float Reflectivity { get; set; }
+        public float Glossyness { get; set; }
         public float Transparency { get; set; }
         public float IndexOfRefraction { get; set; }
     }

@@ -37,6 +37,7 @@ namespace RayTracing.ModelFiles.ObjFormat
                 "dummy-material",
                 Color.DeepPink,
                 reflectivity: 0.5f,
+                glossyness: 0.5f,
                 transparency: 0f,
                 indexOfRefraction: 1.3f);
 

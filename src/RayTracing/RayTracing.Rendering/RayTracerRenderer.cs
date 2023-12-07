@@ -113,9 +113,9 @@ namespace RayTracing.Rendering
                 pixelColor = ApplyNormalShading(pixelColor, hit, lightSources, settings);
             }
 
-            if (settings.ApplyShadows)
+            if (settings.ApplyShadows || settings.ApplyGloss)
             {
-                pixelColor = ApplyShadows(pixelColor, hit, allFaces, lightSources, settings);
+                pixelColor = ApplyLighting(pixelColor, hit, allFaces, lightSources, settings);
             }
 
             if (settings.ApplyReflections)
@@ -165,22 +165,45 @@ namespace RayTracing.Rendering
             return litColor;
         }
 
-        private static Color ApplyShadows(
+        private static Color ApplyLighting(
             Color baseColor,
             RayHit hit,
             IEnumerable<Face> allFaces,
             IEnumerable<LightSource> lightSources,
             IRenderSettings settings)
         {
+            var litColor = baseColor;
             var totalLightColor = settings.AmbientLightColor;
+            var totalGlossColor = Color.Black;
 
             foreach (var light in lightSources)
             {
                 var lightColor = DetermineLightColorRecursive(hit, light, allFaces, settings);
                 totalLightColor = ColorUtils.Add(totalLightColor, lightColor);
+
+                if (settings.ApplyGloss)
+                {
+                    var lightSourceDirection = (light.Location - hit.Position).Norm()!.Value;
+                    var normalFactor = System.Math.Abs(hit.Face.Normal.Dot(lightSourceDirection));
+                    var glossFactor =
+                        normalFactor *
+                        normalFactor *
+                        normalFactor *
+                        hit.Face.ParentGeometry.Material.Glossyness;
+
+                    var glossColor = ColorUtils.Scale(totalLightColor, glossFactor);
+                    totalGlossColor = ColorUtils.Add(litColor, glossColor);
+                }
             }
 
-            var litColor = ColorUtils.Multiply(baseColor, totalLightColor);
+            // Apply shadow total.
+            if (settings.ApplyShadows)
+            {
+                litColor = ColorUtils.Multiply(litColor, totalLightColor);
+            }
+
+            // Apply - add on top - gloss.
+            litColor = ColorUtils.Add(litColor, totalGlossColor);
 
             return litColor;
         }

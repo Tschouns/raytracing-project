@@ -8,6 +8,7 @@ namespace RayTracing.Rendering.Settings
         public bool FillBackground { get; set; } = true;
         public bool ApplyDepthCueing { get; set; } = true;
         public bool ApplyShadows { get; set; } = true;
+        public bool ApplyGloss { get; set; } = true;
         public bool ApplyNormalShading { get; set; } = true;
         public bool ApplyReflections { get; set; } = true;
         public bool ApplyTransmission { get; set; } = true;

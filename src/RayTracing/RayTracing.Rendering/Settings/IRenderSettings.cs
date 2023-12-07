@@ -30,6 +30,11 @@ namespace RayTracing.Rendering.Settings
         public bool ApplyShadows { get; }
 
         /// <summary>
+        /// Gets a value indicating whether the rendering shall apply gloss.
+        /// </summary>
+        public bool ApplyGloss { get; }
+
+        /// <summary>
         /// Gets a value indicating whether the rendering shall apply reflections.
         /// </summary>
         public bool ApplyReflections { get; }
