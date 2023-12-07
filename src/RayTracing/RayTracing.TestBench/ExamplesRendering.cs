@@ -55,10 +55,10 @@ namespace RayTracing.TestBench
                     var glassMaterial = scene.Materials.Single(m => m.Name.Contains("Glass"));
                     glassMaterial.BaseColor = Color.GreenYellow;
                     glassMaterial.Reflectivity = 0.8f;
-                    glassMaterial.Transparency = 0.8f;
+                    glassMaterial.Transparency = 0.6f;
                 },
-                resX: 300,
-                resY: 300,
+                resX: 100,
+                resY: 100,
                 camera =>
                 {
                     camera.Position = new Vector3(0, 1f, -1.3f);

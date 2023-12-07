@@ -177,16 +177,45 @@ namespace RayTracing.Rendering
             foreach (var light in lightSources)
             {
                 // TODO: allow for transparency??
-                var lightSourceCheckRay = new Ray(hit.Position, light.Location - hit.Position, originFace: hit.Face);
-                if (!lightSourceCheckRay.HasAnyHit(allFaces))
-                {
-                    totalLightColor = ColorUtils.Add(totalLightColor, light.Color);
-                }
+                var lightColor = DetermineLightColorRecursive(hit, light, allFaces, settings);
+                totalLightColor = ColorUtils.Add(totalLightColor, lightColor);
             }
 
             var litColor = ColorUtils.Multiply(baseColor, totalLightColor);
 
             return litColor;
+        }
+
+        private static Color DetermineLightColorRecursive(RayHit hit, LightSource light, IEnumerable<Face> allFaces, IRenderSettings settings, int currentDepth = 0)
+        {
+            if (currentDepth >= settings.MaxRecursionDepth)
+            {
+                return Color.Black;
+            }
+
+            var toLight = light.Location - hit.Position;
+            var lightSourceCheckRay = new Ray(hit.Position, toLight, originFace: hit.Face);
+            var nearestHit = lightSourceCheckRay.DetectNearestHit(allFaces);
+
+            if (nearestHit == null ||
+                toLight.LengthSquared() < nearestHit.Distance * nearestHit.Distance) // TODO: add max distance to ray?
+            {
+                return light.Color;
+            }
+
+            var material = nearestHit.Face.ParentGeometry.Material;
+            if (material.Transparency <= 0)
+            {
+                // No light.
+                return Color.Black;
+            }
+
+            var colorBefore = DetermineLightColorRecursive(nearestHit, light, allFaces, settings, currentDepth + 1);
+            var colorChanged = ColorUtils.Add(
+                ColorUtils.Scale(colorBefore, material.Transparency),
+                ColorUtils.Scale(material.BaseColor, 1 - material.Transparency));
+
+            return colorChanged;
         }
 
         private static Color ApplyReflectionRecursive(
