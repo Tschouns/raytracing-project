@@ -197,9 +197,9 @@ namespace RayTracing.ModelFiles.ColladaFormat
                 var c = verticesTransformed[vertexIndexes[i + 2]];
 
                 var triangle = new Triangle3D(a, b, c);
-                var normal = ((b - a).Cross(c - a)).Norm();
+                var normal = ((b - a).Cross(c - a)).Norm() ?? new Vector3(1,0,0);
 
-                faces.Add(new Face(geometry, triangle, normal.Value));
+                faces.Add(new Face(geometry, triangle, normal));
             }
 
             return geometry;

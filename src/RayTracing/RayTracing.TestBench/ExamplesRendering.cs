@@ -58,17 +58,20 @@ namespace RayTracing.TestBench
                     tableMaterial.Reflectivity = 0.4f;
 
                     var glassMaterial = scene.Materials.Single(m => m.Name.Contains("Glass"));
-                    glassMaterial.BaseColor = Color.LightGreen;
                     glassMaterial.Reflectivity = 0.9f;
                     glassMaterial.Transparency = 0.75f;
+
+                    var bottleMaterial = scene.Materials.Single(m => m.Name.Contains("Bottle"));
+                    glassMaterial.Reflectivity = 0.9f;
+                    glassMaterial.Transparency = 0.6f;
                 },
-                resX: 300,
+                resX: 250,
                 resY: 300,
                 camera =>
                 {
                     camera.Position = new Vector3(0, 1f, -1.3f);
-                    camera.LookingDirection = new Vector3(0, -0.5f, 0.7f);
-                    camera.FocalLength *= 1.5f;
+                    camera.LookingDirection = new Vector3(0, -0.5f, 1f);
+                    //camera.FocalLength *= 1.1f;
                 },
                 new RenderSettings
                 {
