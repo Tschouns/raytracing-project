@@ -28,6 +28,9 @@ namespace RayTracing.TestBench
                 new RenderSettings
                 {
                     FillBackground = false,
+                    ApplyDepthCueing = false,
+                    ApplyShadows = true,
+                    ApplyReflections = false,
                     DepthCueingMaxDistance = 100f,
                 });
         }

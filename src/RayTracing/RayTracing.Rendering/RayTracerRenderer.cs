@@ -100,15 +100,40 @@ namespace RayTracing.Rendering
                 return settings.DepthCueingColor;
             }
 
+            // Start with the base color...
             var pixelColor = hit.Face.ParentGeometry.Material.BaseColor;
-            pixelColor = ApplyLight(pixelColor, hit, allFaces, lightSources, settings);
-            pixelColor = ApplyReflectionRecursive(pixelColor, hit, allFaces, lightSources, settings, depth);
-            pixelColor = ApplyDepthCueing(pixelColor, settings.DepthCueingColor, hit.Distance, settings.DepthCueingMaxDistance);
+
+            if (settings.ApplyDepthCueing)
+            {
+                pixelColor = ApplyDepthCueing(pixelColor, settings.DepthCueingColor, hit.Distance, settings.DepthCueingMaxDistance);
+            }
+
+            if (settings.ApplyShadows)
+            {
+                pixelColor = ApplyShadows(pixelColor, hit, allFaces, lightSources, settings);
+            }
+
+            if (settings.ApplyReflections)
+            {
+                pixelColor = ApplyReflectionRecursive(pixelColor, hit, allFaces, lightSources, settings, depth);
+            }
 
             return pixelColor;
         }
 
-        private static Color ApplyLight(
+        private static Color ApplyDepthCueing(Color baseColor, Color fadeColor, float distance, float maxDistance)
+        {
+            var fadeFactor = System.Math.Clamp(distance / maxDistance, 0, 1);
+
+            var fadeColorFraction = ColorUtils.Scale(fadeColor, fadeFactor);
+            var baseColorFraction = ColorUtils.Scale(baseColor, 1 - fadeFactor);
+
+            var newColor = ColorUtils.Add(baseColorFraction, fadeColorFraction);
+
+            return newColor;
+        }
+
+        private static Color ApplyShadows(
             Color baseColor,
             RayHit hit,
             IEnumerable<Face> allFaces,
@@ -164,18 +189,6 @@ namespace RayTracing.Rendering
                 ColorUtils.Scale(reflectionColor, reflectivity));
 
             return colorWithReflection;
-        }
-
-        private static Color ApplyDepthCueing(Color baseColor, Color fadeColor, float distance, float maxDistance)
-        {
-            var fadeFactor = System.Math.Clamp(distance / maxDistance, 0, 1);
-            
-            var fadeColorFraction = ColorUtils.Scale(fadeColor, fadeFactor);
-            var baseColorFraction = ColorUtils.Scale(baseColor, 1 - fadeFactor);
-
-            var newColor = ColorUtils.Add(baseColorFraction, fadeColorFraction);
-
-            return newColor;
         }
 
         private static Matrix4x4 AsMatrix(Vector3 vector)

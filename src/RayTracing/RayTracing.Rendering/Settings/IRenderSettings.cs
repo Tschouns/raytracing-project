@@ -15,6 +15,21 @@ namespace RayTracing.Rendering.Settings
         public bool FillBackground { get;}
 
         /// <summary>
+        /// Gets a value indicating whether the rendering shall apply depth cueing.
+        /// </summary>
+        public bool ApplyDepthCueing { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether the rendering shall apply shodows.
+        /// </summary>
+        public bool ApplyShadows { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether the rendering shall apply reflections.
+        /// </summary>
+        public bool ApplyReflections { get; }
+
+        /// <summary>
         /// Gets the background color to fill the screen with.
         /// </summary>
         public Color FillBackgroundColor { get; }
