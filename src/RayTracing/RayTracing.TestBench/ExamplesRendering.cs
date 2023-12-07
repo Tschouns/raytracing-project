@@ -19,10 +19,10 @@ namespace RayTracing.TestBench
                     planeMaterial.Reflectivity = 0.1f;
 
                     var cubeMaterial = scene.Materials.Single(m => m.Name.Contains("Cube"));
-                    cubeMaterial.Transparency = 0.8f;
+                    cubeMaterial.Transparency = 0.3f;
 
                     var cylinderMaterial = scene.Materials.Single(m => m.Name.Contains("Cylinder"));
-                    cylinderMaterial.Reflectivity = 0;
+                    cylinderMaterial.Reflectivity = 0.8f;
                     cylinderMaterial.Transparency = 0.5f;
                 },
                 resX: 400,
@@ -54,16 +54,16 @@ namespace RayTracing.TestBench
                 scene =>
                 {
                     var tableMaterial = scene.Materials.Single(m => m.Name.Contains("Table"));
-                    tableMaterial.BaseColor = Color.LightGray;
-                    tableMaterial.Reflectivity = 0.2f;
+                    tableMaterial.BaseColor = Color.WhiteSmoke;
+                    tableMaterial.Reflectivity = 0.3f;
 
                     var glassMaterial = scene.Materials.Single(m => m.Name.Contains("Glass"));
                     glassMaterial.BaseColor = Color.GreenYellow;
                     glassMaterial.Reflectivity = 0.8f;
-                    glassMaterial.Transparency = 0.9f;
+                    glassMaterial.Transparency = 0.85f;
                 },
-                resX: 50,
-                resY: 50,
+                resX: 300,
+                resY: 300,
                 camera =>
                 {
                     camera.Position = new Vector3(0, 1f, -1.3f);
