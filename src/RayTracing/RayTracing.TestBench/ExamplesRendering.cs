@@ -16,6 +16,12 @@ namespace RayTracing.TestBench
                 {
                     var planeMaterial = scene.Materials.Single(m => m.Name.Contains("Plane"));
                     planeMaterial.Reflectivity = 0.2f;
+
+                    var cubeMaterial = scene.Materials.Single(m => m.Name.Contains("Cube"));
+                    cubeMaterial.Transparency = 0.2f;
+
+                    var cylinderMaterial = scene.Materials.Single(m => m.Name.Contains("Cylinder"));
+                    cylinderMaterial.Transparency = 0.1f;
                 },
                 resX: 400,
                 resY: 300,

@@ -35,6 +35,11 @@ namespace RayTracing.Rendering.Settings
         public bool ApplyReflections { get; }
 
         /// <summary>
+        /// Gets a value indicating whether the rendering shall apply transmission.
+        /// </summary>
+        public bool ApplyTransmission { get; }
+
+        /// <summary>
         /// Gets the background color to fill the screen with.
         /// </summary>
         public Color FillBackgroundColor { get; }

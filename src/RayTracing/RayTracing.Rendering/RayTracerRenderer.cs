@@ -123,6 +123,11 @@ namespace RayTracing.Rendering
                 pixelColor = ApplyReflectionRecursive(pixelColor, hit, allFaces, lightSources, settings, depth);
             }
 
+            if (settings.ApplyTransmission)
+            {
+                pixelColor = ApplyTransmissionRecursive(pixelColor, hit, ray.IsInsideObject, allFaces, lightSources, settings, depth);
+            }
+
             return pixelColor;
         }
 
@@ -171,6 +176,7 @@ namespace RayTracing.Rendering
 
             foreach (var light in lightSources)
             {
+                // TODO: allow for transparency??
                 var lightSourceCheckRay = new Ray(hit.Position, light.Location - hit.Position, originFace: hit.Face);
                 if (!lightSourceCheckRay.HasAnyHit(allFaces))
                 {
@@ -211,6 +217,32 @@ namespace RayTracing.Rendering
             var colorWithReflection = ColorUtils.Add(
                 ColorUtils.Scale(baseColor, 1 - reflectivity),
                 ColorUtils.Scale(reflectionColor, reflectivity));
+
+            return colorWithReflection;
+        }
+
+        private static Color ApplyTransmissionRecursive(
+            Color baseColor,
+            RayHit hit,
+            bool isInside,
+            IEnumerable<Face> allFaces,
+            IEnumerable<LightSource> lightSources,
+            IRenderSettings settings,
+            int currentRecursionDepth)
+        {
+            var newDirection = hit.Direction; // TODO: use IOR;
+            var transmissionRay = new Ray(hit.Position, newDirection, originFace: hit.Face, !isInside);
+            var refractedColor = DetermineColorRecursive(
+                transmissionRay,
+                allFaces,
+                lightSources,
+                settings,
+                currentRecursionDepth + 1);
+
+            var transparency = hit.Face.ParentGeometry.Material.Transparency;
+            var colorWithReflection = ColorUtils.Add(
+                ColorUtils.Scale(baseColor, 1 - transparency),
+                ColorUtils.Scale(refractedColor, transparency));
 
             return colorWithReflection;
         }
