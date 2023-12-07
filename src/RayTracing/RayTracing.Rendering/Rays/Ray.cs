@@ -42,42 +42,48 @@ namespace RayTracing.Rendering.Rays
         {
             Argument.AssertNotNull(faces, nameof(faces));
 
-            Vector3? firstHitPoint = null;
-            Face? hitFace = null;
+            Vector3? nearestHitPoint = null;
+            Face? nearestHitFace = null;
+            float? nearestHitDistanceSquared = null;
 
             foreach (var face in faces)
             {
-                if (this.DetectForwardHitInternal(face, out var intersectionPoint))
+                if (this.DetectForwardHitInternal(face, out var currentHitPoint))
                 {
-                    if (firstHitPoint == null)
+                    if (nearestHitPoint == null)
                     {
-                        firstHitPoint = intersectionPoint;
-                        hitFace = face;
+                        nearestHitPoint = currentHitPoint;
+                        nearestHitFace = face;
+                        nearestHitDistanceSquared = (nearestHitPoint.Value - Origin).LengthSquared();
+
                         continue;
                     }
 
-                    if ((intersectionPoint - Origin).LengthSquared() <
-                        (firstHitPoint.Value - Origin).LengthSquared())
+                    var currentHitDistanceSquared = (currentHitPoint - Origin).LengthSquared();
+                    var changeSquared = currentHitDistanceSquared - nearestHitDistanceSquared;
+
+                    if (changeSquared < 0)
                     {
-                        firstHitPoint = intersectionPoint;
-                        hitFace = face;
+                        nearestHitPoint = currentHitPoint;
+                        nearestHitFace = face;
+                        nearestHitDistanceSquared = currentHitDistanceSquared;
                     }
                 }
             }
 
-            if (!firstHitPoint.HasValue)
+            if (!nearestHitPoint.HasValue)
             {
                 return null;
             }
 
-            var distance = (firstHitPoint.Value - Origin).Length();
+            var distance = MathF.Sqrt(nearestHitDistanceSquared!.Value);
 
             return new RayHit(
-                firstHitPoint.Value,
+                nearestHitPoint.Value,
                 this.Direction,
                 distance, 
-                hitFace!,
-                isBackFaceHit: InsideObjects.Contains(hitFace.ParentGeometry)); // That means we're hitting the face from inside the object.
+                nearestHitFace!,
+                isBackFaceHit: InsideObjects.Contains(nearestHitFace.ParentGeometry)); // That means we're hitting the face from inside the object.
         }
 
         private bool DetectForwardHitInternal(Face face, out Vector3 intersectionPoint)

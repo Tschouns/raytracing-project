@@ -197,7 +197,13 @@ namespace RayTracing.Rendering
             IRenderSettings settings,
             int currentRecursionDepth)
         {
-            // Get reflection.
+            // A little optimization:
+            if (hit.Face.ParentGeometry.Material.Reflectivity <= 0)
+            {
+                return baseColor;
+            }
+
+            // Get reflection ray.
             var n = AsMatrix(hit.Face.Normal);
             var nT = n.Transpose();
             var nnT = n.Multiply(nT);
@@ -206,6 +212,8 @@ namespace RayTracing.Rendering
             var outgoingDirection = reflectTransform.ApplyTo(hit.Direction);
 
             var reflectionRay = new Ray(hit.Position, outgoingDirection, originFace: hit.Face);
+
+            // Recursive call.
             var reflectionColor = DetermineColorRecursive(
                 reflectionRay,
                 allFaces,
@@ -250,6 +258,8 @@ namespace RayTracing.Rendering
             }
 
             var transmissionRay = new Ray(hit.Position, newDirection, originFace: hit.Face, insideObjects);
+            
+            // Recursive call.
             var refractedColor = DetermineColorRecursive(
                 transmissionRay,
                 allFaces,

@@ -21,7 +21,8 @@ namespace RayTracing.TestBench
                     cubeMaterial.Transparency = 0.2f;
 
                     var cylinderMaterial = scene.Materials.Single(m => m.Name.Contains("Cylinder"));
-                    cylinderMaterial.Transparency = 0.1f;
+                    cylinderMaterial.Reflectivity = 0;
+                    cylinderMaterial.Transparency = 0;
                 },
                 resX: 400,
                 resY: 300,

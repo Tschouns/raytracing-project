@@ -4,7 +4,6 @@ using RayTracing.ModelFiles.ColladaFormat;
 using RayTracing.Rendering.Cameras;
 using RayTracing.Rendering.Settings;
 using RayTracing.Rendering;
-using System.Drawing;
 using RayTracing.Math;
 using RayTracing.Model;
 
