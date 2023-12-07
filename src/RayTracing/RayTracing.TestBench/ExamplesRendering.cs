@@ -54,12 +54,12 @@ namespace RayTracing.TestBench
                 scene =>
                 {
                     var tableMaterial = scene.Materials.Single(m => m.Name.Contains("Table"));
-                    tableMaterial.BaseColor = Color.WhiteSmoke;
-                    tableMaterial.Reflectivity = 0.3f;
+                    tableMaterial.BaseColor = Color.LightSteelBlue;
+                    tableMaterial.Reflectivity = 0.4f;
 
                     var glassMaterial = scene.Materials.Single(m => m.Name.Contains("Glass"));
-                    glassMaterial.BaseColor = Color.GreenYellow;
-                    glassMaterial.Reflectivity = 0.8f;
+                    glassMaterial.BaseColor = Color.LightGreen;
+                    glassMaterial.Reflectivity = 0.9f;
                     glassMaterial.Transparency = 0.75f;
                 },
                 resX: 300,
