@@ -31,6 +31,8 @@ namespace RayTracing.TestBench
             var parser = new ColladaFileParser();
             var scene = parser.LoadFromFile(colladaFile);
 
+            configureScene(scene);
+
             // Setup camera.
             var camera = new Camera(resX, resY);
             configureCamera(camera);
