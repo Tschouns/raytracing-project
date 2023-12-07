@@ -38,7 +38,9 @@ namespace RayTracing.TestBench
                     ApplyNormalShading = true,
                     ApplyShadows = true,
                     ApplyReflections = true,
+                    ApplyTransmission = true,
                     DepthCueingMaxDistance = 100f,
+                    MaxRecursionDepth = 5,
                 });
         }
 

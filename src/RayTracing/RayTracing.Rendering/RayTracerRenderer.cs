@@ -230,6 +230,12 @@ namespace RayTracing.Rendering
             IRenderSettings settings,
             int currentRecursionDepth)
         {
+            // A little optimization:
+            if (hit.Face.ParentGeometry.Material.Transparency <= 0)
+            {
+                return baseColor;
+            }
+
             var newDirection = hit.Direction; // TODO: use IOR;
 
             // Keep track of which object(s) we're inside of.
