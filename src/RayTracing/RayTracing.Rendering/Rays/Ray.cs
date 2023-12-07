@@ -32,26 +32,9 @@ namespace RayTracing.Rendering.Rays
         {
             Argument.AssertNotNull(faces, nameof(faces));
 
-            var hitLine = new Line3D(Origin, Origin + Direction);
-
             foreach (var face in faces)
             {
-                if (face == this.OriginFace)
-                {
-                    continue;
-                }
-
-                // Back-face culling.
-                if (this.CullFace(face))
-                {
-                    continue;
-                }
-
-                // Detect intersection.
-                var intersect = VectorCalculator3D.IntersectTriangle(hitLine, face.Triangle);
-                
-                if (intersect.HasIntersection &&
-                    intersect.Lambda > 0)
+                if (this.DetectForwardHitInternal(face, out _))
                 {
                     return true;
                 }
@@ -64,48 +47,26 @@ namespace RayTracing.Rendering.Rays
         {
             Argument.AssertNotNull(faces, nameof(faces));
 
-            var hitLine = new Line3D(Origin, Origin + Direction);
             Vector3? firstHit = null;
             Face? hitFace = null;
 
             foreach (var face in faces)
             {
-                if (face == this.OriginFace)
+                if (this.DetectForwardHitInternal(face, out var intersectionPoint))
                 {
-                    continue;
-                }
+                    if (firstHit == null)
+                    {
+                        firstHit = intersectionPoint;
+                        hitFace = face;
+                        continue;
+                    }
 
-                // Back-face culling.
-                if (this.CullFace(face))
-                {
-                    continue;
-                }
-
-                // Detect intersection.
-                var intersect = VectorCalculator3D.IntersectTriangle(hitLine, face.Triangle);
-                if (!intersect.HasIntersection)
-                {
-                    continue;
-                }
-
-                // Filter out trianlges behind the camera.
-                if (intersect.Lambda < 0)
-                {
-                    continue;
-                }
-
-                if (firstHit == null)
-                {
-                    firstHit = intersect.IntersectionPoint;
-                    hitFace = face;
-                    continue;
-                }
-
-                if ((intersect.IntersectionPoint!.Value - Origin).LengthSquared() <
-                    (firstHit.Value - Origin).LengthSquared())
-                {
-                    firstHit = intersect.IntersectionPoint;
-                    hitFace = face;
+                    if ((intersectionPoint - Origin).LengthSquared() <
+                        (firstHit.Value - Origin).LengthSquared())
+                    {
+                        firstHit = intersectionPoint;
+                        hitFace = face;
+                    }
                 }
             }
 
@@ -117,6 +78,41 @@ namespace RayTracing.Rendering.Rays
             var distance = (firstHit.Value - Origin).Length();
 
             return new RayHit(hitFace!, firstHit.Value, distance);
+        }
+
+        private bool DetectForwardHitInternal(Face face, out Vector3 intersectionPoint)
+        {
+            if (face == this.OriginFace)
+            {
+                intersectionPoint = new Vector3();
+                return false;
+            }
+
+            // Back-face culling.
+            if (this.CullFace(face))
+            {
+                intersectionPoint = new Vector3();
+                return false;
+            }
+
+            // Detect intersection.
+            var hitLine = new Line3D(Origin, Origin + Direction);
+            var intersect = VectorCalculator3D.IntersectTriangle(hitLine, face.Triangle);
+            if (!intersect.HasIntersection)
+            {
+                intersectionPoint = new Vector3();
+                return false;
+            }
+
+            // Filter out triangles "behind" the ray.
+            if (intersect.Lambda < 0)
+            {
+                intersectionPoint = new Vector3();
+                return false;
+            }
+
+            intersectionPoint = intersect.IntersectionPoint!.Value;
+            return true;
         }
 
         private bool CullFace(Face face)
