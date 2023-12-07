@@ -55,6 +55,7 @@ namespace RayTracing.TestBench
                     var glassMaterial = scene.Materials.Single(m => m.Name.Contains("Glass"));
                     glassMaterial.BaseColor = Color.GreenYellow;
                     glassMaterial.Reflectivity = 0.8f;
+                    glassMaterial.Transparency = 0.8f;
                 },
                 resX: 300,
                 resY: 300,
@@ -66,8 +67,14 @@ namespace RayTracing.TestBench
                 },
                 new RenderSettings
                 {
-                    FillBackground = false,
+                    FillBackground = true,
+                    ApplyDepthCueing = true,
+                    ApplyNormalShading = true,
+                    ApplyShadows = true,
+                    ApplyReflections = true,
+                    ApplyTransmission = true,
                     DepthCueingMaxDistance = 20f,
+                    MaxRecursionDepth = 5,
                 });
         }
     }

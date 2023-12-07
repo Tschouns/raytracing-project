@@ -11,6 +11,6 @@ tcpClient.Connect("127.0.0.1", 9012);
 var canvasClient = new CanvasTcpClient(tcpClient);
 
 // Perform example rendering.
-ExamplesRendering.DummyScene(canvasClient);
+ExamplesRendering.GlassScene(canvasClient);
 
 tcpClient.Close();
