@@ -135,7 +135,6 @@ namespace RayTracing.Rendering
                 settings,
                 depth + 1);
 
-            // TODO: get the reflection property from the collada file...
             var reflectivity = hit.Face.ParentGeometry.Material.Reflectivity;
             var colorWithReflection = ColorUtils.Add(
                 ColorUtils.Scale(litColor, 1 - reflectivity),

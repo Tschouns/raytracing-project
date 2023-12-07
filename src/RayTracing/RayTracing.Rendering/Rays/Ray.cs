@@ -10,16 +10,23 @@ namespace RayTracing.Rendering.Rays
     /// </summary>
     public class Ray
     {
-        public Ray(Vector3 origin, Vector3 direction, Face? originFace = null)
+        public Ray(Vector3 origin, Vector3 direction, Face? originFace = null, bool isInsideObject = false)
         {
+            if (isInsideObject && originFace == null)
+            {
+                throw new ArgumentException("A ray inside an object must have an origin face, i.e. the face where it entered.");
+            }
+
             Origin = origin;
             Direction = direction;
             OriginFace = originFace;
+            IsInsideObject = isInsideObject;
         }
 
         public Vector3 Origin { get; }
         public Vector3 Direction { get; }
         public Face? OriginFace { get; }
+        public bool IsInsideObject { get; }
 
         public bool HasAnyHit(IEnumerable<Face> faces)
         {
@@ -29,8 +36,13 @@ namespace RayTracing.Rendering.Rays
 
             foreach (var face in faces)
             {
+                if (face == this.OriginFace)
+                {
+                    continue;
+                }
+
                 // Back-face culling.
-                if (face.Normal.Dot(this.Direction) > 0)
+                if (this.CullFace(face))
                 {
                     continue;
                 }
@@ -39,8 +51,7 @@ namespace RayTracing.Rendering.Rays
                 var intersect = VectorCalculator3D.IntersectTriangle(hitLine, face.Triangle);
                 
                 if (intersect.HasIntersection &&
-                    intersect.Lambda > 0 &&
-                    face != this.OriginFace)
+                    intersect.Lambda > 0)
                 {
                     return true;
                 }
@@ -65,7 +76,7 @@ namespace RayTracing.Rendering.Rays
                 }
 
                 // Back-face culling.
-                if (face.Normal.Dot(this.Direction) > 0)
+                if (this.CullFace(face))
                 {
                     continue;
                 }
@@ -106,6 +117,20 @@ namespace RayTracing.Rendering.Rays
             var distance = (firstHit.Value - Origin).Length();
 
             return new RayHit(hitFace!, firstHit.Value, distance);
+        }
+
+        private bool CullFace(Face face)
+        {
+            // If we are inside an object...
+            if (IsInsideObject &&
+                face.ParentGeometry == OriginFace!.ParentGeometry)
+            {
+                // ...no back-face culling of faces of that object.
+                return false;
+            }
+
+            // Regular back-face culling.
+            return (face.Normal.Dot(this.Direction) > 0);
         }
     }
 }

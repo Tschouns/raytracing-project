@@ -28,7 +28,7 @@ namespace RayTracing.TestBench
                 new RenderSettings
                 {
                     FillBackground = false,
-                    DepthCueingMaxDistance = 20f,
+                    DepthCueingMaxDistance = 100f,
                 });
         }
 
