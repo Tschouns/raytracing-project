@@ -53,13 +53,17 @@ namespace RayTracing.TestBench
                 @"..\..\..\..\..\..\models\glass\glass.dae",
                 scene =>
                 {
+                    var tableMaterial = scene.Materials.Single(m => m.Name.Contains("Table"));
+                    tableMaterial.BaseColor = Color.LightGray;
+                    tableMaterial.Reflectivity = 0.2f;
+
                     var glassMaterial = scene.Materials.Single(m => m.Name.Contains("Glass"));
                     glassMaterial.BaseColor = Color.GreenYellow;
                     glassMaterial.Reflectivity = 0.8f;
-                    glassMaterial.Transparency = 0.6f;
+                    glassMaterial.Transparency = 0.9f;
                 },
-                resX: 100,
-                resY: 100,
+                resX: 50,
+                resY: 50,
                 camera =>
                 {
                     camera.Position = new Vector3(0, 1f, -1.3f);

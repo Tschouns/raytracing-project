@@ -210,11 +210,13 @@ namespace RayTracing.Rendering
             }
 
             var colorBefore = DetermineLightColorRecursive(nearestHit, light, allFaces, settings, currentDepth + 1);
-            var colorChanged = ColorUtils.Add(
+            var colorHueAdjusted = ColorUtils.Add(
                 ColorUtils.Scale(colorBefore, material.Transparency),
                 ColorUtils.Scale(material.BaseColor, 1 - material.Transparency));
 
-            return colorChanged;
+            var colorDampened = ColorUtils.Scale(colorHueAdjusted, material.Transparency);
+
+            return colorDampened;
         }
 
         private static Color ApplyReflectionRecursive(
