@@ -100,34 +100,12 @@ namespace RayTracing.Rendering
                 return settings.DepthCueingColor;
             }
 
-            var baseColor = hit.Face.ParentGeometry.Material.BaseColor;
-            var litColor = ApplyLight(baseColor, hit, allFaces, lightSources, settings);
+            var pixelColor = hit.Face.ParentGeometry.Material.BaseColor;
+            pixelColor = ApplyLight(pixelColor, hit, allFaces, lightSources, settings);
+            pixelColor = ApplyReflectionRecursive(pixelColor, hit, allFaces, lightSources, settings, depth);
+            pixelColor = ApplyDepthCueing(pixelColor, settings.DepthCueingColor, hit.Distance, settings.DepthCueingMaxDistance);
 
-            // Get reflection.
-            var n = AsMatrix(hit.Face.Normal);
-            var nT = n.Transpose();
-            var nnT = n.Multiply(nT);
-            var nnTm2 = nnT.Multiply(-2);
-            var reflectTransform = Matrix4x4.Identity.Add(nnTm2);
-            var outgoingDirection = reflectTransform.ApplyTo(ray.Direction);
-
-            var reflectionRay = new Ray(hit.Position, outgoingDirection, originFace: hit.Face);
-            var reflectionColor = DetermineColorRecursive(
-                reflectionRay,
-                allFaces,
-                lightSources,
-                settings,
-                depth + 1);
-
-            var reflectivity = hit.Face.ParentGeometry.Material.Reflectivity;
-            var colorWithReflection = ColorUtils.Add(
-                ColorUtils.Scale(litColor, 1 - reflectivity),
-                ColorUtils.Scale(reflectionColor, reflectivity));
-
-            // Add depth fog.
-            var color = FogColor(colorWithReflection, settings.DepthCueingColor, hit.Distance, settings.DepthCueingMaxDistance);
-
-            return color;
+            return pixelColor;
         }
 
         private static Color ApplyLight(
@@ -156,9 +134,39 @@ namespace RayTracing.Rendering
             return litColor;
         }
 
+        private static Color ApplyReflectionRecursive(
+            Color baseColor,
+            RayHit hit,
+            IEnumerable<Face> allFaces,
+            IEnumerable<LightSource> lightSources,
+            IRenderSettings settings,
+            int currentRecursionDepth)
+        {
+            // Get reflection.
+            var n = AsMatrix(hit.Face.Normal);
+            var nT = n.Transpose();
+            var nnT = n.Multiply(nT);
+            var nnTm2 = nnT.Multiply(-2);
+            var reflectTransform = Matrix4x4.Identity.Add(nnTm2);
+            var outgoingDirection = reflectTransform.ApplyTo(hit.Direction);
 
+            var reflectionRay = new Ray(hit.Position, outgoingDirection, originFace: hit.Face);
+            var reflectionColor = DetermineColorRecursive(
+                reflectionRay,
+                allFaces,
+                lightSources,
+                settings,
+                currentRecursionDepth + 1);
 
-        private static Color FogColor(Color baseColor, Color fadeColor, float distance, float maxDistance)
+            var reflectivity = hit.Face.ParentGeometry.Material.Reflectivity;
+            var colorWithReflection = ColorUtils.Add(
+                ColorUtils.Scale(baseColor, 1 - reflectivity),
+                ColorUtils.Scale(reflectionColor, reflectivity));
+
+            return colorWithReflection;
+        }
+
+        private static Color ApplyDepthCueing(Color baseColor, Color fadeColor, float distance, float maxDistance)
         {
             var fadeFactor = System.Math.Clamp(distance / maxDistance, 0, 1);
             

@@ -18,7 +18,7 @@ namespace RayTracing.Rendering.Rays
             }
 
             Origin = origin;
-            Direction = direction;
+            Direction = direction.Norm()!.Value;
             OriginFace = originFace;
             IsInsideObject = isInsideObject;
         }
@@ -47,37 +47,37 @@ namespace RayTracing.Rendering.Rays
         {
             Argument.AssertNotNull(faces, nameof(faces));
 
-            Vector3? firstHit = null;
+            Vector3? firstHitPoint = null;
             Face? hitFace = null;
 
             foreach (var face in faces)
             {
                 if (this.DetectForwardHitInternal(face, out var intersectionPoint))
                 {
-                    if (firstHit == null)
+                    if (firstHitPoint == null)
                     {
-                        firstHit = intersectionPoint;
+                        firstHitPoint = intersectionPoint;
                         hitFace = face;
                         continue;
                     }
 
                     if ((intersectionPoint - Origin).LengthSquared() <
-                        (firstHit.Value - Origin).LengthSquared())
+                        (firstHitPoint.Value - Origin).LengthSquared())
                     {
-                        firstHit = intersectionPoint;
+                        firstHitPoint = intersectionPoint;
                         hitFace = face;
                     }
                 }
             }
 
-            if (!firstHit.HasValue)
+            if (!firstHitPoint.HasValue)
             {
                 return null;
             }
 
-            var distance = (firstHit.Value - Origin).Length();
+            var distance = (firstHitPoint.Value - Origin).Length();
 
-            return new RayHit(hitFace!, firstHit.Value, distance);
+            return new RayHit(hitFace!, firstHitPoint.Value, this.Direction, distance);
         }
 
         private bool DetectForwardHitInternal(Face face, out Vector3 intersectionPoint)
