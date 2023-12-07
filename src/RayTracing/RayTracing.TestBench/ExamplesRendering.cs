@@ -68,8 +68,8 @@ namespace RayTracing.TestBench
                     bottleMaterial.Glossyness = 0.7f;
                     bottleMaterial.Transparency = 0.5f;
                 },
-                resX: 100,
-                resY: 120,
+                resX: 200,
+                resY: 240,
                 camera =>
                 {
                     camera.Position = new Vector3(0, 1f, -1.3f);
