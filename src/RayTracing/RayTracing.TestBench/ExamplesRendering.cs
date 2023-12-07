@@ -11,6 +11,30 @@ namespace RayTracing.TestBench
 {
     public static class ExamplesRendering
     {
+        public static void GlassScene(ICanvas canvas)
+        {
+            ExampleUtils.RenderToCanvas(
+                canvas,
+                @"..\..\..\..\..\..\models\glass\glass.dae",
+                scene =>
+                {
+                    var glassMaterial = scene.Materials.Single(m => m.Name.Contains("Glass"));
+                    glassMaterial.Reflectivity = 0.5f;
+                },
+                resX: 90,
+                resY: 120,
+                camera =>
+                {
+                    camera.Position = new Vector3(0, 1f, -1.3f);
+                    camera.LookingDirection = new Vector3(0, -0.5f, 0.8f);
+                },
+                new RenderSettings
+                {
+                    FillBackground = false,
+                    DepthCueingMaxDistance = 200f,
+                });
+        }
+
         public static void Camera(ICanvas canvas)
         {
             Argument.AssertNotNull(canvas, nameof(canvas));

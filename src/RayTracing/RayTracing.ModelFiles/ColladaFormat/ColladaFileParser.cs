@@ -77,7 +77,12 @@ namespace RayTracing.ModelFiles.ColladaFormat
                 lightSources.Add(modelLightSource);
             }
 
-            return new Scene(geometries, lightSources);
+            var allMaterials = geometries
+                .Select(g => g.Material)
+                .Distinct()
+                .ToList();
+
+            return new Scene(allMaterials,geometries, lightSources);
         }
 
         private static Material PrepMaterial(Xml.Materials.Material xmlMaterial, IEnumerable<Effect> xmlEffects)

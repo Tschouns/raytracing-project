@@ -1,7 +1,6 @@
 ﻿using RayTracing.Base;
 using RayTracing.Rendering.Targets;
 using System.Drawing;
-using System.Runtime.CompilerServices;
 
 namespace RayTracing.TestBench
 {
