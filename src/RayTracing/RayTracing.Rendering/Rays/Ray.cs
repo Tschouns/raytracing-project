@@ -10,23 +10,18 @@ namespace RayTracing.Rendering.Rays
     /// </summary>
     public class Ray
     {
-        public Ray(Vector3 origin, Vector3 direction, Face? originFace = null, bool isInsideObject = false)
+        public Ray(Vector3 origin, Vector3 direction, Face? originFace = null, IEnumerable<Geometry> insideObjects = null)
         {
-            if (isInsideObject && originFace == null)
-            {
-                throw new ArgumentException("A ray inside an object must have an origin face, i.e. the face where it entered.");
-            }
-
             Origin = origin;
             Direction = direction.Norm()!.Value;
             OriginFace = originFace;
-            IsInsideObject = isInsideObject;
+            InsideObjects = (insideObjects ?? new Geometry[0]).ToArray(); // Make a copy of the list.
         }
 
         public Vector3 Origin { get; }
         public Vector3 Direction { get; }
         public Face? OriginFace { get; }
-        public bool IsInsideObject { get; }
+        public IEnumerable<Geometry> InsideObjects { get; }
 
         public bool HasAnyHit(IEnumerable<Face> faces)
         {
@@ -77,7 +72,12 @@ namespace RayTracing.Rendering.Rays
 
             var distance = (firstHitPoint.Value - Origin).Length();
 
-            return new RayHit(hitFace!, firstHitPoint.Value, this.Direction, distance);
+            return new RayHit(
+                firstHitPoint.Value,
+                this.Direction,
+                distance, 
+                hitFace!,
+                isBackFaceHit: InsideObjects.Contains(hitFace.ParentGeometry)); // That means we're hitting the face from inside the object.
         }
 
         private bool DetectForwardHitInternal(Face face, out Vector3 intersectionPoint)
@@ -117,11 +117,10 @@ namespace RayTracing.Rendering.Rays
 
         private bool CullFace(Face face)
         {
-            // If we are inside an object...
-            if (IsInsideObject &&
-                face.ParentGeometry == OriginFace!.ParentGeometry)
+            // If we are inside the object...
+            if (this.InsideObjects.Contains(face.ParentGeometry))
             {
-                // ...no back-face culling of faces of that object.
+                // ...no back-face culling for this object.
                 return false;
             }
 

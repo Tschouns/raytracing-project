@@ -125,7 +125,7 @@ namespace RayTracing.Rendering
 
             if (settings.ApplyTransmission)
             {
-                pixelColor = ApplyTransmissionRecursive(pixelColor, hit, ray.IsInsideObject, allFaces, lightSources, settings, depth);
+                pixelColor = ApplyTransmissionRecursive(pixelColor, hit, ray, allFaces, lightSources, settings, depth);
             }
 
             return pixelColor;
@@ -224,14 +224,26 @@ namespace RayTracing.Rendering
         private static Color ApplyTransmissionRecursive(
             Color baseColor,
             RayHit hit,
-            bool isInside,
+            Ray originalRay,
             IEnumerable<Face> allFaces,
             IEnumerable<LightSource> lightSources,
             IRenderSettings settings,
             int currentRecursionDepth)
         {
             var newDirection = hit.Direction; // TODO: use IOR;
-            var transmissionRay = new Ray(hit.Position, newDirection, originFace: hit.Face, !isInside);
+
+            // Keep track of which object(s) we're inside of.
+            var insideObjects = originalRay.InsideObjects.ToList();
+            if (hit.IsBackFaceHit)
+            {
+                insideObjects.Remove(hit.Face.ParentGeometry);
+            }
+            else
+            {
+                insideObjects.Add(hit.Face.ParentGeometry);
+            }
+
+            var transmissionRay = new Ray(hit.Position, newDirection, originFace: hit.Face, insideObjects);
             var refractedColor = DetermineColorRecursive(
                 transmissionRay,
                 allFaces,
