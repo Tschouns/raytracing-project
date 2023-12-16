@@ -22,10 +22,6 @@ namespace RayTracing.Rendering
             Argument.AssertNotNull(target, nameof(target));
             Argument.AssertNotNull(settings, nameof(settings));
 
-            var faces = scene.Geometries
-                .SelectMany(g => g.Faces)
-                .ToList();
-
             var pixelRays = camera.GeneratePixelRays();
             var pixelRaysList = pixelRays.ToList();
             Shuffle(pixelRaysList);
@@ -39,7 +35,7 @@ namespace RayTracing.Rendering
 
             // Render image pixel by pixel.
             var tasks = pixelRays
-                .Select(pixel => Task.Run(() => SetPixel(faces, scene.LightSources, pixel, target, settings)))
+                .Select(pixel => Task.Run(() => SetPixel(scene.Geometries, scene.LightSources, pixel, target, settings)))
                 .ToArray();
 
             Task.WaitAll(tasks);
@@ -48,44 +44,44 @@ namespace RayTracing.Rendering
         private static void Shuffle<T>(IList<T> list)
         {
             var rng = new Random();
-            int n = list.Count;
+            var n = list.Count;
 
             while (n > 1)
             {
                 n--;
-                int k = rng.Next(n + 1);
-                T value = list[k];
+                var k = rng.Next(n + 1);
+                var value = list[k];
                 list[k] = list[n];
                 list[n] = value;
             }
         }
 
         private static void SetPixel(
-            IEnumerable<Face> allFaces,
+            IEnumerable<Geometry> allGeometries,
             IEnumerable<LightSource> lightSources,
             PixelRay pixel,
             IRenderTarget target,
             IRenderSettings settings)
         {
-            Argument.AssertNotNull(allFaces, nameof(allFaces));
+            Argument.AssertNotNull(allGeometries, nameof(allGeometries));
             Argument.AssertNotNull(lightSources, nameof(lightSources));
             Argument.AssertNotNull(pixel, nameof(pixel));
             Argument.AssertNotNull(target, nameof(target));
             Argument.AssertNotNull(settings, nameof(settings));
 
-            var color = DeterminePixelColorRecursive(pixel.Ray, allFaces, lightSources, settings);
+            var color = DeterminePixelColorRecursive(pixel.Ray, allGeometries, lightSources, settings);
             target.SetPixel(pixel.X, pixel.Y, color);
         }
 
         private static Color DeterminePixelColorRecursive(
             Ray ray,
-            IEnumerable<Face> allFaces,
+            IEnumerable<Geometry> allGeometries,
             IEnumerable<LightSource> lightSources,
             IRenderSettings settings,
             int depth = 0)
         {
             Argument.AssertNotNull(ray, nameof(ray));
-            Argument.AssertNotNull(allFaces, nameof(allFaces));
+            Argument.AssertNotNull(allGeometries, nameof(allGeometries));
             Argument.AssertNotNull(lightSources, nameof(lightSources));
             Argument.AssertNotNull(settings, nameof(settings));
 
@@ -94,7 +90,7 @@ namespace RayTracing.Rendering
                 return settings.DepthCueingColor;
             }
 
-            var hit = ray.DetectNearestHit(allFaces);
+            var hit = ray.DetectNearestHit(allGeometries);
             if (hit == null)
             {
                 return settings.DepthCueingColor;
@@ -115,18 +111,18 @@ namespace RayTracing.Rendering
 
             if (settings.ApplyReflections)
             {
-                pixelColor = ApplyReflectionRecursive(pixelColor, hit, allFaces, lightSources, settings, depth);
+                pixelColor = ApplyReflectionRecursive(pixelColor, hit, allGeometries, lightSources, settings, depth);
             }
 
             if (settings.ApplyTransmission)
             {
-                pixelColor = ApplyTransmissionRecursive(pixelColor, hit, ray, allFaces, lightSources, settings, depth);
+                pixelColor = ApplyTransmissionRecursive(pixelColor, hit, ray, allGeometries, lightSources, settings, depth);
             }
 
             // Gloss should be at the end (the rest should be irrelevant).
             if (settings.ApplyShadows || settings.ApplyGloss)
             {
-                pixelColor = ApplyLighting(pixelColor, hit, allFaces, lightSources, settings);
+                pixelColor = ApplyLighting(pixelColor, hit, allGeometries, lightSources, settings);
             }
 
             return pixelColor;
@@ -169,7 +165,7 @@ namespace RayTracing.Rendering
         private static Color ApplyReflectionRecursive(
             Color baseColor,
             RayHit hit,
-            IEnumerable<Face> allFaces,
+            IEnumerable<Geometry> allGeometries,
             IEnumerable<LightSource> lightSources,
             IRenderSettings settings,
             int currentRecursionDepth)
@@ -193,7 +189,7 @@ namespace RayTracing.Rendering
             // Recursive call.
             var reflectionColor = DeterminePixelColorRecursive(
                 reflectionRay,
-                allFaces,
+                allGeometries,
                 lightSources,
                 settings,
                 currentRecursionDepth + 1);
@@ -210,7 +206,7 @@ namespace RayTracing.Rendering
             Color baseColor,
             RayHit hit,
             Ray originalRay,
-            IEnumerable<Face> allFaces,
+            IEnumerable<Geometry> allGeometries,
             IEnumerable<LightSource> lightSources,
             IRenderSettings settings,
             int currentRecursionDepth)
@@ -239,7 +235,7 @@ namespace RayTracing.Rendering
             // Recursive call.
             var refractedColor = DeterminePixelColorRecursive(
                 transmissionRay,
-                allFaces,
+                allGeometries,
                 lightSources,
                 settings,
                 currentRecursionDepth + 1);
@@ -255,7 +251,7 @@ namespace RayTracing.Rendering
         private static Color ApplyLighting(
             Color baseColor,
             RayHit hit,
-            IEnumerable<Face> allFaces,
+            IEnumerable<Geometry> allGeometries,
             IEnumerable<LightSource> lightSources,
             IRenderSettings settings)
         {
@@ -265,7 +261,7 @@ namespace RayTracing.Rendering
 
             foreach (var light in lightSources)
             {
-                var lightColor = DetermineLightColorRecursive(hit, light, allFaces, settings);
+                var lightColor = DetermineLightColorRecursive(hit, light, allGeometries, settings);
                 totalLightColor = ColorUtils.Add(totalLightColor, lightColor);
 
                 if (settings.ApplyGloss)
@@ -280,7 +276,7 @@ namespace RayTracing.Rendering
                         normalFactor *
                         hit.Face.ParentGeometry.Material.Glossyness *
                         hit.Face.ParentGeometry.Material.Glossyness;
-                        //hit.Face.ParentGeometry.Material.Reflectivity;
+                    //hit.Face.ParentGeometry.Material.Reflectivity;
 
                     var glossColor = ColorUtils.Scale(totalLightColor, glossFactor);
                     totalGlossColor = ColorUtils.Add(totalGlossColor, glossColor);
@@ -299,7 +295,12 @@ namespace RayTracing.Rendering
             return litColor;
         }
 
-        private static Color DetermineLightColorRecursive(RayHit hit, LightSource light, IEnumerable<Face> allFaces, IRenderSettings settings, int currentDepth = 0)
+        private static Color DetermineLightColorRecursive(
+            RayHit hit,
+            LightSource light,
+            IEnumerable<Geometry> allGeometries,
+            IRenderSettings settings,
+            int currentDepth = 0)
         {
             if (currentDepth >= settings.MaxRecursionDepth)
             {
@@ -308,7 +309,7 @@ namespace RayTracing.Rendering
 
             var toLight = light.Location - hit.Position;
             var lightSourceCheckRay = new Ray(hit.Position, toLight, originFace: hit.Face);
-            var nearestHit = lightSourceCheckRay.DetectNearestHit(allFaces);
+            var nearestHit = lightSourceCheckRay.DetectNearestHit(allGeometries);
 
             if (nearestHit == null ||
                 toLight.LengthSquared() < nearestHit.Distance * nearestHit.Distance) // TODO: add max distance to ray?
@@ -329,7 +330,7 @@ namespace RayTracing.Rendering
                 return Color.Black;
             }
 
-            var colorBefore = DetermineLightColorRecursive(nearestHit, light, allFaces, settings, currentDepth + 1);
+            var colorBefore = DetermineLightColorRecursive(nearestHit, light, allGeometries, settings, currentDepth + 1);
             var colorHueAdjusted = ColorUtils.Add(
                 ColorUtils.Scale(colorBefore, material.Transparency),
                 ColorUtils.Scale(material.BaseColor, 1 - material.Transparency));

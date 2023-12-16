@@ -29,7 +29,7 @@ namespace RayTracing.Rendering.Rays
 
             foreach (var face in faces)
             {
-                if (this.DetectForwardHitInternal(face, out _))
+                if (DetectForwardHitInternal(face, out _))
                 {
                     return true;
                 }
@@ -38,35 +38,38 @@ namespace RayTracing.Rendering.Rays
             return false;
         }
 
-        public RayHit? DetectNearestHit(IEnumerable<Face> faces)
+        public RayHit? DetectNearestHit(IEnumerable<Geometry> geometries)
         {
-            Argument.AssertNotNull(faces, nameof(faces));
+            Argument.AssertNotNull(geometries, nameof(geometries));
 
             Vector3? nearestHitPoint = null;
             Face? nearestHitFace = null;
             float? nearestHitDistanceSquared = null;
 
-            foreach (var face in faces)
+            foreach (var geometry in geometries)
             {
-                if (this.DetectForwardHitInternal(face, out var currentHitPoint))
+                foreach (var face in geometry.Faces)
                 {
-                    if (nearestHitPoint == null)
+                    if (DetectForwardHitInternal(face, out var currentHitPoint))
                     {
-                        nearestHitPoint = currentHitPoint;
-                        nearestHitFace = face;
-                        nearestHitDistanceSquared = (nearestHitPoint.Value - Origin).LengthSquared();
+                        if (nearestHitPoint == null)
+                        {
+                            nearestHitPoint = currentHitPoint;
+                            nearestHitFace = face;
+                            nearestHitDistanceSquared = (nearestHitPoint.Value - Origin).LengthSquared();
 
-                        continue;
-                    }
+                            continue;
+                        }
 
-                    var currentHitDistanceSquared = (currentHitPoint - Origin).LengthSquared();
-                    var changeSquared = currentHitDistanceSquared - nearestHitDistanceSquared;
+                        var currentHitDistanceSquared = (currentHitPoint - Origin).LengthSquared();
+                        var changeSquared = currentHitDistanceSquared - nearestHitDistanceSquared;
 
-                    if (changeSquared < 0)
-                    {
-                        nearestHitPoint = currentHitPoint;
-                        nearestHitFace = face;
-                        nearestHitDistanceSquared = currentHitDistanceSquared;
+                        if (changeSquared < 0)
+                        {
+                            nearestHitPoint = currentHitPoint;
+                            nearestHitFace = face;
+                            nearestHitDistanceSquared = currentHitDistanceSquared;
+                        }
                     }
                 }
             }
@@ -80,22 +83,22 @@ namespace RayTracing.Rendering.Rays
 
             return new RayHit(
                 nearestHitPoint.Value,
-                this.Direction,
-                distance, 
+                Direction,
+                distance,
                 nearestHitFace!,
                 isBackFaceHit: InsideObjects.Contains(nearestHitFace.ParentGeometry)); // That means we're hitting the face from inside the object.
         }
 
         private bool DetectForwardHitInternal(Face face, out Vector3 intersectionPoint)
         {
-            if (face == this.OriginFace)
+            if (face == OriginFace)
             {
                 intersectionPoint = new Vector3();
                 return false;
             }
 
             // Back-face culling.
-            if (this.CullFace(face))
+            if (CullFace(face))
             {
                 intersectionPoint = new Vector3();
                 return false;
@@ -124,14 +127,14 @@ namespace RayTracing.Rendering.Rays
         private bool CullFace(Face face)
         {
             // If we are inside the object...
-            if (this.InsideObjects.Contains(face.ParentGeometry))
+            if (InsideObjects.Contains(face.ParentGeometry))
             {
                 // ...no back-face culling for this object.
                 return false;
             }
 
             // Regular back-face culling.
-            return (face.Normal.Dot(this.Direction) > 0);
+            return (face.Normal.Dot(Direction) > 0);
         }
     }
 }
