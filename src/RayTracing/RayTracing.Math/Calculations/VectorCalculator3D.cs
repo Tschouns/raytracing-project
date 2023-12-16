@@ -108,5 +108,39 @@ namespace RayTracing.Math.Calculations
 
             return IntersectionResult.IntersectAt(intersection, lambda);
         }
+
+        public static bool IntersectRayWithAabb(Vector3 origin, Vector3 direction, AxisAlignedBoundingBox aabb)
+        {
+            var pos = AsArray(origin);
+            var dir = AsArray(direction);
+            var aabbMin = AsArray(aabb.Min);
+            var aabbMax = AsArray(aabb.Max);
+
+            for (var i = 0; i < 3; i++)
+            {
+                var invDir = 1.0f / dir[i];
+                var t0 = (aabbMin[i] - pos[i]) * invDir;
+                var t1 = (aabbMax[i] - pos[i]) * invDir;
+
+                if (invDir < 0f)
+                {
+                    var temp = t1;
+                    t1 = t0;
+                    t0 = temp;
+                }
+
+                if (t1 <= t0)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private static float[] AsArray(Vector3 vec)
+        {
+            return new float[] { vec.X, vec.Y, vec.Z };
+        }
     }
 }

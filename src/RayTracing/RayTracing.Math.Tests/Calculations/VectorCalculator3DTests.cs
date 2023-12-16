@@ -159,6 +159,28 @@ namespace RayTracing.Math.Tests.Calculations
                 null);
         }
 
+        [Fact]
+        public void IntersectRayWithAabb_RayHitsUpwards_ReturnsTrue()
+        {
+            IntersectRayWithAabb_GivenRayWithAabb_ReturnsExpectedResult(
+                origin: new Vector3(1, 1, 1),
+                direction: new Vector3(2, 2, 2),
+                aabbMin: new Vector3(3, 3, 3),
+                aabbMax: new Vector3(4, 4, 4),
+                expectedResult: true);
+        }
+
+        [Fact]
+        public void IntersectRayWithAabb_RayHitsDownwards_ReturnsTrue()
+        {
+            IntersectRayWithAabb_GivenRayWithAabb_ReturnsExpectedResult(
+                origin: new Vector3(4, 4, 4),
+                direction: new Vector3(3, 3, 3),
+                aabbMin: new Vector3(1, 1, 1),
+                aabbMax: new Vector3(2, 2, 2),
+                expectedResult: true);
+        }
+
         private void IntersectPlane_GivenLineAndPlane_ReturnsExpectedResult(
             Line3D line,
             Plane3D plane,
@@ -182,6 +204,23 @@ namespace RayTracing.Math.Tests.Calculations
             // Assert
             Assert.Equal(expectedIntersection != null, result.HasIntersection);
             Assert.Equal(expectedIntersection, result.IntersectionPoint);
+        }
+
+        private void IntersectRayWithAabb_GivenRayWithAabb_ReturnsExpectedResult(
+            Vector3 origin,
+            Vector3 direction,
+            Vector3 aabbMin,
+            Vector3 aabbMax,
+            bool expectedResult)
+        {
+            // Arrange
+            var aabb = new AxisAlignedBoundingBox(aabbMin, aabbMax);
+
+            // Act
+            var result = VectorCalculator3D.IntersectRayWithAabb(origin, direction, aabb);
+
+            // Assert
+            Assert.Equal(expectedResult, result);
         }
     }
 }
