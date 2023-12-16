@@ -1,15 +1,14 @@
 ﻿
 using RayTracing.Math.Calculations;
-using System.Numerics;
 
 namespace RayTracing.Math.Tests.Calculations
 {
     public class VectorCalculator3DTests
     {
         [Fact]
-        public void Intersect_ZLineThroughXyPlane_ReturnsExpectedIntersection()
+        public void IntersectPlane_ZLineThroughXyPlane_ReturnsExpectedIntersection()
         {
-            this.Intersect_GivenLineAndPlane_ReturnsExpectedResult(
+            IntersectPlane_GivenLineAndPlane_ReturnsExpectedResult(
                 new Line3D(
                     pointA: new Vector3(1, 1, -10),
                     pointB: new Vector3(1, 1, -9)),
@@ -21,9 +20,9 @@ namespace RayTracing.Math.Tests.Calculations
         }
 
         [Fact]
-        public void Intersect_AngledLineAndPlane_ReturnsExpectedIntersection()
+        public void IntersectPlane_AngledLineAndPlane_ReturnsExpectedIntersection()
         {
-            this.Intersect_GivenLineAndPlane_ReturnsExpectedResult(
+            IntersectPlane_GivenLineAndPlane_ReturnsExpectedResult(
                 new Line3D(
                     pointA: new Vector3(-5, 5, 30),
                     pointB: new Vector3(-5, 5, 29)),
@@ -35,9 +34,9 @@ namespace RayTracing.Math.Tests.Calculations
         }
 
         [Fact]
-        public void Intersect_LineParallelToPlane_ReturnsNull()
+        public void IntersectPlane_LineParallelToPlane_ReturnsNull()
         {
-            this.Intersect_GivenLineAndPlane_ReturnsExpectedResult(
+            IntersectPlane_GivenLineAndPlane_ReturnsExpectedResult(
                 new Line3D(
                     pointA: new Vector3(7, 0, 1),
                     pointB: new Vector3(0, 3, 1)),
@@ -51,7 +50,7 @@ namespace RayTracing.Math.Tests.Calculations
         [Fact]
         public void IntersectTriangle_ZLineThroughXyTriangle_ReturnsExpectedIntersection()
         {
-            this.IntersectTriangle_GivenLineAndTriangle_ReturnsExpectedResult(
+            IntersectTriangle_GivenLineAndTriangle_ReturnsExpectedResult(
                 new Line3D(
                     pointA: new Vector3(1, 1, -10),
                     pointB: new Vector3(1, 1, -9)),
@@ -65,7 +64,7 @@ namespace RayTracing.Math.Tests.Calculations
         [Fact]
         public void IntersectTriangle_AngledLineAndTriangle_ReturnsExpectedIntersection()
         {
-            this.IntersectTriangle_GivenLineAndTriangle_ReturnsExpectedResult(
+            IntersectTriangle_GivenLineAndTriangle_ReturnsExpectedResult(
                 new Line3D(
                     pointA: new Vector3(-7, -1, -6),
                     pointB: new Vector3(-6, 3, -10)),
@@ -79,7 +78,7 @@ namespace RayTracing.Math.Tests.Calculations
         [Fact]
         public void IntersectTriangle_ZLineThroughCornerA_ReturnsExpectedIntersection()
         {
-            this.IntersectTriangle_GivenLineAndTriangle_ReturnsExpectedResult(
+            IntersectTriangle_GivenLineAndTriangle_ReturnsExpectedResult(
                 new Line3D(
                     pointA: new Vector3(2, 2, 3),
                     pointB: new Vector3(2, 2, 4)),
@@ -93,7 +92,7 @@ namespace RayTracing.Math.Tests.Calculations
         [Fact]
         public void IntersectTriangle_ZLineThroughCornerB_ReturnsExpectedIntersection()
         {
-            this.IntersectTriangle_GivenLineAndTriangle_ReturnsExpectedResult(
+            IntersectTriangle_GivenLineAndTriangle_ReturnsExpectedResult(
                 new Line3D(
                     pointA: new Vector3(4, 2, 3),
                     pointB: new Vector3(4, 2, 4)),
@@ -107,7 +106,7 @@ namespace RayTracing.Math.Tests.Calculations
         [Fact]
         public void IntersectTriangle_ZLineThroughCornerC_ReturnsExpectedIntersection()
         {
-            this.IntersectTriangle_GivenLineAndTriangle_ReturnsExpectedResult(
+            IntersectTriangle_GivenLineAndTriangle_ReturnsExpectedResult(
                 new Line3D(
                     pointA: new Vector3(2, 4, -5),
                     pointB: new Vector3(2, 4, -6)),
@@ -121,7 +120,7 @@ namespace RayTracing.Math.Tests.Calculations
         [Fact]
         public void IntersectTriangle_JustOffCornerA_ReturnsNull()
         {
-            this.IntersectTriangle_GivenLineAndTriangle_ReturnsExpectedResult(
+            IntersectTriangle_GivenLineAndTriangle_ReturnsExpectedResult(
                 new Line3D(
                     pointA: new Vector3(1.99f, 1.99f, 3),
                     pointB: new Vector3(1.99f, 1.99f, 4)),
@@ -135,7 +134,7 @@ namespace RayTracing.Math.Tests.Calculations
         [Fact]
         public void IntersectTriangle_JustOffCornerB_ReturnsNull()
         {
-            this.IntersectTriangle_GivenLineAndTriangle_ReturnsExpectedResult(
+            IntersectTriangle_GivenLineAndTriangle_ReturnsExpectedResult(
                 new Line3D(
                     pointA: new Vector3(4.01f, 2.01f, 3),
                     pointB: new Vector3(4.01f, 2.01f, 4)),
@@ -149,7 +148,7 @@ namespace RayTracing.Math.Tests.Calculations
         [Fact]
         public void IntersectTriangle_JustOffCornerC_ReturnsNull()
         {
-            this.IntersectTriangle_GivenLineAndTriangle_ReturnsExpectedResult(
+            IntersectTriangle_GivenLineAndTriangle_ReturnsExpectedResult(
                 new Line3D(
                     pointA: new Vector3(2.01f, 4.01f, 3),
                     pointB: new Vector3(2.01f, 4.01f, 4)),
@@ -160,13 +159,13 @@ namespace RayTracing.Math.Tests.Calculations
                 null);
         }
 
-        private void Intersect_GivenLineAndPlane_ReturnsExpectedResult(
+        private void IntersectPlane_GivenLineAndPlane_ReturnsExpectedResult(
             Line3D line,
             Plane3D plane,
             Vector3? expectedIntersection)
         {
             // Act
-            var actualIntersection = VectorCalculator3D.Intersect(line, plane);
+            var actualIntersection = VectorCalculator3D.IntersectPlane(line, plane);
 
             // Assert
             Assert.Equal(expectedIntersection, actualIntersection);
