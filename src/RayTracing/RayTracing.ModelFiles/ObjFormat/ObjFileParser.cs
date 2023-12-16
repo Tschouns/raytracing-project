@@ -41,7 +41,9 @@ namespace RayTracing.ModelFiles.ObjFormat
                 transparency: 0f,
                 indexOfRefraction: 1.3f);
 
-            var geometry = new Geometry("unknown", material, facesList);
+            // TODO: fix bounding box.
+            var boundingBox = new AxisAlignedBoundingBox(new Vector3(), new Vector3());
+            var geometry = new Geometry("unknown", material, facesList, boundingBox);
 
             var faces = objData.Triangles.Select(t => new Face(geometry, t, new Vector3())).ToList();
             facesList.AddRange(faces);
@@ -58,10 +60,10 @@ namespace RayTracing.ModelFiles.ObjFormat
             switch (start)
             {
                 case "v":
-                    this.ParseVertex(remainingStrings, data);
+                    ParseVertex(remainingStrings, data);
                     break;
                 case "f":
-                    this.ParseFace(remainingStrings, data);
+                    ParseFace(remainingStrings, data);
                     break;
                 default:
                     break;

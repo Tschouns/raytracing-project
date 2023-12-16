@@ -1,6 +1,5 @@
 ﻿using RayTracing.Base;
 using RayTracing.Math;
-using System.Drawing;
 
 namespace RayTracing.Model
 {
@@ -9,15 +8,17 @@ namespace RayTracing.Model
     /// </summary>
     public class Geometry
     {
-        public Geometry(string name, Material material, IReadOnlyList<Face> faces)
+        public Geometry(string name, Material material, IReadOnlyList<Face> faces, AxisAlignedBoundingBox boundingBox)
         {
             Argument.AssertNotNull(name, nameof(name));
             Argument.AssertNotNull(material, nameof(material));
             Argument.AssertNotNull(faces, nameof(faces));
+            Argument.AssertNotNull(boundingBox, nameof(boundingBox));
 
             Name = name;
             Material = material;
             Faces = faces;
+            BoundingBox = boundingBox;
         }
 
         /// <summary>
@@ -36,6 +37,11 @@ namespace RayTracing.Model
         public IReadOnlyList<Face> Faces { get; private set; }
 
         /// <summary>
+        /// Gets the axis-aligned bounding box.
+        /// </summary>
+        public AxisAlignedBoundingBox BoundingBox { get; private set; }
+
+        /// <summary>
         /// Transforms all the faces of this geometry using the specified transformation matrix.
         /// </summary>
         /// <param name="t">
@@ -43,7 +49,7 @@ namespace RayTracing.Model
         /// </param>
         public void Transform(Matrix4x4 t)
         {
-            var newFaces = this.Faces
+            var newFaces = Faces
                 .Select(f =>
                     new Face(
                         this,
@@ -54,7 +60,7 @@ namespace RayTracing.Model
                         t.ApplyTo(f.Normal)))
                 .ToList();
 
-            this.Faces = newFaces;
+            Faces = newFaces;
         }
     }
 }

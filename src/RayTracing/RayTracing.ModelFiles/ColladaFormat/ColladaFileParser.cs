@@ -33,7 +33,7 @@ namespace RayTracing.ModelFiles.ColladaFormat
 
             // Process materials.
             IDictionary<string, Material> materialsById = new Dictionary<string, Material>();
-            
+
             foreach (var xmlMaterial in colladaRoot.LibraryMaterials)
             {
                 var material = PrepMaterial(xmlMaterial, colladaRoot.LibraryEffects);
@@ -54,7 +54,7 @@ namespace RayTracing.ModelFiles.ColladaFormat
                 var xmlGeometry = colladaRoot.LibraryGeometries.Single(g => g.Id == geometryUrl);
                 var transform = PrepTransformMatrix(node.MatrixString);
                 var material = materialsById[xmlGeometry.Mesh.Triangles.MaterialId];
-                
+
                 var modelGeometry = PrepGeometry(xmlGeometry, transform, material);
                 geometries.Add(modelGeometry);
             }
@@ -82,14 +82,14 @@ namespace RayTracing.ModelFiles.ColladaFormat
                 .Distinct()
                 .ToList();
 
-            return new Scene(allMaterials,geometries, lightSources);
+            return new Scene(allMaterials, geometries, lightSources);
         }
 
         private static Material PrepMaterial(Xml.Materials.Material xmlMaterial, IEnumerable<Effect> xmlEffects)
         {
             Argument.AssertNotNull(xmlMaterial, nameof(xmlMaterial));
             Argument.AssertNotNull(xmlEffects, nameof(xmlEffects));
-            
+
             if (!xmlMaterial.InstanceEffect.Url.StartsWith('#'))
             {
                 throw new ArgumentException($"The instance effect URL \"{xmlMaterial.InstanceEffect.Url}\" is not supported.");
@@ -187,9 +187,8 @@ namespace RayTracing.ModelFiles.ColladaFormat
             var vertexOffset = int.Parse(vertexInput.Offset);
 
             var vertexIndexes = indexes.Where((index, i) => i % nInputs == vertexOffset).ToList();
-            var faces = new List<Face>();
-
-            var geometry = new Model.Geometry(xmlGeometry.Name, material, faces);
+            var trianglesAndNormals = new List<Tuple<Triangle3D, Vector3>>();
+            var usedVertices = new List<Vector3>();
 
             for (var i = 0; i + 2 < vertexIndexes.Count; i = i + 3)
             {
@@ -198,12 +197,81 @@ namespace RayTracing.ModelFiles.ColladaFormat
                 var c = verticesTransformed[vertexIndexes[i + 2]];
 
                 var triangle = new Triangle3D(a, b, c);
-                var normal = ((b - a).Cross(c - a)).Norm() ?? new Vector3(1,0,0);
+                var normal = ((b - a).Cross(c - a)).Norm() ?? new Vector3(1, 0, 0);
 
-                faces.Add(new Face(geometry, triangle, normal));
+                trianglesAndNormals.Add(new Tuple<Triangle3D, Vector3>(triangle, normal));
+                usedVertices.AddRange(new[] { a, b, c });
             }
 
+            // Bounding box.
+            var boundingBox = GetAabb(usedVertices);
+
+            // Prepare a faces list, and instanciate the Geometry.
+            var faceLists = new List<Face>();
+            var geometry = new Model.Geometry(xmlGeometry.Name, material, faceLists, boundingBox);
+
+            // Post-hoc-add the actual faces.
+            var faces = trianglesAndNormals.Select(t => new Face(geometry, t.Item1, t.Item2));
+
+            faceLists.AddRange(faces);
+
             return geometry;
+        }
+
+        private static AxisAlignedBoundingBox GetAabb(IEnumerable<Vector3> vertices)
+        {
+            if (!vertices.Any())
+            {
+                throw new ArgumentException("No vertices.");
+            }
+
+            var minX = vertices.First().X;
+            var minY = vertices.First().Y;
+            var minZ = vertices.First().Z;
+
+            var maxX = vertices.First().X;
+            var maxY = vertices.First().Y;
+            var maxZ = vertices.First().Z;
+
+            foreach (var vertex in vertices)
+            {
+                // Min.
+                if (vertex.X < minX)
+                {
+                    minX = vertex.X;
+                }
+
+                if (vertex.Y < minY)
+                {
+                    minY = vertex.Y;
+                }
+
+                if (vertex.Z < minZ)
+                {
+                    minZ = vertex.Z;
+                }
+
+                // Max.
+                if (vertex.X > maxX)
+                {
+                    maxX = vertex.X;
+                }
+
+                if (vertex.Y > maxY)
+                {
+                    maxY = vertex.Y;
+                }
+
+                if (vertex.Z > maxZ)
+                {
+                    maxZ = vertex.Z;
+                }
+            }
+
+            var min = new Vector3(minX, minY, minZ);
+            var max = new Vector3(maxX, maxY, maxZ);
+
+            return new AxisAlignedBoundingBox(min, max);
         }
 
         private static IReadOnlyList<Vector3> GetVertices(MeshVertices meshVertices, IEnumerable<MeshSource> sources)
