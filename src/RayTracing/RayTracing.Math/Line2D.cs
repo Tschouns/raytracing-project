@@ -5,12 +5,6 @@
     /// </summary>
     public class Line2D
     {
-        public Line2D()
-        {
-            PointA = new Vector2();
-            PointB = new Vector2();
-        }
-
         public Line2D(Vector2 pointA, Vector2 pointB)
         {
             PointA = pointA;
