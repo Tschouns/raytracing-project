@@ -1,6 +1,7 @@
 ﻿using RayTracing.Base;
 using RayTracing.Math;
 using RayTracing.Model;
+using RayTracing.Model.Octrees;
 using System.Drawing;
 
 namespace RayTracing.ModelFiles.ObjFormat
@@ -46,7 +47,9 @@ namespace RayTracing.ModelFiles.ObjFormat
             var faces = objData.Triangles.Select(t => new Face(geometry, t, new Vector3())).ToList();
             facesList.AddRange(faces);
 
-            return new Scene(new List<Material> { material }, new List<Geometry> { geometry }, new List<LightSource>());
+            var octree = OctreeHelper.PrepareOctree(faces);
+
+            return new Scene(new List<Material> { material }, new List<Geometry> { geometry }, octree, new List<LightSource>());
         }
 
         private void ProcessLine(string line, ObjData data)

@@ -8,5 +8,7 @@ A simple ray tracer.
 - Material properties as colors
 - Material properties from Collada files
 - Proper transparency, including refraction
+- Smooth edges, vector normals
 - Spot lights
+- Anti-aliasing
 - Emmitting objects

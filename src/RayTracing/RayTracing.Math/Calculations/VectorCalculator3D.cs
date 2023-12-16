@@ -18,12 +18,12 @@ namespace RayTracing.Math.Calculations
         /// <summary>
         /// Calculates the intersection between a specified line with a specified plane.
         /// </summary>
-        public static Vector3? Intersect(Line3D line, Plane3D plane)
+        public static Vector3? IntersectPlane(Line3D line, Plane3D plane)
         {
             Argument.AssertNotNull(line, nameof(line));
             Argument.AssertNotNull(plane, nameof(plane));
 
-            return Intersect(
+            return IntersectPlane(
                 line.PointA,
                 line.PointB - line.PointA,
                 plane.PointP,
@@ -53,7 +53,7 @@ namespace RayTracing.Math.Calculations
         /// Line: r = p + lambda * u
         /// Plane: r = q + mu * v + nu * w
         /// </summary>
-        public static Vector3? Intersect(Vector3 p, Vector3 u, Vector3 q, Vector3 v, Vector3 w)
+        public static Vector3? IntersectPlane(Vector3 p, Vector3 u, Vector3 q, Vector3 v, Vector3 w)
         {
             // lambda * u - mu * v - nu * w = q - p
 

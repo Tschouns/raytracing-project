@@ -6,16 +6,10 @@ namespace RayTracing.Math
     /// </summary>
     public class Line3D
     {
-        public Line3D()
-        {
-            this.PointA = new Vector3();
-            this.PointB = new Vector3();
-        }
-
         public Line3D(Vector3 pointA, Vector3 pointB)
         {
-            this.PointA = pointA;
-            this.PointB = pointB;
+            PointA = pointA;
+            PointB = pointB;
         }
 
         public Line3D(

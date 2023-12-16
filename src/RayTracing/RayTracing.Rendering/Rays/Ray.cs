@@ -2,6 +2,7 @@
 using RayTracing.Math;
 using RayTracing.Math.Calculations;
 using RayTracing.Model;
+using RayTracing.Model.Octrees;
 
 namespace RayTracing.Rendering.Rays
 {
@@ -38,7 +39,51 @@ namespace RayTracing.Rendering.Rays
             return false;
         }
 
-        public RayHit? DetectNearestHit(IEnumerable<Face> faces)
+        public RayHit? DetectNearestHit(Octree octree)
+        {
+            return this.DetectNearestHit(new Octree[] { octree });
+        }
+
+        private RayHit? DetectNearestHit(IEnumerable<Octree> octrees)
+        {
+            var octreeTests = octrees
+                .Where(o => o.AllFaces.Any())
+                .Select(o => new { Octree = o, Hit = AabbHelper.IntersectAabb(this.Origin, this.Direction, o.BoundingBox) })
+                .ToList();
+               
+            var octreeHitsOrdered = octreeTests
+                .Where(o => o.Hit.DoIntersect)
+                .Where(o => o.Hit.T1 >= 0)
+                .OrderBy(o => o.Hit.T0)
+                .ToList();
+
+            var hits = new List<RayHit>();
+
+            foreach (var octreeHit in octreeHitsOrdered)
+            {
+                if (octreeHit.Octree.HasChildren)
+                {
+                    // Recursive call:
+                    var rayHit = this.DetectNearestHit(octreeHit.Octree.Children);
+                    if (rayHit != null)
+                    {
+                        hits.Add(rayHit);
+                    }
+                }
+                else
+                {
+                    var rayHit = this.DetectNearestHit(octreeHit.Octree.AllFaces);
+                    if (rayHit != null)
+                    {
+                        hits.Add(rayHit);
+                    }
+                }
+            }
+
+            return hits.OrderBy(hit => hit.Distance).FirstOrDefault();
+        }
+
+        private RayHit? DetectNearestHit(IEnumerable<Face> faces)
         {
             Argument.AssertNotNull(faces, nameof(faces));
 
