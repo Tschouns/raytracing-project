@@ -48,6 +48,12 @@ namespace RayTracing.Rendering.Rays
 
             foreach (var geometry in geometries)
             {
+                // AABB optimization:
+                if (!VectorCalculator3D.IntersectRayWithAabb(Origin, Direction, geometry.BoundingBox))
+                {
+                    continue;
+                }
+
                 foreach (var face in geometry.Faces)
                 {
                     if (DetectForwardHitInternal(face, out var currentHitPoint))
