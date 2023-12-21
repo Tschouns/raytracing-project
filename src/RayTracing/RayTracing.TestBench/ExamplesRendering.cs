@@ -68,24 +68,24 @@ namespace RayTracing.TestBench
                     bottleMaterial.Glossyness = 0.9f;
                     bottleMaterial.Transparency = 0.5f;
                 },
-                resX: 200,
-                resY: 240,
+                resX: 50,
+                resY: 60,
                 camera =>
                 {
-                    camera.Position = new Vector3(0, 1f, -1.3f);
-                    camera.LookingDirection = new Vector3(0, -0.5f, 1f);
-                    //camera.FocalLength *= 1.1f;
+                    camera.Position = new Vector3(0, 1f, 1.3f);
+                    camera.LookingDirection = new Vector3(0, -0.5f, -1f);
+                    camera.FocalLength /= 1.1f;
                 },
                 new RenderSettings
                 {
-                    //FillBackground = false,
-                    //ApplyDepthCueing = false,
-                    //ApplyNormalShading = false,
-                    //ApplyShadows = false,
-                    //ApplyReflections = false,
-                    //ApplyTransmission = false,
-                    //ApplyGloss = false,
-                    //UseFancyLighting = false,
+                    FillBackground = true,
+                    ApplyDepthCueing = true,
+                    ApplyNormalShading = true,
+                    ApplyShadows = true,
+                    ApplyReflections = true,
+                    ApplyTransmission = true,
+                    ApplyGloss = true,
+                    UseFancyLighting = true,
                     DepthCueingMaxDistance = 20f,
                     MaxRecursionDepth = 5,
                 });
