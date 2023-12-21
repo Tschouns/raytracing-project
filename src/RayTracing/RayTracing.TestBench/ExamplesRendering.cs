@@ -59,19 +59,22 @@ namespace RayTracing.TestBench
                     tableMaterial.Reflectivity = 0.5f;
 
                     var glassMaterial = scene.Materials.Single(m => m.Name.Contains("Glass"));
-                    glassMaterial.Reflectivity = 0.8f;
-                    glassMaterial.Glossyness = 0.9f;
-                    glassMaterial.Transparency = 0.8f;
+                    glassMaterial.Reflectivity = 0.7f;
+                    glassMaterial.Glossyness = 0.8f;
+                    glassMaterial.Transparency = 0.95f;
 
                     var drinkMaterial = scene.Materials.Single(m => m.Name.Contains("Drink"));
                     drinkMaterial.Reflectivity = 0.3f;
-                    drinkMaterial.Glossyness = 0.3f;
-                    drinkMaterial.Transparency = 0.6f;
+                    drinkMaterial.Glossyness = 0.4f;
+                    drinkMaterial.Transparency = 0.7f;
+
+                    var oliveMaterial = scene.Materials.Single(m => m.Name.Contains("Olive"));
+                    oliveMaterial.Glossyness = 0.9f;
 
                     var bottleMaterial = scene.Materials.Single(m => m.Name.Contains("Bottle"));
-                    bottleMaterial.Reflectivity = 0.5f;
+                    bottleMaterial.Reflectivity = 0.6f;
                     bottleMaterial.Glossyness = 0.8f;
-                    bottleMaterial.Transparency = 0.7f;
+                    bottleMaterial.Transparency = 0.9f;
                 },
                 resX: 50,
                 resY: 60,
@@ -86,13 +89,13 @@ namespace RayTracing.TestBench
                     FillBackground = true,
                     ApplyDepthCueing = true,
                     ApplyNormalShading = true,
-                    ApplyShadows = false,
+                    ApplyShadows = true,
                     ApplyReflections = true,
                     ApplyTransmission = true,
-                    ApplyGloss = false,
-                    UseFancyLighting = false,
+                    ApplyGloss = true,
+                    UseFancyLighting = true,
                     DepthCueingMaxDistance = 20f,
-                    MaxRecursionDepth = 5,
+                    MaxRecursionDepth = 4,
                 });
         }
     }
