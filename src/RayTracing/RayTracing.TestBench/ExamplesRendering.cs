@@ -76,8 +76,8 @@ namespace RayTracing.TestBench
                     bottleMaterial.Glossyness = 0.8f;
                     bottleMaterial.Transparency = 0.9f;
                 },
-                resX: 50,
-                resY: 60,
+                resX: 100,
+                resY: 120,
                 camera =>
                 {
                     camera.Position = new Vector3(0, 1f, 1.3f);
@@ -95,7 +95,7 @@ namespace RayTracing.TestBench
                     ApplyGloss = true,
                     UseFancyLighting = true,
                     DepthCueingMaxDistance = 20f,
-                    MaxRecursionDepth = 4,
+                    MaxRecursionDepth = 5,
                 });
         }
     }
