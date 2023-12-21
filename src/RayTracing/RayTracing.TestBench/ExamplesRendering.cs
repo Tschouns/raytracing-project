@@ -63,9 +63,14 @@ namespace RayTracing.TestBench
                     glassMaterial.Glossyness = 0.9f;
                     glassMaterial.Transparency = 0.8f;
 
+                    var drinkMaterial = scene.Materials.Single(m => m.Name.Contains("Drink"));
+                    drinkMaterial.Reflectivity = 0.3f;
+                    drinkMaterial.Glossyness = 0.3f;
+                    drinkMaterial.Transparency = 0.6f;
+
                     var bottleMaterial = scene.Materials.Single(m => m.Name.Contains("Bottle"));
-                    bottleMaterial.Reflectivity = 0.6f;
-                    bottleMaterial.Glossyness = 0.9f;
+                    bottleMaterial.Reflectivity = 0.5f;
+                    bottleMaterial.Glossyness = 0.8f;
                     bottleMaterial.Transparency = 0.5f;
                 },
                 resX: 50,
@@ -81,11 +86,11 @@ namespace RayTracing.TestBench
                     FillBackground = true,
                     ApplyDepthCueing = true,
                     ApplyNormalShading = true,
-                    ApplyShadows = true,
+                    ApplyShadows = false,
                     ApplyReflections = true,
                     ApplyTransmission = true,
-                    ApplyGloss = true,
-                    UseFancyLighting = true,
+                    ApplyGloss = false,
+                    UseFancyLighting = false,
                     DepthCueingMaxDistance = 20f,
                     MaxRecursionDepth = 5,
                 });
