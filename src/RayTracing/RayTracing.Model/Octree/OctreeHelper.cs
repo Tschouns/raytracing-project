@@ -28,159 +28,82 @@ namespace RayTracing.Model.Octree
 
             var boundingBox = aabbTracker.GetBoundingBox();
 
+            return BuildOctreeInternalRecursive(boundingBox, allFaces);
+        }
+
+        private static OctreeNode? BuildOctreeInternalRecursive(AxisAlignedBoundingBox boundingBox, IReadOnlyList<Face> allFaces)
+        {
+            if (allFaces.Count < 1)
+            {
+                return new OctreeNode(boundingBox, allFaces, childNodes: null);
+            }
+
             // Find the center.
             var center = boundingBox.Min + (boundingBox.Max - boundingBox.Min).Scale(0.5f);
 
-            // Assign all faces to the different boxes.
-            var leftTopFront = new List<Face>();
-            var leftTopBack = new List<Face>();
-            var leftBottomFront = new List<Face>();
-            var leftBottomBack = new List<Face>();
-            var rightTopFront = new List<Face>();
-            var rightTopBack = new List<Face>();
-            var rightBottomFront = new List<Face>();
-            var rightBottomBack = new List<Face>();
+            // Create child AABBs, and face lists.
+            var childBoundingBoxes = CreateChildBoundingBoxes(boundingBox);
+            var childFaceLists = childBoundingBoxes.Select(_ => new List<Face>()).ToArray();
 
+            // Add each face to one or multiple lists.
             foreach (var face in allFaces)
             {
-                AssignToList(
-                    face,
-                    center,
-                    leftTopFront,
-                    leftTopBack,
-                    leftBottomFront,
-                    leftBottomBack,
-                    rightTopFront,
-                    rightTopBack,
-                    rightBottomFront,
-                    rightBottomBack);
+                for (var i = 0; i < childBoundingBoxes.Length; i++)
+                {
+                    if (childBoundingBoxes[i].Contains(face.Triangle.CornerA) ||
+                        childBoundingBoxes[i].Contains(face.Triangle.CornerB) ||
+                        childBoundingBoxes[i].Contains(face.Triangle.CornerB))
+                    {
+                        childFaceLists[i].Add(face);
+                    }
+                }
+            }
+
+            // Stop when a further subdivision makes no sense anymore.
+            if (childFaceLists.Any(l => l.Count >= allFaces.Count))
+            {
+                return new OctreeNode(boundingBox, allFaces, childNodes: null);
             }
 
             // Create child nodes.
-            var child1 = BuildChildIfSmaller(allFaces.Count, leftTopFront);
-            var child2 = BuildChildIfSmaller(allFaces.Count, leftTopBack);
-            var child3 = BuildChildIfSmaller(allFaces.Count, leftBottomFront);
-            var child4 = BuildChildIfSmaller(allFaces.Count, leftBottomBack);
-            var child5 = BuildChildIfSmaller(allFaces.Count, rightTopFront);
-            var child6 = BuildChildIfSmaller(allFaces.Count, rightTopBack);
-            var child7 = BuildChildIfSmaller(allFaces.Count, rightBottomFront);
-            var child8 = BuildChildIfSmaller(allFaces.Count, rightBottomBack);
+            var childNodes = new OctreeNode[childBoundingBoxes.Length];
 
-            return new OctreeNode(boundingBox, allFaces, child1, child2, child3, child4, child5, child6, child7, child8);
+            for (var i = 0; i < childBoundingBoxes.Length; i++)
+            {
+                childNodes[i] = BuildOctreeInternalRecursive(childBoundingBoxes[i], childFaceLists[i]);
+            }
+
+            var nonEmptyChildNodes = childNodes.Where(c => c.Faces.Any()).ToArray();
+
+            return new OctreeNode(boundingBox, allFaces, nonEmptyChildNodes);
         }
 
-        private static void AssignToList(
-            Face face,
-            Vector3 center,
-            IList<Face> leftTopFront,
-            IList<Face> leftTopBack,
-            IList<Face> leftBottomFront,
-            IList<Face> leftBottomBack,
-            IList<Face> rightTopFront,
-            IList<Face> rightTopBack,
-            IList<Face> rightBottomFront,
-            IList<Face> rightBottomBack)
+        private static AxisAlignedBoundingBox[] CreateChildBoundingBoxes(AxisAlignedBoundingBox aabb)
         {
-            foreach (var vertex in GetVertices(face))
+            // Find the center offset.
+            var centerOffset = (aabb.Max - aabb.Min).Scale(0.5f);
+
+            var leftBottomBack = new AxisAlignedBoundingBox(aabb.Min, aabb.Min + centerOffset);
+            var leftBottomFront = leftBottomBack.CopyMove(centerOffset.DirectionZ());
+            var leftTopBack = leftBottomBack.CopyMove(centerOffset.DirectionY());
+            var leftTopFront = leftTopBack.CopyMove(centerOffset.DirectionZ());
+
+            var rightBottomBack = leftBottomBack.CopyMove(centerOffset.DirectionX());
+            var rightBottomFront = rightBottomBack.CopyMove(centerOffset.DirectionZ());
+            var rightTopBack = rightBottomBack.CopyMove(centerOffset.DirectionY());
+            var rightTopFront = rightTopBack.CopyMove(centerOffset.DirectionZ());
+
+            return new AxisAlignedBoundingBox[]
             {
-                var left = vertex.X > center.X;
-                var top = vertex.Y > center.Y;
-                var front = vertex.Z > center.Z;
-
-                if (left)
-                {
-                    if (top)
-                    {
-                        if (front)
-                        {
-                            leftTopFront.Add(face);
-                            return;
-                        }
-                        else
-                        {
-                            leftTopBack.Add(face);
-                            return;
-                        }
-                    }
-                    else
-                    {
-                        if (front)
-                        {
-                            leftBottomFront.Add(face);
-                            return;
-                        }
-                        else
-                        {
-                            leftBottomBack.Add(face);
-                            return;
-                        }
-                    }
-                }
-                else
-                {
-                    if (top)
-                    {
-                        if (front)
-                        {
-                            rightTopFront.Add(face);
-                            return;
-                        }
-                        else
-                        {
-                            rightTopBack.Add(face);
-                            return;
-                        }
-                    }
-                    else
-                    {
-                        if (front)
-                        {
-                            rightBottomFront.Add(face);
-                            return;
-                        }
-                        else
-                        {
-                            rightBottomBack.Add(face);
-                            return;
-                        }
-                    }
-                }
-            }
-        }
-
-        private static OctreeNode? BuildChildIfSmaller(int previousFaceCount, IReadOnlyList<Face> faces)
-        {
-            if (faces.Count < previousFaceCount)
-            {
-                return BuildOctree(faces);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        //private static void AddIfNotJustAdded(Face face, IList<Face> facesList)
-        //{
-        //    if (!facesList.Any())
-        //    {
-        //        facesList.Add(face);
-        //        return;
-        //    }
-
-        //    if (facesList.Last() == face)
-        //    {
-        //        return;
-        //    }
-
-        //    facesList.Add(face);
-        //}
-
-        private static IEnumerable<Vector3> GetVertices(Face face)
-        {
-            Argument.AssertNotNull(face, nameof(face));
-
-            return new Vector3[] { face.Triangle.CornerA, face.Triangle.CornerB, face.Triangle.CornerC };
+                leftBottomBack,
+                leftBottomFront,
+                leftTopBack,
+                leftTopFront,
+                rightBottomBack,
+                rightBottomFront,
+                rightTopBack,
+                rightTopFront
+            };
         }
 
         private class AabbTracker
