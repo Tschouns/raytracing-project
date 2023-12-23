@@ -63,7 +63,9 @@ namespace RayTracing.Model.Octree
                 return Faces;
             }
 
-            var prunedChildFaces = childNodes.SelectMany(c => c.PruneFacesForRayTest(rayOrigin, rayDirection, minFaceCount));
+            var prunedChildFaces = childNodes
+                .SelectMany(c => c.PruneFacesForRayTest(rayOrigin, rayDirection, minFaceCount))
+                .ToList(); // Debugging
 
             return prunedChildFaces;
         }

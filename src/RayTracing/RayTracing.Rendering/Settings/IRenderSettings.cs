@@ -12,7 +12,7 @@ namespace RayTracing.Rendering.Settings
         /// Gets a value indicating whether the screen shall be filled with a background
         /// color before rendering actual pixels.
         /// </summary>
-        public bool FillBackground { get;}
+        public bool FillBackground { get; }
 
         /// <summary>
         /// Gets a value indicating whether the rendering shall apply depth cueing.
@@ -73,5 +73,10 @@ namespace RayTracing.Rendering.Settings
         /// Gets the maximum depth of the recursive ray traycing.
         /// </summary>
         int MaxRecursionDepth { get; }
+
+        /// <summary>
+        /// Gets a value indicating wether parallel render shall be used.
+        /// </summary>
+        bool UseParallelRendering { get; }
     }
 }

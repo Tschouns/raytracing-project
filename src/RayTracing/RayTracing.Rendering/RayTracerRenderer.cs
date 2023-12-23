@@ -34,11 +34,22 @@ namespace RayTracing.Rendering
             }
 
             // Render image pixel by pixel.
-            var tasks = pixelRays
-                .Select(pixel => Task.Run(() => SetPixel(scene.Geometries, scene.LightSources, pixel, target, settings)))
-                .ToArray();
+            if (settings.UseParallelRendering)
+            {
+                var tasks = pixelRays
+                    .Select(pixel => Task.Run(() => SetPixel(scene.Geometries, scene.LightSources, pixel, target, settings)))
+                    .ToArray();
 
-            Task.WaitAll(tasks);
+                Task.WaitAll(tasks);
+            }
+            else
+            {
+                // Render image pixel by pixel.
+                foreach (var pixel in pixelRays)
+                {
+                    SetPixel(scene.Geometries, scene.LightSources, pixel, target, settings);
+                }
+            }
         }
 
         private static void Shuffle<T>(IList<T> list)
@@ -85,7 +96,7 @@ namespace RayTracing.Rendering
             Argument.AssertNotNull(lightSources, nameof(lightSources));
             Argument.AssertNotNull(settings, nameof(settings));
 
-            if (depth > settings.MaxRecursionDepth)
+            if (depth >= settings.MaxRecursionDepth)
             {
                 return settings.DepthCueingColor;
             }

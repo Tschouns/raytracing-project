@@ -18,5 +18,6 @@ namespace RayTracing.Rendering.Settings
         public Color DepthCueingColor { get; set; } = Color.AliceBlue;
         public float DepthCueingMaxDistance { get; set; } = 100f;
         public int MaxRecursionDepth { get; set; } = 10;
+        public bool UseParallelRendering { get; set; } = true;
     }
 }
