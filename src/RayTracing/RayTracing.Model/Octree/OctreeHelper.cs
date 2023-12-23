@@ -1,5 +1,6 @@
 ﻿using RayTracing.Base;
 using RayTracing.Math;
+using RayTracing.Model.BoundingBoxes;
 
 namespace RayTracing.Model.Octree
 {

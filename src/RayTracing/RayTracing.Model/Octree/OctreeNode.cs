@@ -2,6 +2,7 @@
 using RayTracing.Base;
 using RayTracing.Math;
 using RayTracing.Math.Calculations;
+using RayTracing.Model.BoundingBoxes;
 
 namespace RayTracing.Model.Octree
 {

@@ -1,6 +1,7 @@
 ﻿using RayTracing.Base;
 using RayTracing.Math;
 using RayTracing.Model;
+using RayTracing.Model.BoundingBoxes;
 using RayTracing.ModelFiles.ColladaFormat.Xml;
 using RayTracing.ModelFiles.ColladaFormat.Xml.Effects;
 using RayTracing.ModelFiles.ColladaFormat.Xml.Geometries;

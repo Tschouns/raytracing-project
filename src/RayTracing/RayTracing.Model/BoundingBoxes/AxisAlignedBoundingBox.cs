@@ -1,4 +1,6 @@
-﻿namespace RayTracing.Math
+﻿using RayTracing.Math;
+
+namespace RayTracing.Model.BoundingBoxes
 {
     /// <summary>
     /// Represents an axis-aligned bounding box.
