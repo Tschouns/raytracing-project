@@ -29,9 +29,11 @@ namespace RayTracing.Model.Octree
 
         public IEnumerable<Face> GetFaces(Vector3 rayOrigin, Vector3 rayDirection, int minFaceCount)
         {
-            if (!VectorCalculator3D.DoesRayIntersectWithAabb(rayOrigin, rayDirection, BoundingBox.Min, BoundingBox.Max))
+            var rayAndAabb = VectorCalculator3D.DoesRayIntersectWithAabb(rayOrigin, rayDirection, BoundingBox.Min, BoundingBox.Max);
+
+            if (!rayAndAabb.DoIntersect)
             {
-                return new List<Face>();
+                return new Face[0];
             }
 
             if (ChildNodes == null)
@@ -40,11 +42,18 @@ namespace RayTracing.Model.Octree
                 return Faces;
             }
 
-            var faces = ChildNodes
-                .Where(c => VectorCalculator3D.DoesRayIntersectWithAabb(rayOrigin, rayDirection, c.BoundingBox.Min, c.BoundingBox.Max))
-                .SelectMany(c => c.GetFaces(rayOrigin, rayDirection, minFaceCount))
-                .Distinct()
-                .ToList();
+            var nearestRelevantChildNode = ChildNodes
+                .Select(c => new { Node = c, Result = VectorCalculator3D.DoesRayIntersectWithAabb(rayOrigin, rayDirection, c.BoundingBox.Min, c.BoundingBox.Max) })
+                .Where(c => c.Result.DoIntersect)
+                .OrderBy(c => c.Result.T0.LengthSquared())
+                .FirstOrDefault();
+
+            if (nearestRelevantChildNode == null)
+            {
+                return new Face[0];
+            }
+
+            var faces = nearestRelevantChildNode.Node.GetFaces(rayOrigin, rayDirection, minFaceCount);
 
             return faces;
         }

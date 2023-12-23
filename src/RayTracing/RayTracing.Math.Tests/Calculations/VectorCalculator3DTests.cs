@@ -252,7 +252,7 @@ namespace RayTracing.Math.Tests.Calculations
             var result = VectorCalculator3D.DoesRayIntersectWithAabb(origin, direction, aabbMin, aabbMax);
 
             // Assert
-            Assert.Equal(expectedResult, result);
+            Assert.Equal(expectedResult, result.DoIntersect);
         }
     }
 }

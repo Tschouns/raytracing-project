@@ -128,10 +128,12 @@ namespace RayTracing.Math.Calculations
         /// <returns>
         /// A value indicating whether the ray intersects with the bounding box
         /// </returns>
-        public static bool DoesRayIntersectWithAabb(Vector3 rayOrigin, Vector3 rayDirection, Vector3 aabbMin, Vector3 aabbMax)
+        public static AabbIntersectionResult DoesRayIntersectWithAabb(Vector3 rayOrigin, Vector3 rayDirection, Vector3 aabbMin, Vector3 aabbMax)
         {
             var tMin = aabbMin - rayOrigin;
             var tMax = aabbMax - rayOrigin;
+
+            var doIntersect = true;
 
             // X
             var incDirX = 1 / rayDirection.X;
@@ -140,7 +142,7 @@ namespace RayTracing.Math.Calculations
 
             if (t1X <= t0X ^ incDirX < 0)
             {
-                return false;
+                doIntersect = false;
             }
 
             // Y
@@ -150,7 +152,7 @@ namespace RayTracing.Math.Calculations
 
             if (t1Y <= t0Y ^ incDirY < 0)
             {
-                return false;
+                doIntersect = false;
             }
 
             // Z
@@ -160,10 +162,13 @@ namespace RayTracing.Math.Calculations
 
             if (t1Z <= t0Z ^ incDirZ < 0)
             {
-                return false;
+                doIntersect = false;
             }
 
-            return true;
+            return new AabbIntersectionResult(
+                doIntersect,
+                new Vector3(t0X, t0Y, t0Z),
+                new Vector3(t1X, t1Y, t1Z));
         }
 
         private static float[] AsArray(Vector3 vec)
