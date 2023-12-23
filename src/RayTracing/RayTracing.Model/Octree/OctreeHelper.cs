@@ -5,6 +5,8 @@ namespace RayTracing.Model.Octree
 {
     internal static class OctreeHelper
     {
+        private static readonly float calcErrorMargin = 0.00001f;
+
         public static OctreeNode? BuildOctree(IReadOnlyList<Face> allFaces)
         {
             Argument.AssertNotNull(allFaces, nameof(allFaces));
@@ -26,12 +28,6 @@ namespace RayTracing.Model.Octree
 
             var boundingBox = aabbTracker.GetBoundingBox();
 
-            //// Break recursion.
-            //if (allFaces.Count <= 5)
-            //{
-            //    return new OctreeNode(boundingBox, allFaces, null, null, null, null, null, null, null, null);
-            //}
-
             // Find the center.
             var center = boundingBox.Min + (boundingBox.Max - boundingBox.Min).Scale(0.5f);
 
@@ -47,52 +43,17 @@ namespace RayTracing.Model.Octree
 
             foreach (var face in allFaces)
             {
-                foreach (var vertex in GetVertices(face))
-                {
-                    var left = vertex.X > center.X;
-                    var top = vertex.Y > center.Y;
-                    var front = vertex.Z > center.Z;
-
-                    if (left && top && front)
-                    {
-                        AddIfNotJustAdded(face, leftTopFront);
-                    }
-
-                    if (left && top && !front)
-                    {
-                        AddIfNotJustAdded(face, leftTopBack);
-                    }
-
-                    if (left && !top && front)
-                    {
-                        AddIfNotJustAdded(face, leftBottomFront);
-                    }
-
-                    if (!left && !top && !front)
-                    {
-                        AddIfNotJustAdded(face, leftBottomBack);
-                    }
-
-                    if (!left && top && front)
-                    {
-                        AddIfNotJustAdded(face, rightTopFront);
-                    }
-
-                    if (!left && top && !front)
-                    {
-                        AddIfNotJustAdded(face, rightTopBack);
-                    }
-
-                    if (!left && !top && front)
-                    {
-                        AddIfNotJustAdded(face, rightBottomFront);
-                    }
-
-                    if (!left && !top && !front)
-                    {
-                        AddIfNotJustAdded(face, rightBottomBack);
-                    }
-                }
+                AssignToList(
+                    face,
+                    center,
+                    leftTopFront,
+                    leftTopBack,
+                    leftBottomFront,
+                    leftBottomBack,
+                    rightTopFront,
+                    rightTopBack,
+                    rightBottomFront,
+                    rightBottomBack);
             }
 
             // Create child nodes.
@@ -108,9 +69,88 @@ namespace RayTracing.Model.Octree
             return new OctreeNode(boundingBox, allFaces, child1, child2, child3, child4, child5, child6, child7, child8);
         }
 
-        private static OctreeNode? BuildChildIfSmaller(int threshold, IReadOnlyList<Face> faces)
+        private static void AssignToList(
+            Face face,
+            Vector3 center,
+            IList<Face> leftTopFront,
+            IList<Face> leftTopBack,
+            IList<Face> leftBottomFront,
+            IList<Face> leftBottomBack,
+            IList<Face> rightTopFront,
+            IList<Face> rightTopBack,
+            IList<Face> rightBottomFront,
+            IList<Face> rightBottomBack)
         {
-            if (faces.Count < threshold)
+            foreach (var vertex in GetVertices(face))
+            {
+                var left = vertex.X > center.X;
+                var top = vertex.Y > center.Y;
+                var front = vertex.Z > center.Z;
+
+                if (left)
+                {
+                    if (top)
+                    {
+                        if (front)
+                        {
+                            leftTopFront.Add(face);
+                            return;
+                        }
+                        else
+                        {
+                            leftTopBack.Add(face);
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        if (front)
+                        {
+                            leftBottomFront.Add(face);
+                            return;
+                        }
+                        else
+                        {
+                            leftBottomBack.Add(face);
+                            return;
+                        }
+                    }
+                }
+                else
+                {
+                    if (top)
+                    {
+                        if (front)
+                        {
+                            rightTopFront.Add(face);
+                            return;
+                        }
+                        else
+                        {
+                            rightTopBack.Add(face);
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        if (front)
+                        {
+                            rightBottomFront.Add(face);
+                            return;
+                        }
+                        else
+                        {
+                            rightBottomBack.Add(face);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+
+        private static OctreeNode? BuildChildIfSmaller(int previousFaceCount, IReadOnlyList<Face> faces)
+        {
+            if (faces.Count < previousFaceCount)
             {
                 return BuildOctree(faces);
             }
@@ -120,21 +160,21 @@ namespace RayTracing.Model.Octree
             }
         }
 
-        private static void AddIfNotJustAdded(Face face, IList<Face> facesList)
-        {
-            if (!facesList.Any())
-            {
-                facesList.Add(face);
-                return;
-            }
+        //private static void AddIfNotJustAdded(Face face, IList<Face> facesList)
+        //{
+        //    if (!facesList.Any())
+        //    {
+        //        facesList.Add(face);
+        //        return;
+        //    }
 
-            if (facesList.Last() == face)
-            {
-                return;
-            }
+        //    if (facesList.Last() == face)
+        //    {
+        //        return;
+        //    }
 
-            facesList.Add(face);
-        }
+        //    facesList.Add(face);
+        //}
 
         private static IEnumerable<Vector3> GetVertices(Face face)
         {
@@ -167,8 +207,14 @@ namespace RayTracing.Model.Octree
             public AxisAlignedBoundingBox GetBoundingBox()
             {
                 return new AxisAlignedBoundingBox(
-                    new Vector3(minX, minY, minZ),
-                    new Vector3(maxX, maxY, maxZ));
+                    new Vector3(
+                        minX - calcErrorMargin,
+                        minY - calcErrorMargin,
+                        minZ - calcErrorMargin),
+                    new Vector3(
+                        maxX + calcErrorMargin,
+                        maxY + calcErrorMargin,
+                        maxZ + calcErrorMargin));
             }
 
             public void Register(Vector3 vertex)

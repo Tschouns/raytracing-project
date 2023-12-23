@@ -160,7 +160,7 @@ namespace RayTracing.Math.Tests.Calculations
         }
 
         [Fact]
-        public void IntersectRayWithAabb_RayHitsUpwards_ReturnsTrue()
+        public void DoesRayIntersectWithAabb_RayHitsUpwards_ReturnsTrue()
         {
             DoesRayIntersectWithAabb_GivenRayWithAabb_ReturnsExpectedResult(
                 origin: new Vector3(1, 1, 1),
@@ -171,10 +171,21 @@ namespace RayTracing.Math.Tests.Calculations
         }
 
         [Fact]
-        public void IntersectRayWithAabb_RayHitsDownwards_ReturnsTrue()
+        public void DoesRayIntersectWithAabb_RayHitsDownwards_ReturnsTrue()
         {
             DoesRayIntersectWithAabb_GivenRayWithAabb_ReturnsExpectedResult(
                 origin: new Vector3(4, 4, 4),
+                direction: new Vector3(3, 3, 3),
+                aabbMin: new Vector3(1, 1, 1),
+                aabbMax: new Vector3(2, 2, 2),
+                expectedResult: true);
+        }
+
+        [Fact]
+        public void DoesRayIntersectWithAabb_RayStartsWithinBox_ReturnsTrue()
+        {
+            DoesRayIntersectWithAabb_GivenRayWithAabb_ReturnsExpectedResult(
+                origin: new Vector3(1.5f, 1.5f, 1.5f),
                 direction: new Vector3(3, 3, 3),
                 aabbMin: new Vector3(1, 1, 1),
                 aabbMax: new Vector3(2, 2, 2),

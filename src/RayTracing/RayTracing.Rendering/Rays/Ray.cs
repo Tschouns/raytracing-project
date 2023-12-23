@@ -48,14 +48,12 @@ namespace RayTracing.Rendering.Rays
 
             foreach (var geometry in geometries)
             {
-                // AABB optimization:
-                if (geometry.Octree != null &&
-                    !VectorCalculator3D.DoesRayIntersectWithAabb(Origin, Direction, geometry.Octree.BoundingBox))
-                {
-                    continue;
-                }
+                IEnumerable<Face> faces = geometry.Faces;
 
-                foreach (var face in geometry.Faces)
+                // AABB optimization:
+                faces = geometry.Octree.PruneFacesForRayTest(Origin, Direction, 100);
+
+                foreach (var face in faces)
                 {
                     if (DetectForwardHitInternal(face, out var currentHitPoint))
                     {

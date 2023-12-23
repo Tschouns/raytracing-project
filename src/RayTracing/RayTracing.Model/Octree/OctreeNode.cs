@@ -1,14 +1,16 @@
 ﻿
 using RayTracing.Base;
 using RayTracing.Math;
+using RayTracing.Math.Calculations;
 
 namespace RayTracing.Model.Octree
 {
     public class OctreeNode
     {
+        private readonly OctreeNode[] childNodes;
         public OctreeNode(
             AxisAlignedBoundingBox boundingBox,
-            IEnumerable<Face> faces,
+            IReadOnlyList<Face> faces,
             OctreeNode? child1,
             OctreeNode? child2,
             OctreeNode? child3,
@@ -23,6 +25,7 @@ namespace RayTracing.Model.Octree
 
             BoundingBox = boundingBox;
             Faces = faces;
+
             Child1 = child1;
             Child2 = child2;
             Child3 = child3;
@@ -31,10 +34,14 @@ namespace RayTracing.Model.Octree
             Child6 = child6;
             Child7 = child7;
             Child8 = child8;
+
+            childNodes = new[] { Child1, Child2, Child3, Child4, Child5, Child6, Child7, Child8 }
+                .Where(c => c != null)
+                .ToArray();
         }
 
         public AxisAlignedBoundingBox BoundingBox { get; }
-        public IEnumerable<Face> Faces { get; }
+        public IReadOnlyList<Face> Faces { get; }
         public OctreeNode? Child1 { get; }
         public OctreeNode? Child2 { get; }
         public OctreeNode? Child3 { get; }
@@ -43,5 +50,22 @@ namespace RayTracing.Model.Octree
         public OctreeNode? Child6 { get; }
         public OctreeNode? Child7 { get; }
         public OctreeNode? Child8 { get; }
+
+        public IEnumerable<Face> PruneFacesForRayTest(Vector3 rayOrigin, Vector3 rayDirection, int minFaceCount)
+        {
+            if (!VectorCalculator3D.DoesRayIntersectWithAabb(rayOrigin, rayDirection, BoundingBox))
+            {
+                return new List<Face>();
+            }
+
+            if (Faces.Count <= minFaceCount)
+            {
+                return Faces;
+            }
+
+            var prunedChildFaces = childNodes.SelectMany(c => c.PruneFacesForRayTest(rayOrigin, rayDirection, minFaceCount));
+
+            return prunedChildFaces;
+        }
     }
 }
