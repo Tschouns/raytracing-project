@@ -6,7 +6,7 @@ namespace RayTracing.Model.Octree
 {
     public class OctreeNode
     {
-        private OctreeNode(
+        public OctreeNode(
             AxisAlignedBoundingBox boundingBox,
             IEnumerable<Face> faces,
             OctreeNode? child1,
