@@ -109,7 +109,23 @@ namespace RayTracing.Math.Calculations
             return IntersectionResult.IntersectAt(intersection, lambda);
         }
 
-        public static bool IntersectRayWithAabb(Vector3 origin, Vector3 direction, AxisAlignedBoundingBox aabb)
+        /// <summary>
+        /// Checks whether a ray -- specified by an origin and direction vector -- intersects with the specified
+        /// axis-aligned bounding box.
+        /// </summary>
+        /// <param name="origin">
+        /// The ray origin vector
+        /// </param>
+        /// <param name="direction">
+        /// The ray direction vector
+        /// </param>
+        /// <param name="aabb">
+        /// The axis-aligned bounding box
+        /// </param>
+        /// <returns>
+        /// A value indicating whether the ray intersects with the bounding box
+        /// </returns>
+        public static bool DoesRayIntersectWithAabb(Vector3 origin, Vector3 direction, AxisAlignedBoundingBox aabb)
         {
             var pos = AsArray(origin);
             var dir = AsArray(direction);

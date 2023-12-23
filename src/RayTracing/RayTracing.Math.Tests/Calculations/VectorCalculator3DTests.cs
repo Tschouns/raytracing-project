@@ -162,7 +162,7 @@ namespace RayTracing.Math.Tests.Calculations
         [Fact]
         public void IntersectRayWithAabb_RayHitsUpwards_ReturnsTrue()
         {
-            IntersectRayWithAabb_GivenRayWithAabb_ReturnsExpectedResult(
+            DoesRayIntersectWithAabb_GivenRayWithAabb_ReturnsExpectedResult(
                 origin: new Vector3(1, 1, 1),
                 direction: new Vector3(2, 2, 2),
                 aabbMin: new Vector3(3, 3, 3),
@@ -173,7 +173,7 @@ namespace RayTracing.Math.Tests.Calculations
         [Fact]
         public void IntersectRayWithAabb_RayHitsDownwards_ReturnsTrue()
         {
-            IntersectRayWithAabb_GivenRayWithAabb_ReturnsExpectedResult(
+            DoesRayIntersectWithAabb_GivenRayWithAabb_ReturnsExpectedResult(
                 origin: new Vector3(4, 4, 4),
                 direction: new Vector3(3, 3, 3),
                 aabbMin: new Vector3(1, 1, 1),
@@ -206,7 +206,7 @@ namespace RayTracing.Math.Tests.Calculations
             Assert.Equal(expectedIntersection, result.IntersectionPoint);
         }
 
-        private void IntersectRayWithAabb_GivenRayWithAabb_ReturnsExpectedResult(
+        private void DoesRayIntersectWithAabb_GivenRayWithAabb_ReturnsExpectedResult(
             Vector3 origin,
             Vector3 direction,
             Vector3 aabbMin,
@@ -217,7 +217,7 @@ namespace RayTracing.Math.Tests.Calculations
             var aabb = new AxisAlignedBoundingBox(aabbMin, aabbMax);
 
             // Act
-            var result = VectorCalculator3D.IntersectRayWithAabb(origin, direction, aabb);
+            var result = VectorCalculator3D.DoesRayIntersectWithAabb(origin, direction, aabb);
 
             // Assert
             Assert.Equal(expectedResult, result);
