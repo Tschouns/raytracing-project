@@ -225,10 +225,9 @@ namespace RayTracing.Math.Tests.Calculations
             bool expectedResult)
         {
             // Arrange
-            var aabb = new AxisAlignedBoundingBox(aabbMin, aabbMax);
 
             // Act
-            var result = VectorCalculator3D.DoesRayIntersectWithAabb(origin, direction, aabb);
+            var result = VectorCalculator3D.DoesRayIntersectWithAabb(origin, direction, aabbMin, aabbMax);
 
             // Assert
             Assert.Equal(expectedResult, result);

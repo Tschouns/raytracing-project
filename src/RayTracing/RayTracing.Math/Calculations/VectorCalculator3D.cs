@@ -125,18 +125,18 @@ namespace RayTracing.Math.Calculations
         /// <returns>
         /// A value indicating whether the ray intersects with the bounding box
         /// </returns>
-        public static bool DoesRayIntersectWithAabb(Vector3 origin, Vector3 direction, AxisAlignedBoundingBox aabb)
+        public static bool DoesRayIntersectWithAabb(Vector3 origin, Vector3 direction, Vector3 aabbMin, Vector3 aabbMax)
         {
             var pos = AsArray(origin);
             var dir = AsArray(direction);
-            var aabbMin = AsArray(aabb.Min);
-            var aabbMax = AsArray(aabb.Max);
+            var minArray = AsArray(aabbMin);
+            var maxArray = AsArray(aabbMax);
 
             for (var i = 0; i < 3; i++)
             {
                 var invDir = 1.0f / dir[i];
-                var t0 = (aabbMin[i] - pos[i]) * invDir;
-                var t1 = (aabbMax[i] - pos[i]) * invDir;
+                var t0 = (minArray[i] - pos[i]) * invDir;
+                var t1 = (maxArray[i] - pos[i]) * invDir;
 
                 if (invDir < 0f)
                 {

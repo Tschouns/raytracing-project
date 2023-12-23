@@ -28,7 +28,7 @@ namespace RayTracing.Model.Octree
 
         public IEnumerable<Face> GetFaces(Vector3 rayOrigin, Vector3 rayDirection, int minFaceCount)
         {
-            if (!VectorCalculator3D.DoesRayIntersectWithAabb(rayOrigin, rayDirection, BoundingBox))
+            if (!VectorCalculator3D.DoesRayIntersectWithAabb(rayOrigin, rayDirection, BoundingBox.Min, BoundingBox.Max))
             {
                 return new List<Face>();
             }
@@ -40,7 +40,7 @@ namespace RayTracing.Model.Octree
             }
 
             var faces = ChildNodes
-                .Where(c => VectorCalculator3D.DoesRayIntersectWithAabb(rayOrigin, rayDirection, c.BoundingBox))
+                .Where(c => VectorCalculator3D.DoesRayIntersectWithAabb(rayOrigin, rayDirection, c.BoundingBox.Min, c.BoundingBox.Max))
                 .SelectMany(c => c.GetFaces(rayOrigin, rayDirection, minFaceCount))
                 .Distinct()
                 .ToList();
