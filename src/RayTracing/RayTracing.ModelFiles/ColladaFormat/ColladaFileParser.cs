@@ -208,7 +208,7 @@ namespace RayTracing.ModelFiles.ColladaFormat
 
             // Prepare a faces list, and instanciate the Geometry.
             var faceLists = new List<Face>();
-            var geometry = new Model.Geometry(xmlGeometry.Name, material, faceLists, boundingBox);
+            var geometry = new Model.Geometry(xmlGeometry.Name, material, faceLists);
 
             // Post-hoc-add the actual faces.
             var faces = trianglesAndNormals.Select(t => new Face(geometry, t.Item1, t.Item2));

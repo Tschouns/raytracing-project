@@ -26,11 +26,11 @@ namespace RayTracing.Model.Octree
 
             var boundingBox = aabbTracker.GetBoundingBox();
 
-            // Break recursion.
-            if (allFaces.Count <= 5)
-            {
-                return new OctreeNode(boundingBox, allFaces, null, null, null, null, null, null, null, null);
-            }
+            //// Break recursion.
+            //if (allFaces.Count <= 5)
+            //{
+            //    return new OctreeNode(boundingBox, allFaces, null, null, null, null, null, null, null, null);
+            //}
 
             // Find the center.
             var center = boundingBox.Min + (boundingBox.Max - boundingBox.Min).Scale(0.5f);
@@ -96,16 +96,28 @@ namespace RayTracing.Model.Octree
             }
 
             // Create child nodes.
-            var child1 = BuildOctree(leftTopFront);
-            var child2 = BuildOctree(leftTopBack);
-            var child3 = BuildOctree(leftBottomFront);
-            var child4 = BuildOctree(leftBottomBack);
-            var child5 = BuildOctree(rightTopFront);
-            var child6 = BuildOctree(rightTopBack);
-            var child7 = BuildOctree(rightBottomFront);
-            var child8 = BuildOctree(rightBottomBack);
+            var child1 = BuildChildIfSmaller(allFaces.Count, leftTopFront);
+            var child2 = BuildChildIfSmaller(allFaces.Count, leftTopBack);
+            var child3 = BuildChildIfSmaller(allFaces.Count, leftBottomFront);
+            var child4 = BuildChildIfSmaller(allFaces.Count, leftBottomBack);
+            var child5 = BuildChildIfSmaller(allFaces.Count, rightTopFront);
+            var child6 = BuildChildIfSmaller(allFaces.Count, rightTopBack);
+            var child7 = BuildChildIfSmaller(allFaces.Count, rightBottomFront);
+            var child8 = BuildChildIfSmaller(allFaces.Count, rightBottomBack);
 
             return new OctreeNode(boundingBox, allFaces, child1, child2, child3, child4, child5, child6, child7, child8);
+        }
+
+        private static OctreeNode? BuildChildIfSmaller(int threshold, IReadOnlyList<Face> faces)
+        {
+            if (faces.Count < threshold)
+            {
+                return BuildOctree(faces);
+            }
+            else
+            {
+                return null;
+            }
         }
 
         private static void AddIfNotJustAdded(Face face, IList<Face> facesList)

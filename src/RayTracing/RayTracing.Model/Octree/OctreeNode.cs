@@ -33,15 +33,15 @@ namespace RayTracing.Model.Octree
             Child8 = child8;
         }
 
-        private AxisAlignedBoundingBox BoundingBox { get; }
-        private IEnumerable<Face> Faces { get; }
-        private OctreeNode? Child1 { get; }
-        private OctreeNode? Child2 { get; }
-        private OctreeNode? Child3 { get; }
-        private OctreeNode? Child4 { get; }
-        private OctreeNode? Child5 { get; }
-        private OctreeNode? Child6 { get; }
-        private OctreeNode? Child7 { get; }
-        private OctreeNode? Child8 { get; }
+        public AxisAlignedBoundingBox BoundingBox { get; }
+        public IEnumerable<Face> Faces { get; }
+        public OctreeNode? Child1 { get; }
+        public OctreeNode? Child2 { get; }
+        public OctreeNode? Child3 { get; }
+        public OctreeNode? Child4 { get; }
+        public OctreeNode? Child5 { get; }
+        public OctreeNode? Child6 { get; }
+        public OctreeNode? Child7 { get; }
+        public OctreeNode? Child8 { get; }
     }
 }

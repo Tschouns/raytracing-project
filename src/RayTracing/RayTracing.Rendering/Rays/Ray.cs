@@ -49,7 +49,8 @@ namespace RayTracing.Rendering.Rays
             foreach (var geometry in geometries)
             {
                 // AABB optimization:
-                if (!VectorCalculator3D.DoesRayIntersectWithAabb(Origin, Direction, geometry.BoundingBox))
+                if (geometry.Octree != null &&
+                    !VectorCalculator3D.DoesRayIntersectWithAabb(Origin, Direction, geometry.Octree.BoundingBox))
                 {
                     continue;
                 }
