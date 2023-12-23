@@ -1,10 +1,6 @@
-﻿
-
-using RayTracing.Math;
-
-namespace RayTracing.Model.Octree
+﻿namespace RayTracing.Math.Extensions
 {
-    internal static class Vector3Extensions
+    public static class Vector3Extensions
     {
         public static Vector3 DirectionX(this Vector3 original)
         {

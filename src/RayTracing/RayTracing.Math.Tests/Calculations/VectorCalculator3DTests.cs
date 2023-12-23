@@ -192,6 +192,28 @@ namespace RayTracing.Math.Tests.Calculations
                 expectedResult: true);
         }
 
+        [Fact]
+        public void DoesRayIntersectWithAabb_RayMissesForwardToTheLeft_ReturnsFalse()
+        {
+            DoesRayIntersectWithAabb_GivenRayWithAabb_ReturnsExpectedResult(
+                origin: new Vector3(-1.01f, 1, -5),
+                direction: new Vector3(0, 0, 2),
+                aabbMin: new Vector3(-1, -1, -1),
+                aabbMax: new Vector3(1, 2, 2),
+                expectedResult: false);
+        }
+
+        [Fact]
+        public void DoesRayIntersectWithAabb_RayMissesForwardToTheRight_ReturnsFalse()
+        {
+            DoesRayIntersectWithAabb_GivenRayWithAabb_ReturnsExpectedResult(
+                origin: new Vector3(3.01f, 1, -5),
+                direction: new Vector3(0, 0, 2),
+                aabbMin: new Vector3(-1, -1, -1),
+                aabbMax: new Vector3(3, 2, 2),
+                expectedResult: false);
+        }
+
         private void IntersectPlane_GivenLineAndPlane_ReturnsExpectedResult(
             Line3D line,
             Plane3D plane,

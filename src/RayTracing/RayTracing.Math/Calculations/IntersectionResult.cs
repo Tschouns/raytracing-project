@@ -1,7 +1,7 @@
 ﻿
 namespace RayTracing.Math.Calculations
 {
-    public class IntersectionResult
+    public struct IntersectionResult
     {
         private IntersectionResult(
             bool hasIntersection,
