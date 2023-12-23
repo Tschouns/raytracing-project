@@ -24,6 +24,7 @@ namespace RayTracing.Model.Octree
             Argument.AssertNotNull(faces, nameof(faces));
 
             BoundingBox = boundingBox;
+            Volume = CalcVolume(boundingBox);
             Faces = faces;
 
             Child1 = child1;
@@ -41,6 +42,7 @@ namespace RayTracing.Model.Octree
         }
 
         public AxisAlignedBoundingBox BoundingBox { get; }
+        public float Volume { get; }
         public IReadOnlyList<Face> Faces { get; }
         public OctreeNode? Child1 { get; }
         public OctreeNode? Child2 { get; }
@@ -68,6 +70,14 @@ namespace RayTracing.Model.Octree
                 .ToList(); // Debugging
 
             return prunedChildFaces;
+        }
+
+        private static float CalcVolume(AxisAlignedBoundingBox aabb)
+        {
+            var diagonal = aabb.Max - aabb.Min;
+            var volume = diagonal.X * diagonal.Y * diagonal.Z;
+
+            return volume;
         }
     }
 }

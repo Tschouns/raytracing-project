@@ -51,7 +51,7 @@ namespace RayTracing.Rendering.Rays
                 IEnumerable<Face> faces = geometry.Faces;
 
                 // AABB optimization:
-                faces = geometry.Octree.PruneFacesForRayTest(Origin, Direction, 100);
+                faces = geometry.Octree.PruneFacesForRayTest(Origin, Direction, 10);
 
                 foreach (var face in faces)
                 {

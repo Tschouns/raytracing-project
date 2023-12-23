@@ -13,5 +13,10 @@
 
         public Vector3 Min;
         public Vector3 Max;
+
+        public override string ToString()
+        {
+            return $"({Min}) -> ({Max})";
+        }
     }
 }
