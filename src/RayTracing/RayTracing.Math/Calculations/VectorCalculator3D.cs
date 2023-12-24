@@ -165,10 +165,13 @@ namespace RayTracing.Math.Calculations
                 doIntersect = false;
             }
 
+            var t0 = new Vector3(t0X, t0Y, t0Z);
+            var t1 = new Vector3(t1X, t1Y, t1Z);
+
             return new AabbIntersectionResult(
                 doIntersect,
-                new Vector3(t0X, t0Y, t0Z),
-                new Vector3(t1X, t1Y, t1Z));
+                t0.Dot(rayDirection),
+                t1.Dot(rayDirection));
         }
 
         private static float[] AsArray(Vector3 vec)

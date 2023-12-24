@@ -2,7 +2,7 @@
 {
     public struct AabbIntersectionResult
     {
-        public AabbIntersectionResult(bool doIntersect, Vector3 t0, Vector3 t1)
+        public AabbIntersectionResult(bool doIntersect, float t0, float t1)
         {
             DoIntersect = doIntersect;
             T0 = t0;
@@ -10,7 +10,7 @@
         }
 
         public bool DoIntersect { get; }
-        public Vector3 T0 { get; }
-        public Vector3 T1 { get; }
+        public float T0 { get; }
+        public float T1 { get; }
     }
 }

@@ -95,7 +95,7 @@ namespace RayTracing.TestBench
                     ApplyGloss = true,
                     UseFancyLighting = true,
                     DepthCueingMaxDistance = 20f,
-                    MaxRecursionDepth = 20,
+                    MaxRecursionDepth = 10,
                     UseParallelRendering = true,
                 });
         }

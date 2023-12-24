@@ -51,7 +51,68 @@ namespace RayTracing.Rendering.Rays
                 IEnumerable<Face> faces = geometry.Faces;
 
                 // AABB optimization:
-                faces = geometry.Octree.GetFaces(Origin, Direction, 10);
+                //faces = geometry.Octree.GetFaces(Origin, Direction, 10);
+
+                foreach (var face in faces)
+                {
+                    UpdateNearestHit(face, ref nearestHitPoint, ref nearestHitFace, ref nearestHitDistanceSquared);
+                }
+            }
+
+            if (!nearestHitPoint.HasValue)
+            {
+                return null;
+            }
+
+            var distance = MathF.Sqrt(nearestHitDistanceSquared!.Value);
+
+            return new RayHit(
+                nearestHitPoint.Value,
+                Direction,
+                distance,
+                nearestHitFace!,
+                isBackFaceHit: InsideObjects.Contains(nearestHitFace.ParentGeometry)); // That means we're hitting the face from inside the object.
+        }
+
+        public void UpdateNearestHit(Face face, ref Vector3? nearestHitPoint, ref Face? nearestHitFace, ref float? nearestHitDistanceSquared)
+        {
+            if (DetectForwardHitInternal(face, out var currentHitPoint))
+            {
+                if (nearestHitPoint == null)
+                {
+                    nearestHitPoint = currentHitPoint;
+                    nearestHitFace = face;
+                    nearestHitDistanceSquared = (nearestHitPoint.Value - Origin).LengthSquared();
+
+                    return;
+                }
+
+                var currentHitDistanceSquared = (currentHitPoint - Origin).LengthSquared();
+                var changeSquared = currentHitDistanceSquared - nearestHitDistanceSquared;
+
+                if (changeSquared < 0)
+                {
+                    nearestHitPoint = currentHitPoint;
+                    nearestHitFace = face;
+                    nearestHitDistanceSquared = currentHitDistanceSquared;
+                }
+            }
+        }
+
+        public RayHit? BACKUP(IEnumerable<Geometry> geometries)
+        {
+            Argument.AssertNotNull(geometries, nameof(geometries));
+
+            Vector3? nearestHitPoint = null;
+            Face? nearestHitFace = null;
+            float? nearestHitDistanceSquared = null;
+
+            foreach (var geometry in geometries)
+            {
+                IEnumerable<Face> faces = geometry.Faces;
+
+                // AABB optimization:
+                //faces = geometry.Octree.GetFaces(Origin, Direction, 10);
 
                 foreach (var face in faces)
                 {
