@@ -46,6 +46,7 @@ namespace RayTracing.Model.Octree
             // Create child AABBs, and face lists.
             var childBoundingBoxes = CreateChildBoundingBoxes(boundingBox);
             var childFaceLists = childBoundingBoxes.Select(_ => new List<Face>()).ToArray();
+            var childGrownAabbTrackers = childBoundingBoxes.Select(aabb => new AabbTracker(aabb.Min)).ToArray();
 
             // Add each face to one or multiple lists.
             foreach (var face in allFaces)
@@ -57,6 +58,9 @@ namespace RayTracing.Model.Octree
                         childBoundingBoxes[i].Contains(face.Triangle.CornerB))
                     {
                         childFaceLists[i].Add(face);
+                        childGrownAabbTrackers[i].Register(face.Triangle.CornerA);
+                        childGrownAabbTrackers[i].Register(face.Triangle.CornerB);
+                        childGrownAabbTrackers[i].Register(face.Triangle.CornerC);
                     }
                 }
             }
@@ -72,12 +76,10 @@ namespace RayTracing.Model.Octree
 
             for (var i = 0; i < childBoundingBoxes.Length; i++)
             {
-                childNodes[i] = BuildOctreeInternalRecursive(childBoundingBoxes[i], childFaceLists[i]);
+                childNodes[i] = BuildOctreeInternalRecursive(childGrownAabbTrackers[i].GetBoundingBox(), childFaceLists[i]);
             }
 
-            var nonEmptyChildNodes = childNodes.Where(c => c.Faces.Any()).ToArray();
-
-            return new OctreeNode(boundingBox, allFaces, nonEmptyChildNodes);
+            return new OctreeNode(boundingBox, allFaces, childNodes);
         }
 
         private static AxisAlignedBoundingBox[] CreateChildBoundingBoxes(AxisAlignedBoundingBox aabb)

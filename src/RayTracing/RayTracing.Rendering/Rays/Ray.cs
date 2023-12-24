@@ -2,6 +2,7 @@
 using RayTracing.Math;
 using RayTracing.Math.Calculations;
 using RayTracing.Model;
+using RayTracing.Model.Octree;
 
 namespace RayTracing.Rendering.Rays
 {
@@ -48,14 +49,30 @@ namespace RayTracing.Rendering.Rays
 
             foreach (var geometry in geometries)
             {
-                IEnumerable<Face> faces = geometry.Faces;
+                var boundingBox = geometry.Octree.BoundingBox;
+                var rayAndAabb = VectorCalculator3D.DoesRayIntersectWithAabb(Origin, Direction, boundingBox.Min, boundingBox.Max);
 
-                // AABB optimization:
-                //faces = geometry.Octree.GetFaces(Origin, Direction, 10);
-
-                foreach (var face in faces)
+                if (!rayAndAabb.DoIntersect)
                 {
-                    UpdateNearestHit(face, ref nearestHitPoint, ref nearestHitFace, ref nearestHitDistanceSquared);
+                    // Next geometry.
+                    continue;
+                }
+
+                if (geometry.Octree.HasChildren)
+                {
+                    if (CheckOctreeNodes(geometry.Octree.ChildNodes, faces => CheckFaces(faces, ref nearestHitPoint, ref nearestHitFace, ref nearestHitDistanceSquared)))
+                    {
+                        // Next geometry.
+                        continue;
+                    }
+                }
+                else
+                {
+                    if (CheckFaces(geometry.Octree.Faces, ref nearestHitPoint, ref nearestHitFace, ref nearestHitDistanceSquared))
+                    {
+                        // Next geometry.
+                        continue;
+                    }
                 }
             }
 
@@ -74,7 +91,57 @@ namespace RayTracing.Rendering.Rays
                 isBackFaceHit: InsideObjects.Contains(nearestHitFace.ParentGeometry)); // That means we're hitting the face from inside the object.
         }
 
-        public void UpdateNearestHit(Face face, ref Vector3? nearestHitPoint, ref Face? nearestHitFace, ref float? nearestHitDistanceSquared)
+        private bool CheckOctreeNodes(OctreeNode[]? nodes, Func<IEnumerable<Face>, bool> checkFaces)
+        {
+            if (nodes.Length != 8)
+            {
+                throw new ArgumentException("Each octree level is supposed to have 8 nodes.");
+            }
+
+            var relevantNodesOrdered = nodes
+                .Select(n => new { Node = n, Result = VectorCalculator3D.DoesRayIntersectWithAabb(Origin, Direction, n.BoundingBox.Min, n.BoundingBox.Max) })
+                //.Where(n => n.Result.DoIntersect && n.Result.T1 > 0)
+                .Where(n => n.Result.DoIntersect)
+                .OrderBy(c => c.Result.T0)
+                .ToArray(); // Useful for debugging.
+
+            foreach (var node in relevantNodesOrdered.Select(n => n.Node))
+            {
+                if (node.HasChildren)
+                {
+                    if (CheckOctreeNodes(node.ChildNodes, checkFaces))
+                    {
+                        return true;
+                    }
+                }
+                else
+                {
+                    if (checkFaces(node.Faces))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        private bool CheckFaces(IEnumerable<Face> faces, ref Vector3? nearestHitPoint, ref Face? nearestHitFace, ref float? nearestHitDistanceSquared)
+        {
+            var anyHit = false;
+
+            foreach (var face in faces)
+            {
+                if (UpdateNearestHit(face, ref nearestHitPoint, ref nearestHitFace, ref nearestHitDistanceSquared))
+                {
+                    anyHit = true;
+                }
+            }
+
+            return anyHit;
+        }
+
+        private bool UpdateNearestHit(Face face, ref Vector3? nearestHitPoint, ref Face? nearestHitFace, ref float? nearestHitDistanceSquared)
         {
             if (DetectForwardHitInternal(face, out var currentHitPoint))
             {
@@ -84,7 +151,7 @@ namespace RayTracing.Rendering.Rays
                     nearestHitFace = face;
                     nearestHitDistanceSquared = (nearestHitPoint.Value - Origin).LengthSquared();
 
-                    return;
+                    return true;
                 }
 
                 var currentHitDistanceSquared = (currentHitPoint - Origin).LengthSquared();
@@ -96,6 +163,12 @@ namespace RayTracing.Rendering.Rays
                     nearestHitFace = face;
                     nearestHitDistanceSquared = currentHitDistanceSquared;
                 }
+
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 

@@ -90,12 +90,12 @@ namespace RayTracing.TestBench
                     ApplyDepthCueing = true,
                     ApplyNormalShading = true,
                     ApplyShadows = true,
-                    ApplyReflections = true,
-                    ApplyTransmission = true,
+                    ApplyReflections = false,
+                    ApplyTransmission = false,
                     ApplyGloss = true,
                     UseFancyLighting = true,
                     DepthCueingMaxDistance = 20f,
-                    MaxRecursionDepth = 10,
+                    MaxRecursionDepth = 1,
                     UseParallelRendering = true,
                 });
         }

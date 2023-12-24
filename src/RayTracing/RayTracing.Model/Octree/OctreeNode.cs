@@ -18,43 +18,14 @@ namespace RayTracing.Model.Octree
             Volume = CalcVolume(boundingBox);
             Faces = faces;
             ChildNodes = childNodes;
+            HasChildren = childNodes != null;
         }
 
         public AxisAlignedBoundingBox BoundingBox { get; }
         public float Volume { get; }
         public IReadOnlyList<Face> Faces { get; }
+        public bool HasChildren { get; }
         public OctreeNode[]? ChildNodes { get; }
-
-        //public IEnumerable<Face> GetFaces(Vector3 rayOrigin, Vector3 rayDirection, int minFaceCount)
-        //{
-        //    //var rayAndAabb = VectorCalculator3D.DoesRayIntersectWithAabb(rayOrigin, rayDirection, BoundingBox.Min, BoundingBox.Max);
-
-        //    //if (!rayAndAabb.DoIntersect)
-        //    //{
-        //    //    return new Face[0];
-        //    //}
-
-        //    if (ChildNodes == null)
-        //    {
-        //        // No further subdivision...
-        //        return Faces;
-        //    }
-
-        //    var nearestRelevantChildNode = ChildNodes
-        //        .Select(c => new { Node = c, Result = VectorCalculator3D.DoesRayIntersectWithAabb(rayOrigin, rayDirection, c.BoundingBox.Min, c.BoundingBox.Max) })
-        //        .Where(c => c.Result.DoIntersect && c.Result.T1 > 0)
-        //        .OrderBy(c => c.Result.T0)
-        //        .FirstOrDefault();
-
-        //    if (nearestRelevantChildNode == null)
-        //    {
-        //        return new Face[0];
-        //    }
-
-        //    var faces = nearestRelevantChildNode.Node.GetFaces(rayOrigin, rayDirection, minFaceCount);
-
-        //    return faces;
-        //}
 
         private static float CalcVolume(AxisAlignedBoundingBox aabb)
         {
