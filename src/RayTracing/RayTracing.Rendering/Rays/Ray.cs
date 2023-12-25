@@ -24,20 +24,20 @@ namespace RayTracing.Rendering.Rays
         public Face? OriginFace { get; }
         public IEnumerable<Geometry> InsideObjects { get; }
 
-        public bool HasAnyHit(IEnumerable<Face> faces)
-        {
-            Argument.AssertNotNull(faces, nameof(faces));
+        //public bool HasAnyHit(IEnumerable<Face> faces)
+        //{
+        //    Argument.AssertNotNull(faces, nameof(faces));
 
-            foreach (var face in faces)
-            {
-                if (DetectForwardHitInternal(face, out _))
-                {
-                    return true;
-                }
-            }
+        //    foreach (var face in faces)
+        //    {
+        //        if (DetectForwardHitInternal(face, out _))
+        //        {
+        //            return true;
+        //        }
+        //    }
 
-            return false;
-        }
+        //    return false;
+        //}
 
         public RayHit? DetectNearestHit(IEnumerable<Geometry> geometries)
         {

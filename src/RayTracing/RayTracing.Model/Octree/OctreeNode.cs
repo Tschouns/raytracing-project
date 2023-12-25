@@ -9,7 +9,8 @@ namespace RayTracing.Model.Octree
         public OctreeNode(
             AxisAlignedBoundingBox boundingBox,
             IReadOnlyList<Face> faces,
-            OctreeNode[]? childNodes)
+            OctreeNode[]? childNodes,
+            int level)
         {
             Argument.AssertNotNull(boundingBox, nameof(boundingBox));
             Argument.AssertNotNull(faces, nameof(faces));
@@ -19,6 +20,7 @@ namespace RayTracing.Model.Octree
             Faces = faces;
             ChildNodes = childNodes;
             HasChildren = childNodes != null;
+            Level = level;
         }
 
         public AxisAlignedBoundingBox BoundingBox { get; }
@@ -26,6 +28,7 @@ namespace RayTracing.Model.Octree
         public IReadOnlyList<Face> Faces { get; }
         public bool HasChildren { get; }
         public OctreeNode[]? ChildNodes { get; }
+        private int Level { get; }
 
         private static float CalcVolume(AxisAlignedBoundingBox aabb)
         {

@@ -30,14 +30,14 @@ namespace RayTracing.Model.Octree
 
             var boundingBox = aabbTracker.GetBoundingBox();
 
-            return BuildOctreeInternalRecursive(boundingBox, allFaces);
+            return BuildOctreeInternalRecursive(boundingBox, allFaces, 0);
         }
 
-        private static OctreeNode? BuildOctreeInternalRecursive(AxisAlignedBoundingBox boundingBox, IReadOnlyList<Face> allFaces)
+        private static OctreeNode? BuildOctreeInternalRecursive(AxisAlignedBoundingBox boundingBox, IReadOnlyList<Face> allFaces, int level)
         {
-            if (allFaces.Count < 1)
+            if (allFaces.Count < 50)
             {
-                return new OctreeNode(boundingBox, allFaces, childNodes: null);
+                return new OctreeNode(boundingBox, allFaces, childNodes: null, level);
             }
 
             // Find the center.
@@ -65,21 +65,26 @@ namespace RayTracing.Model.Octree
                 }
             }
 
-            // Stop when a further subdivision makes no sense anymore.
-            if (childFaceLists.Any(l => l.Count >= allFaces.Count))
-            {
-                return new OctreeNode(boundingBox, allFaces, childNodes: null);
-            }
+            //// Stop when a further subdivision makes no sense anymore.
+            //if (childFaceLists.Any(l => l.Count >= allFaces.Count))
+            //{
+            //    return new OctreeNode(boundingBox, allFaces, childNodes: null, level);
+            //}
+
+            //if (childFaceLists.All(l => l.Count < 50))
+            //{
+            //    return new OctreeNode(boundingBox, allFaces, childNodes: null, level);
+            //}
 
             // Create child nodes.
             var childNodes = new OctreeNode[childBoundingBoxes.Length];
 
             for (var i = 0; i < childBoundingBoxes.Length; i++)
             {
-                childNodes[i] = BuildOctreeInternalRecursive(childGrownAabbTrackers[i].GetBoundingBox(), childFaceLists[i]);
+                childNodes[i] = BuildOctreeInternalRecursive(childGrownAabbTrackers[i].GetBoundingBox(), childFaceLists[i], level + 1);
             }
 
-            return new OctreeNode(boundingBox, allFaces, childNodes);
+            return new OctreeNode(boundingBox, allFaces, childNodes, level);
         }
 
         private static AxisAlignedBoundingBox[] CreateChildBoundingBoxes(AxisAlignedBoundingBox aabb)
