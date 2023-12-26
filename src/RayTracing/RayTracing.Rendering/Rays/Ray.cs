@@ -24,21 +24,6 @@ namespace RayTracing.Rendering.Rays
         public Face? OriginFace { get; }
         public IEnumerable<Geometry> InsideObjects { get; }
 
-        //public bool HasAnyHit(IEnumerable<Face> faces)
-        //{
-        //    Argument.AssertNotNull(faces, nameof(faces));
-
-        //    foreach (var face in faces)
-        //    {
-        //        if (DetectForwardHitInternal(face, out _))
-        //        {
-        //            return true;
-        //        }
-        //    }
-
-        //    return false;
-        //}
-
         public RayHit? DetectNearestHit(IEnumerable<Geometry> geometries)
         {
             Argument.AssertNotNull(geometries, nameof(geometries));
@@ -60,7 +45,7 @@ namespace RayTracing.Rendering.Rays
 
                 if (geometry.Octree.HasChildren)
                 {
-                    if (CheckOctreeNodes(geometry.Octree.ChildNodes, faces => CheckFaces(faces, ref nearestHitPoint, ref nearestHitFace, ref nearestHitDistanceSquared)))
+                    if (CheckOctreeNodes(geometry.Octree.ChildNodes, faces => CheckFaces(faces, ref nearestHitPoint, ref nearestHitFace, ref nearestHitDistanceSquared), level: 0))
                     {
                         // Next geometry.
                         continue;
@@ -91,25 +76,33 @@ namespace RayTracing.Rendering.Rays
                 isBackFaceHit: InsideObjects.Contains(nearestHitFace.ParentGeometry)); // That means we're hitting the face from inside the object.
         }
 
-        private bool CheckOctreeNodes(OctreeNode[]? nodes, Func<IEnumerable<Face>, bool> checkFaces)
+        private bool CheckOctreeNodes(OctreeNode[]? nodes, Func<IEnumerable<Face>, bool> checkFaces, int level)
         {
             if (nodes.Length != 8)
             {
                 throw new ArgumentException("Each octree level is supposed to have 8 nodes.");
             }
 
-            var relevantNodesOrdered = nodes
-                .Select(n => new { Node = n, Result = VectorCalculator3D.DoesRayIntersectWithAabb(Origin, Direction, n.BoundingBox.Min, n.BoundingBox.Max) })
-                //.Where(n => n.Result.DoIntersect && n.Result.T1 > 0)
-                .Where(n => n.Result.DoIntersect)
-                .OrderBy(c => c.Result.T0)
-                .ToArray(); // Useful for debugging.
+            //var orderedNodes = nodes
+            //    .Select(n => new { Node = n, Result = VectorCalculator3D.DoesRayIntersectWithAabb(Origin, Direction, n.BoundingBox.Min, n.BoundingBox.Max) })
+            //    .Where(n => n.Result.DoIntersect && n.Result.T1 > 0)
+            //    .Where(n => n.Result.DoIntersect)
+            //    .OrderBy(c => c.Result.T0)
+            //    .ToArray(); // Useful for debugging.
 
-            foreach (var node in relevantNodesOrdered.Select(n => n.Node))
+            var orderedNodes = nodes.OrderBy(n => (n.BoundingBox.Min - Origin).LengthSquared());
+
+            foreach (var node in orderedNodes)
             {
-                if (node.HasChildren)
+                var rayAndBox = VectorCalculator3D.DoesRayIntersectWithAabb(Origin, Direction, node.BoundingBox.Min, node.BoundingBox.Max);
+                if (!rayAndBox.DoIntersect)
                 {
-                    if (CheckOctreeNodes(node.ChildNodes, checkFaces))
+                    continue;
+                }
+
+                if (node.HasChildren && level < 10)
+                {
+                    if (CheckOctreeNodes(node.ChildNodes, checkFaces, level + 1))
                     {
                         return true;
                     }

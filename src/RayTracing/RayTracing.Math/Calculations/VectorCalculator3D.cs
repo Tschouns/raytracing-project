@@ -133,8 +133,6 @@ namespace RayTracing.Math.Calculations
             var tMin = aabbMin - rayOrigin;
             var tMax = aabbMax - rayOrigin;
 
-            var doIntersect = true;
-
             // X
             var incDirX = 1 / rayDirection.X;
             var t0X = tMin.X * incDirX;
@@ -142,7 +140,7 @@ namespace RayTracing.Math.Calculations
 
             if (t1X <= t0X ^ incDirX < 0)
             {
-                doIntersect = false;
+                return new AabbIntersectionResult(false, 0, 0);
             }
 
             // Y
@@ -152,7 +150,7 @@ namespace RayTracing.Math.Calculations
 
             if (t1Y <= t0Y ^ incDirY < 0)
             {
-                doIntersect = false;
+                return new AabbIntersectionResult(false, 0, 0);
             }
 
             // Z
@@ -162,14 +160,14 @@ namespace RayTracing.Math.Calculations
 
             if (t1Z <= t0Z ^ incDirZ < 0)
             {
-                doIntersect = false;
+                return new AabbIntersectionResult(false, 0, 0);
             }
 
             var t0 = new Vector3(t0X, t0Y, t0Z);
             var t1 = new Vector3(t1X, t1Y, t1Z);
 
             return new AabbIntersectionResult(
-                doIntersect,
+                true,
                 t0.Dot(rayDirection),
                 t1.Dot(rayDirection));
         }

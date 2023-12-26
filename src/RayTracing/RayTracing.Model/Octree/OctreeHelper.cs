@@ -35,7 +35,7 @@ namespace RayTracing.Model.Octree
 
         private static OctreeNode? BuildOctreeInternalRecursive(AxisAlignedBoundingBox boundingBox, IReadOnlyList<Face> allFaces, int level)
         {
-            if (allFaces.Count < 50)
+            if (allFaces.Count < 50 || level > 20)
             {
                 return new OctreeNode(boundingBox, allFaces, childNodes: null, level);
             }
