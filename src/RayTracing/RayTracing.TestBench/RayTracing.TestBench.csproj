@@ -1,14 +1,15 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net6.0-windows</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\RayTracing.CanvasClient\RayTracing.CanvasClient.csproj" />
+    <ProjectReference Include="..\RayTracing.Gui\RayTracing.Gui.csproj" />
     <ProjectReference Include="..\RayTracing.Math\RayTracing.Math.csproj" />
     <ProjectReference Include="..\RayTracing.ModelFiles\RayTracing.ModelFiles.csproj" />
     <ProjectReference Include="..\RayTracing.Rendering\RayTracing.Rendering.csproj" />

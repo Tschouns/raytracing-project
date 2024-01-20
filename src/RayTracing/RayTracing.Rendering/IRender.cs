@@ -1,7 +1,7 @@
 ﻿using RayTracing.Model;
 using RayTracing.Rendering.Cameras;
 using RayTracing.Rendering.Settings;
-using RayTracing.Rendering.Targets;
+using RayTracing.Targets;
 
 namespace RayTracing.Rendering
 {

@@ -6,9 +6,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\RayTracing.Base\RayTracing.Base.csproj" />
-    <ProjectReference Include="..\RayTracing.Targets\RayTracing.Targets.csproj" />
-  </ItemGroup>
-
 </Project>

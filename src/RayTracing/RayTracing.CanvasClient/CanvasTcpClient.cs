@@ -1,13 +1,16 @@
 ﻿using RayTracing.Base;
+using RayTracing.Targets;
 using System.Drawing;
 using System.Globalization;
 using System.Net.Sockets;
 
 namespace RayTracing.CanvasClient
 {
-    public class CanvasTcpClient : ICanvas
+    public class CanvasTcpClient : ICanvas, IRenderTarget
     {
         private TcpClient innerTcpClient;
+
+        public IRenderTarget Draw => this;
 
         public CanvasTcpClient(TcpClient innerTcpClient)
         {

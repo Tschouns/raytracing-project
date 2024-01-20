@@ -1,16 +1,16 @@
-﻿using RayTracing.CanvasClient;
-using RayTracing.Math;
+﻿using RayTracing.Math;
 using RayTracing.Rendering.Settings;
+using RayTracing.Targets;
 using System.Drawing;
 
 namespace RayTracing.TestBench
 {
     public static class ExamplesRendering
     {
-        public static void DummyScene(ICanvas canvas)
+        public static void DummyScene(IRenderTarget target, ushort resX, ushort resY)
         {
             ExampleUtils.RenderToCanvas(
-                canvas,
+                target,
                 @"..\..\..\..\..\..\models\dummy\dummy.dae",
                 scene =>
                 {
@@ -25,8 +25,8 @@ namespace RayTracing.TestBench
                     cylinderMaterial.Reflectivity = 0.8f;
                     cylinderMaterial.Transparency = 0.5f;
                 },
-                resX: 400,
-                resY: 300,
+                resX: resX,
+                resY: resY,
                 camera =>
                 {
                     camera.Position = new Vector3(0, 2.5f, -4f);
@@ -47,10 +47,10 @@ namespace RayTracing.TestBench
                 });
         }
 
-        public static void GlassScene(ICanvas canvas)
+        public static void GlassScene(IRenderTarget target, ushort resX, ushort resY)
         {
             ExampleUtils.RenderToCanvas(
-                canvas,
+                target,
                 @"..\..\..\..\..\..\models\glass\glass.dae",
                 scene =>
                 {
@@ -68,8 +68,8 @@ namespace RayTracing.TestBench
                     bottleMaterial.Glossyness = 0.9f;
                     bottleMaterial.Transparency = 0.5f;
                 },
-                resX: 200,
-                resY: 240,
+                resX: resX,
+                resY: resY,
                 camera =>
                 {
                     camera.Position = new Vector3(0, 1f, -1.3f);

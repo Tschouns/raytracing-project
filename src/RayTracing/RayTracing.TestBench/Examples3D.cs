@@ -1,17 +1,15 @@
 ﻿using RayTracing.Base;
-using RayTracing.CanvasClient;
 using RayTracing.Math;
+using RayTracing.Targets;
 using System.Drawing;
 
 namespace RayTracing.TestBench
 {
     internal static class Examples3D
     {
-        public static void DrawTriangles(ICanvas canvas)
+        public static void DrawTriangles(IRenderTarget target)
         {
-            Argument.AssertNotNull(canvas, nameof(canvas));
-
-            canvas.Size(300, 300);
+            Argument.AssertNotNull(target, nameof(target));
 
             var points = new Vector3[]
             {
@@ -47,23 +45,23 @@ namespace RayTracing.TestBench
                     points[i + 1],
                     points[i + 2]);
 
-                DrawTriangle(canvas, triangle);
+                DrawTriangle(target, triangle);
             }
         }
 
-        private static void DrawTriangle(ICanvas canvas, Triangle3D triangle)
+        private static void DrawTriangle(IRenderTarget target, Triangle3D triangle)
         {
-            Argument.AssertNotNull(canvas, nameof(canvas));
+            Argument.AssertNotNull(target, nameof(target));
             Argument.AssertNotNull(triangle, nameof(triangle));
 
-            DrawLine(canvas, triangle.CornerA, triangle.CornerB);
-            DrawLine(canvas, triangle.CornerB, triangle.CornerC);
-            DrawLine(canvas, triangle.CornerC, triangle.CornerA);
+            DrawLine(target, triangle.CornerA, triangle.CornerB);
+            DrawLine(target, triangle.CornerB, triangle.CornerC);
+            DrawLine(target, triangle.CornerC, triangle.CornerA);
         }
 
-        private static void DrawLine(ICanvas canvas, Vector3 a, Vector3 b)
+        private static void DrawLine(IRenderTarget target, Vector3 a, Vector3 b)
         {
-            Argument.AssertNotNull(canvas, nameof(canvas));
+            Argument.AssertNotNull(target, nameof(target));
 
             var p = a;
             var u = b - a;
@@ -76,7 +74,7 @@ namespace RayTracing.TestBench
                 var lambda = i * stepFactor;
                 var r = p + lambda * u;
 
-                canvas.Pixel((int)r.X, (int)r.Y, Color.BlueViolet);
+                target.Pixel((int)r.X, (int)r.Y, Color.BlueViolet);
             }
         }
     }

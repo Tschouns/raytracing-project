@@ -1,18 +1,18 @@
 ﻿using RayTracing.Base;
-using RayTracing.CanvasClient;
 using RayTracing.ModelFiles.ColladaFormat;
 using RayTracing.Rendering.Cameras;
 using RayTracing.Rendering.Settings;
 using RayTracing.Rendering;
 using RayTracing.Math;
 using RayTracing.Model;
+using RayTracing.Targets;
 
 namespace RayTracing.TestBench
 {
     internal static class ExampleUtils
     {
         public static void RenderToCanvas(
-            ICanvas canvas,
+            IRenderTarget target,
             string colladaFile,
             Action<Scene> configureScene,
             ushort resX,
@@ -20,7 +20,7 @@ namespace RayTracing.TestBench
             Action<ICameraSettings> configureCamera,
             IRenderSettings renderSettings)
         {
-            Argument.AssertNotNull(canvas, nameof(canvas));
+            Argument.AssertNotNull(target, nameof(target));
             Argument.AssertNotNull(colladaFile, nameof(colladaFile));
             Argument.AssertNotNull(configureScene, nameof(configureScene));
             Argument.AssertNotNull(configureCamera, nameof(configureCamera));
@@ -36,35 +36,17 @@ namespace RayTracing.TestBench
             var camera = new Camera(resX, resY);
             configureCamera(camera);
 
-            // Setup canvas.
-            canvas.Size(resX, resY);
-
             // Render image.
-            var canvasTarget = new CanvasRenderTarget(canvas);
             var renderer = new RayTracerRenderer();
 
-            while (true)
-            {
-                // Rotate the whole scene.
-                var rotate = Matrix4x4.RotateY(-0.523599f / 2f);
+            // Render, and measure time.
+            var timeBefore = DateTime.Now;
+            renderer.Render(scene, camera, target, renderSettings);
+            var timeAfter = DateTime.Now;
 
-                foreach (var g in scene.Geometries)
-                {
-                    g.Transform(rotate);
-                }
-
-                // Render, and measure time.
-                var timeBefore = DateTime.Now;
-                renderer.Render(scene, camera, canvasTarget, renderSettings);
-                var timeAfter = DateTime.Now;
-
-                // Print time to render.
-                var timeElapsed = timeAfter - timeBefore;
-                Console.WriteLine("time to render: " + timeElapsed);
-
-                // Wait for user.
-                Console.ReadLine();
-            }
+            // Print time to render.
+            var timeElapsed = timeAfter - timeBefore;
+            Console.WriteLine("time to render: " + timeElapsed);
         }
     }
 }

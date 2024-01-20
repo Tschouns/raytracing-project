@@ -1,5 +1,5 @@
 ﻿using RayTracing.Base;
-using RayTracing.Rendering.Targets;
+using RayTracing.Targets;
 using System.Drawing;
 
 namespace RayTracing.TestBench
@@ -23,10 +23,10 @@ namespace RayTracing.TestBench
 
         public void Fill(Color color)
         {
-            this.ForEachPixel((x, y) => SetPixel(x, y, color));
+            this.ForEachPixel((x, y) => Pixel(x, y, color));
         }
 
-        public void SetPixel(int x, int y, Color color)
+        public void Pixel(int x, int y, Color color)
         {
             this.pixels[x, y] = color;
         }
@@ -35,7 +35,7 @@ namespace RayTracing.TestBench
         {
             Argument.AssertNotNull(target, nameof(target));
 
-            this.ForEachPixel((x, y) => target.SetPixel(x, y, this.pixels[x, y]));
+            this.ForEachPixel((x, y) => target.Pixel(x, y, this.pixels[x, y]));
         }
 
         private void ForEachPixel(Action<ushort, ushort> pixelAction)

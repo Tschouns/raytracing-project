@@ -10,6 +10,11 @@
     <ProjectReference Include="..\RayTracing.Base\RayTracing.Base.csproj" />
     <ProjectReference Include="..\RayTracing.Math\RayTracing.Math.csproj" />
     <ProjectReference Include="..\RayTracing.Model\RayTracing.Model.csproj" />
+    <ProjectReference Include="..\RayTracing.Targets\RayTracing.Targets.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Targets\" />
   </ItemGroup>
 
 </Project>
