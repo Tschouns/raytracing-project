@@ -9,7 +9,9 @@ namespace RayTracing.Gui
     /// </summary>
     public partial class CanvasWindow : Window, ICanvas
     {
-        private WriteableBitmap bitmap;
+        private int? width;
+        private int? height;
+        private WriteableBitmap? bitmap;
 
         public CanvasWindow()
         {
@@ -18,6 +20,9 @@ namespace RayTracing.Gui
 
         public void Size(int width, int height)
         {
+            this.width = width;
+            this.height = height;
+
             var newBitmap = new WriteableBitmap(width, height, 96, 96, PixelFormats.Bgra32, null);
             bitmap = newBitmap;
             image.Source = bitmap;
@@ -25,12 +30,28 @@ namespace RayTracing.Gui
 
         public void Fill(System.Drawing.Color color)
         {
-            throw new System.NotImplementedException();
+            for (var i = 0; i < width; i++)
+            {
+                for (var j = 0; j < height; j++)
+                {
+                    Pixel(i, j, color);
+                }
+            }
         }
 
         public void Pixel(int x, int y, System.Drawing.Color color)
         {
-            throw new System.NotImplementedException();
+            if (bitmap == null ||
+                x >= width ||
+                y >= height)
+            {
+                return;
+            }
+
+            var rect = new Int32Rect(x, y, 1, 1);
+            byte[] colorData = { color.B, color.G, color.R, 0 }; // B G R
+
+            bitmap.WritePixels(rect, colorData, 1, 1);
         }
     }
 }
