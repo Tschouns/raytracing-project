@@ -1,4 +1,4 @@
-﻿using RayTracing.CanvasClient;
+﻿using RayTracing.Gui;
 using RayTracing.Math;
 using RayTracing.Rendering.Settings;
 using System.Drawing;
@@ -68,8 +68,8 @@ namespace RayTracing.TestBench
                     bottleMaterial.Glossyness = 0.9f;
                     bottleMaterial.Transparency = 0.5f;
                 },
-                resX: 200,
-                resY: 240,
+                resX: 20,
+                resY: 24,
                 camera =>
                 {
                     camera.Position = new Vector3(0, 1f, -1.3f);

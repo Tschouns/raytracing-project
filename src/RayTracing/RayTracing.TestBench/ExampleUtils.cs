@@ -1,11 +1,11 @@
 ﻿using RayTracing.Base;
-using RayTracing.CanvasClient;
 using RayTracing.ModelFiles.ColladaFormat;
 using RayTracing.Rendering.Cameras;
 using RayTracing.Rendering.Settings;
 using RayTracing.Rendering;
 using RayTracing.Math;
 using RayTracing.Model;
+using RayTracing.Gui;
 
 namespace RayTracing.TestBench
 {
@@ -40,7 +40,7 @@ namespace RayTracing.TestBench
             canvas.Size(resX, resY);
 
             // Render image.
-            var canvasTarget = new CanvasRenderTarget(canvas);
+            var canvasTarget = new CanvasWindowRenderTarget(canvas);
             var renderer = new RayTracerRenderer();
 
             while (true)

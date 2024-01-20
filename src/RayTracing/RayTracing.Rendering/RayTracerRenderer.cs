@@ -38,23 +38,28 @@ namespace RayTracing.Rendering
             }
 
             // Render image pixel by pixel.
-            var tasks = pixelRays
-                .Select(pixel => Task.Run(() => SetPixel(faces, scene.LightSources, pixel, target, settings)))
-                .ToArray();
+            //var tasks = pixelRays
+            //    .Select(pixel => Task.Run(() => SetPixel(faces, scene.LightSources, pixel, target, settings)))
+            //    .ToArray();
 
-            Task.WaitAll(tasks);
+            //Task.WaitAll(tasks);
+
+            foreach (var ray in pixelRays)
+            {
+                SetPixel(faces, scene.LightSources, ray, target, settings);
+            }
         }
 
         private static void Shuffle<T>(IList<T> list)
         {
             var rng = new Random();
-            int n = list.Count;
+            var n = list.Count;
 
             while (n > 1)
             {
                 n--;
-                int k = rng.Next(n + 1);
-                T value = list[k];
+                var k = rng.Next(n + 1);
+                var value = list[k];
                 list[k] = list[n];
                 list[n] = value;
             }
@@ -280,7 +285,7 @@ namespace RayTracing.Rendering
                         normalFactor *
                         hit.Face.ParentGeometry.Material.Glossyness *
                         hit.Face.ParentGeometry.Material.Glossyness;
-                        //hit.Face.ParentGeometry.Material.Reflectivity;
+                    //hit.Face.ParentGeometry.Material.Reflectivity;
 
                     var glossColor = ColorUtils.Scale(totalLightColor, glossFactor);
                     totalGlossColor = ColorUtils.Add(totalGlossColor, glossColor);

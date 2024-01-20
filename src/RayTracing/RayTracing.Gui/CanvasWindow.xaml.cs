@@ -16,6 +16,8 @@ namespace RayTracing.Gui
         public CanvasWindow()
         {
             InitializeComponent();
+            //RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.NearestNeighbor);
+            //RenderOptions.SetEdgeMode(image, EdgeMode.Aliased);
         }
 
         public void Size(int width, int height)
@@ -25,7 +27,12 @@ namespace RayTracing.Gui
 
             var newBitmap = new WriteableBitmap(width, height, 96, 96, PixelFormats.Bgra32, null);
             bitmap = newBitmap;
+
             image.Source = bitmap;
+
+            image.Stretch = Stretch.None;
+            image.HorizontalAlignment = HorizontalAlignment.Center;
+            image.VerticalAlignment = VerticalAlignment.Center;
         }
 
         public void Fill(System.Drawing.Color color)
@@ -49,9 +56,9 @@ namespace RayTracing.Gui
             }
 
             var rect = new Int32Rect(x, y, 1, 1);
-            byte[] colorData = { color.B, color.G, color.R, 0 }; // B G R
+            byte[] colorData = { color.B, color.G, color.R, 255 }; // B G R
 
-            bitmap.WritePixels(rect, colorData, 1, 1);
+            bitmap.WritePixels(rect, colorData, 4, 0);
         }
     }
 }

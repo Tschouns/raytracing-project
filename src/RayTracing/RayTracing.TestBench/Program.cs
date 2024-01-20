@@ -1,16 +1,32 @@
 ﻿// See https://aka.ms/new-console-template for more information
-using RayTracing.CanvasClient;
-using RayTracing.TestBench;
-using System.Net.Sockets;
+using RayTracing.Gui;
 
-Console.WriteLine("Hello, World!");
+namespace RayTracing.TestBench
+{
+    internal class Program
+    {
+        [STAThread]
+        private static void Main(string[] args)
+        {
+            Console.WriteLine("Hello, World!");
 
-// Connect to canvas server.
-using var tcpClient = new TcpClient();
-tcpClient.Connect("127.0.0.1", 9012);
-var canvasClient = new CanvasTcpClient(tcpClient);
+            // Connect to canvas server.
+            //using var tcpClient = new TcpClient();
+            //tcpClient.Connect("127.0.0.1", 9012);
+            //var canvasClient = new CanvasTcpClient(tcpClient);
 
-// Perform example rendering.
-ExamplesRendering.GlassScene(canvasClient);
+            var canvasWindow = new CanvasWindow();
+            canvasWindow.Show();
 
-tcpClient.Close();
+            // Perform example rendering.
+            ExamplesRendering.GlassScene(canvasWindow);
+
+            Console.WriteLine("Done.");
+            Console.ReadLine();
+
+            canvasWindow.Close();
+        }
+    }
+}
+
+//tcpClient.Close();
