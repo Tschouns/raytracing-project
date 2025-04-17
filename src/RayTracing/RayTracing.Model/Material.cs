@@ -7,7 +7,7 @@ namespace RayTracing.Model
     {
         public Material(
             string name,
-            Color color,
+            ArgbColor color,
             float reflectivity,
             float glossyness,
             float transparency,
@@ -22,7 +22,7 @@ namespace RayTracing.Model
         }
 
         public string Name { get; }
-        public Color BaseColor { get; set; }
+        public ArgbColor BaseColor { get; set; }
         public float Reflectivity { get; set; }
         public float Glossyness { get; set; }
         public float Transparency { get; set; }

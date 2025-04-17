@@ -1,4 +1,5 @@
 ﻿using RayTracing.Math;
+using RayTracing.Model;
 using RayTracing.Rendering.Settings;
 using RayTracing.Targets;
 using System.Drawing;
@@ -15,7 +16,7 @@ namespace RayTracing.TestBench
                 scene =>
                 {
                     var planeMaterial = scene.Materials.Single(m => m.Name.Contains("Plane"));
-                    planeMaterial.BaseColor = Color.White;
+                    planeMaterial.BaseColor = Color.White.ToArgbColor();
                     planeMaterial.Reflectivity = 0.1f;
 
                     var cubeMaterial = scene.Materials.Single(m => m.Name.Contains("Cube"));
@@ -55,7 +56,7 @@ namespace RayTracing.TestBench
                 scene =>
                 {
                     var tableMaterial = scene.Materials.Single(m => m.Name.Contains("Table"));
-                    tableMaterial.BaseColor = Color.LightSteelBlue;
+                    tableMaterial.BaseColor = Color.LightSteelBlue.ToArgbColor();
                     tableMaterial.Reflectivity = 0.5f;
 
                     var glassMaterial = scene.Materials.Single(m => m.Name.Contains("Glass"));

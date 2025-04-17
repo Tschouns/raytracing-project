@@ -35,7 +35,7 @@ namespace RayTracing.ModelFiles.ObjFormat
             var facesList = new List<Face>();
             var material = new Material(
                 "dummy-material",
-                Color.DeepPink,
+                Color.DeepPink.ToArgbColor(),
                 reflectivity: 0.5f,
                 glossyness: 0.5f,
                 transparency: 0f,
