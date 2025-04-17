@@ -1,6 +1,5 @@
 ﻿using RayTracing.Base;
 using RayTracing.Math;
-using System.Drawing;
 
 namespace RayTracing.Model
 {

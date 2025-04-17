@@ -1,5 +1,5 @@
 ﻿
-using System.Drawing;
+using RayTracing.Model;
 
 namespace RayTracing.Rendering.Settings
 {
@@ -52,17 +52,17 @@ namespace RayTracing.Rendering.Settings
         /// <summary>
         /// Gets the background color to fill the screen with.
         /// </summary>
-        public Color FillBackgroundColor { get; }
+        public ArgbColor FillBackgroundColor { get; }
 
         /// <summary>
         /// Gets the ambient light color, i.e. the light before any light sources.
         /// </summary>
-        Color AmbientLightColor { get; }
+        ArgbColor AmbientLightColor { get; }
 
         /// <summary>
         /// Gets the depth cueing color, i.e. the color objects at a distance fade to.
         /// </summary>
-        Color DepthCueingColor { get; }
+        ArgbColor DepthCueingColor { get; }
 
         /// <summary>
         /// Gets the maximum depth cueing distance, i.e. the distance at which objects fully blend with the background color.

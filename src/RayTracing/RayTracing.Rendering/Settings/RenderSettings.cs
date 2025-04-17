@@ -1,4 +1,5 @@
 ﻿
+using RayTracing.Model;
 using System.Drawing;
 
 namespace RayTracing.Rendering.Settings
@@ -13,9 +14,9 @@ namespace RayTracing.Rendering.Settings
         public bool ApplyReflections { get; set; } = true;
         public bool ApplyTransmission { get; set; } = true;
         public bool UseFancyLighting { get; set; } = true;
-        public Color FillBackgroundColor { get; set; } = Color.CornflowerBlue;
-        public Color AmbientLightColor { get; set; } = Color.DarkSlateGray;
-        public Color DepthCueingColor { get; set; } = Color.AliceBlue;
+        public ArgbColor FillBackgroundColor { get; set; } = Color.CornflowerBlue.ToArgbColor();
+        public ArgbColor AmbientLightColor { get; set; } = Color.DarkSlateGray.ToArgbColor();
+        public ArgbColor DepthCueingColor { get; set; } = Color.AliceBlue.ToArgbColor() ;
         public float DepthCueingMaxDistance { get; set; } = 100f;
         public int MaxRecursionDepth { get; set; } = 10;
     }

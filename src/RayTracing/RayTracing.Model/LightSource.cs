@@ -10,7 +10,7 @@ namespace RayTracing.Model
     /// </summary>
     public class LightSource
     {
-        public LightSource(string name, Vector3 location, Color color, Spot? spot)
+        public LightSource(string name, Vector3 location, ArgbColor color, Spot? spot)
         {
             Argument.AssertNotNull(name, nameof(name));
 
@@ -33,7 +33,7 @@ namespace RayTracing.Model
         /// <summary>
         /// Gets the color of the light.
         /// </summary>
-        public Color Color { get; }
+        public ArgbColor Color { get; }
 
         /// <summary>
         /// Gets the spot properties, if it's a spot light; otherwise null.

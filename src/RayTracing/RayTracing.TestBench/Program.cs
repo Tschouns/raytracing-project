@@ -21,7 +21,7 @@ namespace RayTracing.TestBench
             var renderTask = Task.Run(() =>
             {
                 // Perform example rendering.
-                ExamplesRendering.DummyScene(canvasWindow.Draw, resX, resY);
+                ExamplesRendering.GlassScene(canvasWindow.Draw, resX, resY);
             });
 
             // Show as dialog (blocking, until the user closes it).

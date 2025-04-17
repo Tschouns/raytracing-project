@@ -115,7 +115,7 @@ namespace RayTracing.ModelFiles.ColladaFormat
 
             return new Material(
                 xmlMaterial.Name,
-                color,
+                color.ToArgbColor(),
                 reflectivity,
                 glossyness: 0.5f, // TODO: how to get?
                 transparency: 0f, // TODO: how to get?
@@ -144,7 +144,7 @@ namespace RayTracing.ModelFiles.ColladaFormat
                 spot = new Spot(pointingDirection, falloffAngle);
             }
 
-            return new LightSource(xmlLight.Name, location, color, spot);
+            return new LightSource(xmlLight.Name, location, color.ToArgbColor(), spot);
         }
 
         private static string? GetColorString(Light light)
