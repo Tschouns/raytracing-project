@@ -128,7 +128,7 @@ namespace RayTracing.Math.Calculations
         /// <returns>
         /// A value indicating whether the ray intersects with the bounding box
         /// </returns>
-        public static AabbIntersectionResult DoesRayIntersectWithAabb(Vector3 rayOrigin, Vector3 rayDirection, Vector3 aabbMin, Vector3 aabbMax)
+        public static AabbIntersectionResult IntersectAabb(Vector3 rayOrigin, Vector3 rayDirection, Vector3 aabbMin, Vector3 aabbMax)
         {
             var tMin = aabbMin - rayOrigin;
             var tMax = aabbMax - rayOrigin;
