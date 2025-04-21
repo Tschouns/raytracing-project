@@ -160,9 +160,9 @@ namespace RayTracing.Math.Tests.Calculations
         }
 
         [Fact]
-        public void IntersectRayWithAabb_RayHitsUpwards_ReturnsTrue()
+        public void DoesRayIntersectWithAabb_RayHitsUpwards_ReturnsTrue()
         {
-            IntersectRayWithAabb_GivenRayWithAabb_ReturnsExpectedResult(
+            DoesRayIntersectWithAabb_GivenRayWithAabb_ReturnsExpectedResult(
                 origin: new Vector3(1, 1, 1),
                 direction: new Vector3(2, 2, 2),
                 aabbMin: new Vector3(3, 3, 3),
@@ -171,14 +171,47 @@ namespace RayTracing.Math.Tests.Calculations
         }
 
         [Fact]
-        public void IntersectRayWithAabb_RayHitsDownwards_ReturnsTrue()
+        public void DoesRayIntersectWithAabb_RayHitsDownwards_ReturnsTrue()
         {
-            IntersectRayWithAabb_GivenRayWithAabb_ReturnsExpectedResult(
+            DoesRayIntersectWithAabb_GivenRayWithAabb_ReturnsExpectedResult(
                 origin: new Vector3(4, 4, 4),
                 direction: new Vector3(3, 3, 3),
                 aabbMin: new Vector3(1, 1, 1),
                 aabbMax: new Vector3(2, 2, 2),
                 expectedResult: true);
+        }
+
+        [Fact]
+        public void DoesRayIntersectWithAabb_RayStartsWithinBox_ReturnsTrue()
+        {
+            DoesRayIntersectWithAabb_GivenRayWithAabb_ReturnsExpectedResult(
+                origin: new Vector3(1.5f, 1.5f, 1.5f),
+                direction: new Vector3(3, 3, 3),
+                aabbMin: new Vector3(1, 1, 1),
+                aabbMax: new Vector3(2, 2, 2),
+                expectedResult: true);
+        }
+
+        [Fact]
+        public void DoesRayIntersectWithAabb_RayMissesForwardToTheLeft_ReturnsFalse()
+        {
+            DoesRayIntersectWithAabb_GivenRayWithAabb_ReturnsExpectedResult(
+                origin: new Vector3(-1.01f, 1, -5),
+                direction: new Vector3(0, 0, 2),
+                aabbMin: new Vector3(-1, -1, -1),
+                aabbMax: new Vector3(1, 2, 2),
+                expectedResult: false);
+        }
+
+        [Fact]
+        public void DoesRayIntersectWithAabb_RayMissesForwardToTheRight_ReturnsFalse()
+        {
+            DoesRayIntersectWithAabb_GivenRayWithAabb_ReturnsExpectedResult(
+                origin: new Vector3(3.01f, 1, -5),
+                direction: new Vector3(0, 0, 2),
+                aabbMin: new Vector3(-1, -1, -1),
+                aabbMax: new Vector3(3, 2, 2),
+                expectedResult: false);
         }
 
         private void IntersectPlane_GivenLineAndPlane_ReturnsExpectedResult(
@@ -206,7 +239,7 @@ namespace RayTracing.Math.Tests.Calculations
             Assert.Equal(expectedIntersection, result.IntersectionPoint);
         }
 
-        private void IntersectRayWithAabb_GivenRayWithAabb_ReturnsExpectedResult(
+        private void DoesRayIntersectWithAabb_GivenRayWithAabb_ReturnsExpectedResult(
             Vector3 origin,
             Vector3 direction,
             Vector3 aabbMin,
@@ -214,13 +247,12 @@ namespace RayTracing.Math.Tests.Calculations
             bool expectedResult)
         {
             // Arrange
-            var aabb = new AxisAlignedBoundingBox(aabbMin, aabbMax);
 
             // Act
-            var result = VectorCalculator3D.IntersectRayWithAabb(origin, direction, aabb);
+            var result = VectorCalculator3D.DoesRayIntersectWithAabb(origin, direction, aabbMin, aabbMax);
 
             // Assert
-            Assert.Equal(expectedResult, result);
+            Assert.Equal(expectedResult, result.DoIntersect);
         }
     }
 }

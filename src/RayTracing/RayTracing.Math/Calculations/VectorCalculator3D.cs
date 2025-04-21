@@ -109,38 +109,96 @@ namespace RayTracing.Math.Calculations
             return IntersectionResult.IntersectAt(intersection, lambda);
         }
 
-        public static bool IntersectRayWithAabb(Vector3 origin, Vector3 direction, AxisAlignedBoundingBox aabb)
+        /// <summary>
+        /// Checks whether a ray -- specified by an origin and direction vector -- intersects with the specified
+        /// axis-aligned bounding box.
+        /// </summary>
+        /// <param name="rayOrigin">
+        /// The ray origin vector
+        /// </param>
+        /// <param name="rayDirection">
+        /// The ray direction vector
+        /// </param>
+        /// <param name="aabbMin">
+        /// The axis-aligned bounding box minimum
+        /// </param>
+        /// <param name="aabbMax">
+        /// The axis-aligned bounding box maximum
+        /// </param>
+        /// <returns>
+        /// A value indicating whether the ray intersects with the bounding box
+        /// </returns>
+        public static AabbIntersectionResult DoesRayIntersectWithAabb(Vector3 rayOrigin, Vector3 rayDirection, Vector3 aabbMin, Vector3 aabbMax)
         {
-            var pos = AsArray(origin);
-            var dir = AsArray(direction);
-            var aabbMin = AsArray(aabb.Min);
-            var aabbMax = AsArray(aabb.Max);
+            var tMin = aabbMin - rayOrigin;
+            var tMax = aabbMax - rayOrigin;
 
-            for (var i = 0; i < 3; i++)
+            // X
+            var incDirX = 1 / rayDirection.X;
+            var t0X = tMin.X * incDirX;
+            var t1X = tMax.X * incDirX;
+
+            if (t1X <= t0X ^ incDirX < 0)
             {
-                var invDir = 1.0f / dir[i];
-                var t0 = (aabbMin[i] - pos[i]) * invDir;
-                var t1 = (aabbMax[i] - pos[i]) * invDir;
-
-                if (invDir < 0f)
-                {
-                    var temp = t1;
-                    t1 = t0;
-                    t0 = temp;
-                }
-
-                if (t1 <= t0)
-                {
-                    return false;
-                }
+                return new AabbIntersectionResult(false, 0, 0);
             }
 
-            return true;
+            // Y
+            var incDirY = 1 / rayDirection.Y;
+            var t0Y = tMin.Y * incDirY;
+            var t1Y = tMax.Y * incDirY;
+
+            if (t1Y <= t0Y ^ incDirY < 0)
+            {
+                return new AabbIntersectionResult(false, 0, 0);
+            }
+
+            // Z
+            var incDirZ = 1 / rayDirection.Z;
+            var t0Z = tMin.Z * incDirZ;
+            var t1Z = tMax.Z * incDirZ;
+
+            if (t1Z <= t0Z ^ incDirZ < 0)
+            {
+                return new AabbIntersectionResult(false, 0, 0);
+            }
+
+            var t0 = new Vector3(t0X, t0Y, t0Z);
+            var t1 = new Vector3(t1X, t1Y, t1Z);
+
+            return new AabbIntersectionResult(
+                true,
+                t0.Dot(rayDirection),
+                t1.Dot(rayDirection));
         }
 
         private static float[] AsArray(Vector3 vec)
         {
             return new float[] { vec.X, vec.Y, vec.Z };
+        }
+
+        private static Vector3 Min(Vector3 a, Vector3 b)
+        {
+            if (a.LengthSquared() < b.LengthSquared())
+            {
+                return a;
+            }
+            else
+            {
+                return b;
+            }
+        }
+
+        private static Vector3 Max(Vector3 a, Vector3 b)
+        {
+            if (a.LengthSquared() > b.LengthSquared())
+            {
+                return a;
+            }
+            else
+            {
+                return b;
+            }
         }
     }
 }
