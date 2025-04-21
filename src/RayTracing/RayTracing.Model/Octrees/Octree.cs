@@ -20,7 +20,7 @@ namespace RayTracing.Model.Octrees
         }
 
         public AxisAlignedBoundingBox BoundingBox { get; }
-        IEnumerable<Face> AllFaces { get; }
+        public IEnumerable<Face> AllFaces { get; }
         public IEnumerable<Octree> Children { get; }
         public bool HasChildren => this.Children.Any();
     }

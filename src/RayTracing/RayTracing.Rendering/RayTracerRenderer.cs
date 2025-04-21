@@ -1,6 +1,7 @@
 ﻿using RayTracing.Base;
 using RayTracing.Math;
 using RayTracing.Model;
+using RayTracing.Model.Octrees;
 using RayTracing.Rendering.Cameras;
 using RayTracing.Rendering.Rays;
 using RayTracing.Rendering.Settings;
@@ -21,10 +22,6 @@ namespace RayTracing.Rendering
             Argument.AssertNotNull(target, nameof(target));
             Argument.AssertNotNull(settings, nameof(settings));
 
-            var faces = scene.Geometries
-                .SelectMany(g => g.Faces)
-                .ToList();
-
             var pixelRays = camera.GeneratePixelRays();
             var pixelRaysList = pixelRays.ToList();
             Shuffle(pixelRaysList);
@@ -39,7 +36,7 @@ namespace RayTracing.Rendering
 
             foreach (var ray in pixelRays)
             {
-                SetPixel(faces, scene.LightSources, ray, target, settings);
+                SetPixel(scene.Octree, scene.LightSources, ray, target, settings);
             }
         }
 
@@ -59,19 +56,19 @@ namespace RayTracing.Rendering
         }
 
         private static void SetPixel(
-            IEnumerable<Face> allFaces,
+            Octree octree,
             IEnumerable<LightSource> lightSources,
             PixelRay pixel,
             IRenderTarget target,
             IRenderSettings settings)
         {
-            Argument.AssertNotNull(allFaces, nameof(allFaces));
+            Argument.AssertNotNull(octree, nameof(octree));
             Argument.AssertNotNull(lightSources, nameof(lightSources));
             Argument.AssertNotNull(pixel, nameof(pixel));
             Argument.AssertNotNull(target, nameof(target));
             Argument.AssertNotNull(settings, nameof(settings));
 
-            var argbColor = DeterminePixelColorRecursive(pixel.Ray, allFaces, lightSources, settings);
+            var argbColor = DeterminePixelColorRecursive(pixel.Ray, octree, lightSources, settings);
             
             var drawingColor = Color.FromArgb(
                 (byte)(argbColor.A * 255),
@@ -84,13 +81,13 @@ namespace RayTracing.Rendering
 
         private static ArgbColor DeterminePixelColorRecursive(
             Ray ray,
-            IEnumerable<Face> allFaces,
+            Octree octree,
             IEnumerable<LightSource> lightSources,
             IRenderSettings settings,
             int depth = 0)
         {
             Argument.AssertNotNull(ray, nameof(ray));
-            Argument.AssertNotNull(allFaces, nameof(allFaces));
+            Argument.AssertNotNull(octree, nameof(octree));
             Argument.AssertNotNull(lightSources, nameof(lightSources));
             Argument.AssertNotNull(settings, nameof(settings));
 
@@ -99,7 +96,7 @@ namespace RayTracing.Rendering
                 return settings.DepthCueingColor;
             }
 
-            var hit = ray.DetectNearestHit(allFaces);
+            var hit = ray.DetectNearestHit(octree.AllFaces);
             if (hit == null)
             {
                 return settings.DepthCueingColor;
@@ -120,18 +117,18 @@ namespace RayTracing.Rendering
 
             if (settings.ApplyReflections)
             {
-                pixelColor = ApplyReflectionRecursive(pixelColor, hit, allFaces, lightSources, settings, depth);
+                pixelColor = ApplyReflectionRecursive(pixelColor, hit, octree, lightSources, settings, depth);
             }
 
             if (settings.ApplyTransmission)
             {
-                pixelColor = ApplyTransmissionRecursive(pixelColor, hit, ray, allFaces, lightSources, settings, depth);
+                pixelColor = ApplyTransmissionRecursive(pixelColor, hit, ray, octree, lightSources, settings, depth);
             }
 
             // Gloss should be at the end (the rest should be irrelevant).
             if (settings.ApplyShadows || settings.ApplyGloss)
             {
-                pixelColor = ApplyLighting(pixelColor, hit, allFaces, lightSources, settings);
+                pixelColor = ApplyLighting(pixelColor, hit, octree.AllFaces, lightSources, settings);
             }
 
             return pixelColor;
@@ -174,7 +171,7 @@ namespace RayTracing.Rendering
         private static ArgbColor ApplyReflectionRecursive(
             ArgbColor baseColor,
             RayHit hit,
-            IEnumerable<Face> allFaces,
+            Octree octree,
             IEnumerable<LightSource> lightSources,
             IRenderSettings settings,
             int currentRecursionDepth)
@@ -198,7 +195,7 @@ namespace RayTracing.Rendering
             // Recursive call.
             var reflectionColor = DeterminePixelColorRecursive(
                 reflectionRay,
-                allFaces,
+                octree,
                 lightSources,
                 settings,
                 currentRecursionDepth + 1);
@@ -215,7 +212,7 @@ namespace RayTracing.Rendering
             ArgbColor baseColor,
             RayHit hit,
             Ray originalRay,
-            IEnumerable<Face> allFaces,
+            Octree octree,
             IEnumerable<LightSource> lightSources,
             IRenderSettings settings,
             int currentRecursionDepth)
@@ -244,7 +241,7 @@ namespace RayTracing.Rendering
             // Recursive call.
             var refractedColor = DeterminePixelColorRecursive(
                 transmissionRay,
-                allFaces,
+                octree,
                 lightSources,
                 settings,
                 currentRecursionDepth + 1);
