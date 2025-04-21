@@ -57,7 +57,15 @@ namespace RayTracing.Rendering.Rays
             return this.DetectNearestHit(octree.AllFaces);
         }
 
-        public RayHit? DetectNearestHit(IEnumerable<Face> faces)
+        private RayHit? DetectNearestHit(IEnumerable<Octree> octrees)
+        {
+            var octreeHits = octrees
+
+            var aabbHit = VectorCalculator3D.IntersectAabb(this.Origin, this.Direction, octree.BoundingBox.Min, octree.BoundingBox.Max);
+
+        }
+
+        private RayHit? DetectNearestHit(IEnumerable<Face> faces)
         {
             Argument.AssertNotNull(faces, nameof(faces));
 
