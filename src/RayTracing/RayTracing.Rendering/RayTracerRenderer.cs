@@ -96,7 +96,7 @@ namespace RayTracing.Rendering
                 return settings.DepthCueingColor;
             }
 
-            var hit = ray.DetectNearestHit(octree.AllFaces);
+            var hit = ray.DetectNearestHit(octree);
             if (hit == null)
             {
                 return settings.DepthCueingColor;
@@ -128,7 +128,7 @@ namespace RayTracing.Rendering
             // Gloss should be at the end (the rest should be irrelevant).
             if (settings.ApplyShadows || settings.ApplyGloss)
             {
-                pixelColor = ApplyLighting(pixelColor, hit, octree.AllFaces, lightSources, settings);
+                pixelColor = ApplyLighting(pixelColor, hit, octree, lightSources, settings);
             }
 
             return pixelColor;
@@ -257,7 +257,7 @@ namespace RayTracing.Rendering
         private static ArgbColor ApplyLighting(
             ArgbColor baseColor,
             RayHit hit,
-            IEnumerable<Face> allFaces,
+            Octree octree,
             IEnumerable<LightSource> lightSources,
             IRenderSettings settings)
         {
@@ -267,7 +267,7 @@ namespace RayTracing.Rendering
 
             foreach (var light in lightSources)
             {
-                var lightColor = DetermineLightColorRecursive(hit, light, allFaces, settings);
+                var lightColor = DetermineLightColorRecursive(hit, light, octree, settings);
                 totalLightColor = totalLightColor + lightColor;
 
                 if (settings.ApplyGloss)
@@ -301,7 +301,7 @@ namespace RayTracing.Rendering
             return litColor;
         }
 
-        private static ArgbColor DetermineLightColorRecursive(RayHit hit, LightSource light, IEnumerable<Face> allFaces, IRenderSettings settings, int currentDepth = 0)
+        private static ArgbColor DetermineLightColorRecursive(RayHit hit, LightSource light, Octree octree, IRenderSettings settings, int currentDepth = 0)
         {
             if (currentDepth >= settings.MaxRecursionDepth)
             {
@@ -310,7 +310,7 @@ namespace RayTracing.Rendering
 
             var toLight = light.Location - hit.Position;
             var lightSourceCheckRay = new Ray(hit.Position, toLight, originFace: hit.Face);
-            var nearestHit = lightSourceCheckRay.DetectNearestHit(allFaces);
+            var nearestHit = lightSourceCheckRay.DetectNearestHit(octree);
 
             if (nearestHit == null ||
                 toLight.LengthSquared() < nearestHit.Distance * nearestHit.Distance) // TODO: add max distance to ray?
@@ -331,7 +331,7 @@ namespace RayTracing.Rendering
                 return ArgbColor.Black;
             }
 
-            var colorBefore = DetermineLightColorRecursive(nearestHit, light, allFaces, settings, currentDepth + 1);
+            var colorBefore = DetermineLightColorRecursive(nearestHit, light, octree, settings, currentDepth + 1);
             var colorHueAdjusted =
                 (colorBefore * material.Transparency) +
                 (material.BaseColor * (1 - material.Transparency));

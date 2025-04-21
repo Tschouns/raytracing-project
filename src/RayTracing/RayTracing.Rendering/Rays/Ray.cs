@@ -2,6 +2,7 @@
 using RayTracing.Math;
 using RayTracing.Math.Calculations;
 using RayTracing.Model;
+using RayTracing.Model.Octrees;
 
 namespace RayTracing.Rendering.Rays
 {
@@ -36,6 +37,24 @@ namespace RayTracing.Rendering.Rays
             }
 
             return false;
+        }
+
+        public RayHit? DetectNearestHit(Octree octree)
+        {
+            var aabbHit = VectorCalculator3D.IntersectAabb(this.Origin, this.Direction, octree.BoundingBox.Min, octree.BoundingBox.Max);
+            if (!aabbHit.DoIntersect)
+            {
+                return null;
+            }
+
+            if (!octree.HasChildren)
+            {
+                return this.DetectNearestHit(octree.AllFaces);
+            }
+
+            // TODO: implement children case.
+
+            return this.DetectNearestHit(octree.AllFaces);
         }
 
         public RayHit? DetectNearestHit(IEnumerable<Face> faces)
