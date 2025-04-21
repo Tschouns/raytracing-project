@@ -1,6 +1,7 @@
 ﻿using RayTracing.Base;
 using RayTracing.Math;
 using RayTracing.Model;
+using RayTracing.Model.Octrees;
 using RayTracing.ModelFiles.ColladaFormat.Xml;
 using RayTracing.ModelFiles.ColladaFormat.Xml.Effects;
 using RayTracing.ModelFiles.ColladaFormat.Xml.Geometries;
@@ -82,7 +83,9 @@ namespace RayTracing.ModelFiles.ColladaFormat
                 .Distinct()
                 .ToList();
 
-            return new Scene(allMaterials,geometries, lightSources);
+            var octree = OctreeHelper.PrepareOctree(geometries.SelectMany(g => g.Faces).ToList(), 50);
+
+            return new Scene(allMaterials, geometries, octree, lightSources);
         }
 
         private static Material PrepMaterial(Xml.Materials.Material xmlMaterial, IEnumerable<Effect> xmlEffects)
