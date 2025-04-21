@@ -41,28 +41,39 @@ namespace RayTracing.Rendering.Rays
 
         public RayHit? DetectNearestHit(Octree octree)
         {
-            var aabbHit = VectorCalculator3D.IntersectAabb(this.Origin, this.Direction, octree.BoundingBox.Min, octree.BoundingBox.Max);
-            if (!aabbHit.DoIntersect)
-            {
-                return null;
-            }
-
-            if (!octree.HasChildren)
-            {
-                return this.DetectNearestHit(octree.AllFaces);
-            }
-
-            // TODO: implement children case.
-
-            return this.DetectNearestHit(octree.AllFaces);
+            return this.DetectNearestHit(new Octree[] { octree });
         }
 
         private RayHit? DetectNearestHit(IEnumerable<Octree> octrees)
         {
-            var octreeHits = octrees
+            var octreeHitsOrdered = octrees
+                .Select(o => new { Octree = o, Hit = VectorCalculator3D.IntersectAabb(this.Origin, this.Direction, o.BoundingBox.Min, o.BoundingBox.Max) })
+                .Where(o => o.Hit.DoIntersect)
+                .OrderBy(o => o.Hit.T0)
+                .ToList();
 
-            var aabbHit = VectorCalculator3D.IntersectAabb(this.Origin, this.Direction, octree.BoundingBox.Min, octree.BoundingBox.Max);
+            foreach (var octreeHit in octreeHitsOrdered)
+            {
+                if (octreeHit.Octree.HasChildren)
+                {
+                    // Recursive call:
+                    var rayHit = this.DetectNearestHit(octreeHit.Octree.Children);
+                    if (rayHit != null)
+                    {
+                        return rayHit;
+                    }
+                }
+                else
+                {
+                    var rayHit = this.DetectNearestHit(octreeHit.Octree.AllFaces);
+                    if (rayHit != null)
+                    {
+                        return rayHit;
+                    }
+                }
+            }
 
+            return null;
         }
 
         private RayHit? DetectNearestHit(IEnumerable<Face> faces)
