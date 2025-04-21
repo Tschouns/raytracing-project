@@ -7,6 +7,13 @@
     {
         public AxisAlignedBoundingBox(Vector3 min, Vector3 max)
         {
+            if (min.X > max.X ||
+                min.Y > max.Y ||
+                min.Z > max.Z)
+            {
+                throw new ArgumentException($"The min ({min}) and max ({max}) arguments must contain the lowest and greatest values along all axes respectively.");
+            }
+
             Min = min;
             Max = max;
         }
