@@ -10,8 +10,8 @@ namespace RayTracing.TestBench
             Console.WriteLine("Hello, World!");
 
             // Resolution
-            ushort resX = 100;
-            ushort resY = 80;
+            ushort resX = 200;
+            ushort resY = 250;
 
             // Create a canvas window.
             var canvasWindow = new CanvasWindow();
