@@ -8,7 +8,7 @@ namespace RayTracing.Model.Octrees
 {
     public static class OctreeHelper
     {
-        public static Octree PrepareOctree(IEnumerable<Face> allFaces, int splitTheshold)
+        public static Octree PrepareOctree(IEnumerable<Face> allFaces)
         {
             Argument.AssertNotNull(allFaces, nameof(allFaces));
 
@@ -28,6 +28,11 @@ namespace RayTracing.Model.Octrees
             var max = new Vector3(maxX, maxY, maxZ);
             var boundingBox = new AxisAlignedBoundingBox(min, max);
 
+            return PrepOctreeRecursive(boundingBox, allFaces, splitTheshold: 100);
+        }
+
+        private static Octree PrepOctreeRecursive(AxisAlignedBoundingBox boundingBox, IEnumerable<Face> allFaces, int splitTheshold)
+        {
             var children = new Collection<Octree>();
             var childBoxes = AabbHelper.PrepareOctants(boundingBox);
 

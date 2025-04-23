@@ -47,7 +47,7 @@ namespace RayTracing.ModelFiles.ObjFormat
             var faces = objData.Triangles.Select(t => new Face(geometry, t, new Vector3())).ToList();
             facesList.AddRange(faces);
 
-            var octree = OctreeHelper.PrepareOctree(faces, 50);
+            var octree = OctreeHelper.PrepareOctree(faces);
 
             return new Scene(new List<Material> { material }, new List<Geometry> { geometry }, octree, new List<LightSource>());
         }

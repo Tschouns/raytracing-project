@@ -83,7 +83,7 @@ namespace RayTracing.ModelFiles.ColladaFormat
                 .Distinct()
                 .ToList();
 
-            var octree = OctreeHelper.PrepareOctree(geometries.SelectMany(g => g.Faces).ToList(), 50);
+            var octree = OctreeHelper.PrepareOctree(geometries.SelectMany(g => g.Faces).ToList());
 
             return new Scene(allMaterials, geometries, octree, lightSources);
         }
