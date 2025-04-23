@@ -61,10 +61,31 @@ namespace RayTracing.Math.Calculations
         /// <param name="rayDirection">
         /// The ray direction vector
         /// </param>
-        /// <param name="aabbMin">
+        /// <param name="box">
+        /// The axis-aligned bounding box
+        /// </param>
+        /// <returns>
+        /// A value indicating whether the ray intersects with the bounding box
+        /// </returns>
+        public static AabbIntersectionResult IntersectAabb(Vector3 rayOrigin, Vector3 rayDirection, AxisAlignedBoundingBox box)
+        {
+            return IntersectAabb(rayOrigin, rayDirection, box.Min, box.Max);
+        }
+
+        /// <summary>
+        /// Checks whether a ray -- specified by an origin and direction vector -- intersects with the specified
+        /// axis-aligned bounding box.
+        /// </summary>
+        /// <param name="rayOrigin">
+        /// The ray origin vector
+        /// </param>
+        /// <param name="rayDirection">
+        /// The ray direction vector
+        /// </param>
+        /// <param name="boxMin">
         /// The axis-aligned bounding box minimum
         /// </param>
-        /// <param name="aabbMax">
+        /// <param name="boxMax">
         /// The axis-aligned bounding box maximum
         /// </param>
         /// <returns>
