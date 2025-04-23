@@ -40,6 +40,8 @@ namespace RayTracing.Model.Octrees
 
             foreach (var octantBox in octantBoxes)
             {
+                TODO
+                // TODO: also include faces where none of the corner is contained in the AABB, but the AABB's edges intersect the face triangle!
                 var octantFaces = allFaces
                     .Where(f => DoesTriangleIntersectBox(f.Triangle, octantBox))
                     .ToList();
@@ -66,9 +68,9 @@ namespace RayTracing.Model.Octrees
         private static bool DoesTriangleIntersectBox(Triangle3D triangle, AxisAlignedBoundingBox box)
         {
             return
-                box.Contains(triangle.CornerA, 0.0001f) ||
-                box.Contains(triangle.CornerB, 0.0001f) ||
-                box.Contains(triangle.CornerC, 0.0001f);
+                box.Contains(triangle.CornerA, 0.00001f) ||
+                box.Contains(triangle.CornerB, 0.00001f) ||
+                box.Contains(triangle.CornerC, 0.00001f);
         }
     }
 }
