@@ -28,7 +28,7 @@ namespace RayTracing.Model.Octrees
             var max = new Vector3(maxX, maxY, maxZ);
             var boundingBox = new AxisAlignedBoundingBox(min, max);
 
-            var children = PrepOctantsRecursive(boundingBox, allFaces, splitTheshold: 100);
+            var children = PrepOctantsRecursive(boundingBox, allFaces, splitTheshold: 10);
 
             return new Octree(boundingBox, allFaces, children);
         }
@@ -43,6 +43,12 @@ namespace RayTracing.Model.Octrees
                 var octantFaces = allFaces
                     .Where(f => DoesTriangleIntersectBox(f.Triangle, octantBox))
                     .ToList();
+
+                // If the face-count can no longer be reduced for every octant, we stop. This prevents a stack overflow.
+                if (octantFaces.Count() == allFaces.Count())
+                {
+                    return new Octree[0];
+                }
 
                 IEnumerable<Octree> children = new Collection<Octree>();
 

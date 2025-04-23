@@ -49,7 +49,8 @@ namespace RayTracing.Rendering.Rays
         private RayHit? DetectNearestHit(IEnumerable<Octree> octrees)
         {
             var octreeTests = octrees
-                .Select(o => new { Octree = o, Hit = VectorCalculator3D.IntersectAabb(this.Origin, this.Direction, o.BoundingBox.Min, o.BoundingBox.Max) })
+                .Where(o => o.AllFaces.Any())
+                .Select(o => new { Octree = o, Hit = VectorCalculator3D.RayIntersectsAABB(this.Origin, this.Direction, o.BoundingBox.Min, o.BoundingBox.Max) })
                 .ToList();
                
             var octreeHitsOrdered = octreeTests
@@ -58,7 +59,7 @@ namespace RayTracing.Rendering.Rays
                 .ToList();
 
             var count = octreeHitsOrdered.Count();
-            COUNTER[count - 1]++;
+            //COUNTER[count - 1]++;
             //var hits = new List<RayHit>();
 
             foreach (var octreeHit in octreeHitsOrdered)
