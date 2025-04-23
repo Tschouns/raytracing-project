@@ -47,17 +47,9 @@ namespace RayTracing.Model.Octrees
         private static bool DoesTriangleIntersectBox(Triangle3D triangle, AxisAlignedBoundingBox box)
         {
             return
-                IsPointInBox(triangle.CornerA, box) ||
-                IsPointInBox(triangle.CornerB, box) ||
-                IsPointInBox(triangle.CornerC, box);
-        }
-
-        private static bool IsPointInBox(Vector3 point, AxisAlignedBoundingBox box)
-        {
-            return
-                point.X >= box.Min.X && point.X <= box.Max.X &&
-                point.Y >= box.Min.Y && point.Y <= box.Max.Y &&
-                point.Z >= box.Min.Z && point.Z <= box.Max.Z;
+                box.Contains(triangle.CornerA) ||
+                box.Contains(triangle.CornerB) ||
+                box.Contains(triangle.CornerC);
         }
     }
 }
