@@ -133,23 +133,25 @@ namespace RayTracing.Math.Calculations
             var tMin = float.MinValue;
             var tMax = float.MaxValue;
 
-            for (int i = 0; i < 3; i++)
+            for (var i = 0; i < 3; i++)
             {
                 if (System.Math.Abs(rayDirection.AsArray()[i]) < 1e-8)
                 {
                     // Ray is parallel to slab. No hit if origin not within slab
                     if (rayOrigin.AsArray()[i] < boxMin.AsArray()[i] || rayOrigin.AsArray()[i] > boxMax.AsArray()[i])
+                    {
                         return AabbIntersectionResult.NoIntersection();
+                    }
                 }
                 else
                 {
-                    float invD = 1.0f / rayDirection.AsArray()[i];
-                    float t0 = (boxMin.AsArray()[i] - rayOrigin.AsArray()[i]) * invD;
-                    float t1 = (boxMax.AsArray()[i] - rayOrigin.AsArray()[i]) * invD;
+                    var invD = 1.0f / rayDirection.AsArray()[i];
+                    var t0 = (boxMin.AsArray()[i] - rayOrigin.AsArray()[i]) * invD;
+                    var t1 = (boxMax.AsArray()[i] - rayOrigin.AsArray()[i]) * invD;
 
                     if (t0 > t1)
                     {
-                        float temp = t0;
+                        var temp = t0;
                         t0 = t1;
                         t1 = temp;
                     }
@@ -158,7 +160,9 @@ namespace RayTracing.Math.Calculations
                     tMax = System.Math.Min(tMax, t1);
 
                     if (tMax < tMin)
+                    {
                         return AabbIntersectionResult.NoIntersection();
+                    }
                 }
             }
 

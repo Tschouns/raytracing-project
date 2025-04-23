@@ -1,10 +1,23 @@
 ﻿
+using RayTracing.Base;
+
 namespace RayTracing.Math.Calculations
 {
     public static class AabbHelper
     {
+        /// <summary>
+        /// "Cuts" the specified parent box in half along each axis, and creates child boxes -- i.e. octants.
+        /// </summary>
+        /// <param name="parent">
+        /// The parent box
+        /// </param>
+        /// <returns>
+        /// The child octants
+        /// </returns>
         public static IEnumerable<AxisAlignedBoundingBox> PrepareOctants(AxisAlignedBoundingBox parent)
         {
+            Argument.AssertNotNull(parent, nameof(parent));
+
             var min = parent.Min;
             var max = parent.Max;
 
