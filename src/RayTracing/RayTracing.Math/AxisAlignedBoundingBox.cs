@@ -28,5 +28,13 @@
                 point.Y >= this.Min.Y && point.Y <= this.Max.Y &&
                 point.Z >= this.Min.Z && point.Z <= this.Max.Z;
         }
+
+        public bool Contains(Vector3 point, float t)
+        {
+            return
+                point.X > (this.Min.X - t) && point.X < (this.Max.X + t) &&
+                point.Y > (this.Min.Y - t) && point.Y < (this.Max.Y + t) &&
+                point.Z > (this.Min.Z - t) && point.Z < (this.Max.Z + t);
+        }
     }
 }

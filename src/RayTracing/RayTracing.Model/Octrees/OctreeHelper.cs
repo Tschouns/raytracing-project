@@ -66,9 +66,9 @@ namespace RayTracing.Model.Octrees
         private static bool DoesTriangleIntersectBox(Triangle3D triangle, AxisAlignedBoundingBox box)
         {
             return
-                box.Contains(triangle.CornerA) ||
-                box.Contains(triangle.CornerB) ||
-                box.Contains(triangle.CornerC);
+                box.Contains(triangle.CornerA, 0.0001f) ||
+                box.Contains(triangle.CornerB, 0.0001f) ||
+                box.Contains(triangle.CornerC, 0.0001f);
         }
     }
 }
