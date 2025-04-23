@@ -28,25 +28,33 @@ namespace RayTracing.Model.Octrees
             var max = new Vector3(maxX, maxY, maxZ);
             var boundingBox = new AxisAlignedBoundingBox(min, max);
 
-            return PrepOctreeRecursive(boundingBox, allFaces, splitTheshold: 100);
+            var children = PrepOctantsRecursive(boundingBox, allFaces, splitTheshold: 100);
+
+            return new Octree(boundingBox, allFaces, children);
         }
 
-        private static Octree PrepOctreeRecursive(AxisAlignedBoundingBox boundingBox, IEnumerable<Face> allFaces, int splitTheshold)
+        private static IEnumerable<Octree> PrepOctantsRecursive(AxisAlignedBoundingBox boundingBox, IEnumerable<Face> allFaces, int splitTheshold)
         {
-            var children = new Collection<Octree>();
-            var childBoxes = AabbHelper.PrepareOctants(boundingBox);
+            var octants = new Collection<Octree>();
+            var octantBoxes = AabbHelper.PrepareOctants(boundingBox);
 
-            foreach (var childBox in childBoxes)
+            foreach (var octantBox in octantBoxes)
             {
-                var childFaces = allFaces
-                    .Where(f => DoesTriangleIntersectBox(f.Triangle, childBox))
+                var octantFaces = allFaces
+                    .Where(f => DoesTriangleIntersectBox(f.Triangle, octantBox))
                     .ToList();
 
-                children.Add(new Octree(childBox, childFaces, new Octree[0]));
+                IEnumerable<Octree> children = new Collection<Octree>();
+
+                if (octantFaces.Count >= splitTheshold)
+                {
+                    children = PrepOctantsRecursive(octantBox, octantFaces, splitTheshold);
+                }
+
+                octants.Add(new Octree(octantBox, octantFaces, new Octree[0]));
             }
 
-            // TODO: finish implementation.
-            return new Octree(boundingBox, allFaces, children);
+            return octants;
         }
 
         private static bool DoesTriangleIntersectBox(Triangle3D triangle, AxisAlignedBoundingBox box)
