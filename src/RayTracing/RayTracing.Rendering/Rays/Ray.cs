@@ -11,6 +11,8 @@ namespace RayTracing.Rendering.Rays
     /// </summary>
     public class Ray
     {
+        private static int[] COUNTER = new int[8];
+
         public Ray(Vector3 origin, Vector3 direction, Face? originFace = null, IEnumerable<Geometry> insideObjects = null)
         {
             Origin = origin;
@@ -46,13 +48,18 @@ namespace RayTracing.Rendering.Rays
 
         private RayHit? DetectNearestHit(IEnumerable<Octree> octrees)
         {
-            var octreeHitsOrdered = octrees
+            var octreeTests = octrees
                 .Select(o => new { Octree = o, Hit = VectorCalculator3D.IntersectAabb(this.Origin, this.Direction, o.BoundingBox.Min, o.BoundingBox.Max) })
+                .ToList();
+               
+            var octreeHitsOrdered = octreeTests
                 .Where(o => o.Hit.DoIntersect)
-                //.OrderBy(o => o.Hit.T0)
+                .OrderBy(o => o.Hit.T0)
                 .ToList();
 
-            var hits = new List<RayHit>();
+            var count = octreeHitsOrdered.Count();
+            COUNTER[count - 1]++;
+            //var hits = new List<RayHit>();
 
             foreach (var octreeHit in octreeHitsOrdered)
             {
@@ -62,7 +69,8 @@ namespace RayTracing.Rendering.Rays
                     var rayHit = this.DetectNearestHit(octreeHit.Octree.Children);
                     if (rayHit != null)
                     {
-                        hits.Add(rayHit);
+                        //hits.Add(rayHit);
+                        return rayHit;
                     }
                 }
                 else
@@ -70,12 +78,14 @@ namespace RayTracing.Rendering.Rays
                     var rayHit = this.DetectNearestHit(octreeHit.Octree.AllFaces);
                     if (rayHit != null)
                     {
-                        hits.Add(rayHit);
+                        //hits.Add(rayHit);
+                        return rayHit;
                     }
                 }
             }
 
-            return hits.OrderBy(hit => hit.Distance).FirstOrDefault();
+            //return hits.OrderBy(hit => hit.Distance).FirstOrDefault();
+            return null;
         }
 
         private RayHit? DetectNearestHit(IEnumerable<Face> faces)

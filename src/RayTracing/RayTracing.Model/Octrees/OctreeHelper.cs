@@ -51,7 +51,7 @@ namespace RayTracing.Model.Octrees
                     children = PrepOctantsRecursive(octantBox, octantFaces, splitTheshold);
                 }
 
-                octants.Add(new Octree(octantBox, octantFaces, new Octree[0]));
+                octants.Add(new Octree(octantBox, octantFaces, children));
             }
 
             return octants;
