@@ -172,33 +172,46 @@ namespace RayTracing.Math.Calculations
                 t1.Dot(rayDirection));
         }
 
-        private static float[] AsArray(Vector3 vec)
+        public static AabbIntersectionResult RayIntersectsAABB(Vector3 rayOrigin, Vector3 rayDirection, Vector3 boxMin, Vector3 boxMax)
+        {
+            var tMin = float.MinValue;
+            var tMax = float.MaxValue;
+
+            for (int i = 0; i < 3; i++)
+            {
+                if (System.Math.Abs(rayDirection.AsArray()[i]) < 1e-8)
+                {
+                    // Ray is parallel to slab. No hit if origin not within slab
+                    if (rayOrigin.AsArray()[i] < boxMin.AsArray()[i] || rayOrigin.AsArray()[i] > boxMax.AsArray()[i])
+                        return AabbIntersectionResult.NoIntersection();
+                }
+                else
+                {
+                    float invD = 1.0f / rayDirection.AsArray()[i];
+                    float t0 = (boxMin.AsArray()[i] - rayOrigin.AsArray()[i]) * invD;
+                    float t1 = (boxMax.AsArray()[i] - rayOrigin.AsArray()[i]) * invD;
+
+                    if (t0 > t1)
+                    {
+                        float temp = t0;
+                        t0 = t1;
+                        t1 = temp;
+                    }
+
+                    tMin = System.Math.Max(tMin, t0);
+                    tMax = System.Math.Min(tMax, t1);
+
+                    if (tMax < tMin)
+                        return AabbIntersectionResult.NoIntersection();
+                }
+            }
+
+            return new AabbIntersectionResult(true, tMin, tMax);
+        }
+
+        private static float[] AsArray(this Vector3 vec)
         {
             return new float[] { vec.X, vec.Y, vec.Z };
-        }
-
-        private static Vector3 Min(Vector3 a, Vector3 b)
-        {
-            if (a.LengthSquared() < b.LengthSquared())
-            {
-                return a;
-            }
-            else
-            {
-                return b;
-            }
-        }
-
-        private static Vector3 Max(Vector3 a, Vector3 b)
-        {
-            if (a.LengthSquared() > b.LengthSquared())
-            {
-                return a;
-            }
-            else
-            {
-                return b;
-            }
         }
     }
 }

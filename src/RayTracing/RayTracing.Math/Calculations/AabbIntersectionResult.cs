@@ -12,5 +12,7 @@
         public bool DoIntersect { get; }
         public float T0 { get; }
         public float T1 { get; }
+
+        public static AabbIntersectionResult NoIntersection() => new AabbIntersectionResult(false, 0, 0);
     }
 }
