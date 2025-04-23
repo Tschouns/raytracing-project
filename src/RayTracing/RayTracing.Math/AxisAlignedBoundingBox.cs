@@ -84,9 +84,9 @@ namespace RayTracing.Math
 
         public bool Intersects(Triangle3D triangle)
         {
-            if (this.Contains(triangle.CornerA, 0.0001f) ||
-                this.Contains(triangle.CornerB, 0.0001f) ||
-                this.Contains(triangle.CornerC, 0.0001f))
+            if (this.Contains(triangle.CornerA, 0.00001f) ||
+                this.Contains(triangle.CornerB, 0.00001f) ||
+                this.Contains(triangle.CornerC, 0.00001f))
             {
                 return true;
             }
@@ -96,7 +96,10 @@ namespace RayTracing.Math
             {
                 var check = VectorCalculator3D.IntersectTriangle(edge, triangle);
 
-                return check.HasIntersection && check.Lambda >= 0 && check.Lambda <= 1;
+                return
+                    check.HasIntersection &&
+                    check.Lambda >= -0.00001f &&
+                    check.Lambda <= 1.00001f;
             });
         }
     }

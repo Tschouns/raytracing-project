@@ -53,6 +53,7 @@ namespace RayTracing.Rendering.Rays
                
             var octreeHitsOrdered = octreeTests
                 .Where(o => o.Hit.DoIntersect)
+                .Where(o => o.Hit.T1 >= 0)
                 .OrderBy(o => o.Hit.T0)
                 .ToList();
 

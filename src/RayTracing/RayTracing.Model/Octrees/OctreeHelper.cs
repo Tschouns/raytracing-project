@@ -28,7 +28,7 @@ namespace RayTracing.Model.Octrees
             var max = new Vector3(maxX, maxY, maxZ);
             var boundingBox = new AxisAlignedBoundingBox(min, max);
 
-            var children = PrepOctantsRecursive(boundingBox, allFaces, splitTheshold: 200);
+            var children = PrepOctantsRecursive(boundingBox, allFaces, splitTheshold: 10);
 
             return new Octree(boundingBox, allFaces, children);
         }
