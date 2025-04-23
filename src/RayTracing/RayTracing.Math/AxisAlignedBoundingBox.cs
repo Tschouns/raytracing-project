@@ -1,4 +1,6 @@
-﻿namespace RayTracing.Math
+﻿using RayTracing.Math.Calculations;
+
+namespace RayTracing.Math
 {
     /// <summary>
     /// Represents an axis-aligned bounding box.
@@ -78,6 +80,24 @@
                 point.X > (this.Min.X - t) && point.X < (this.Max.X + t) &&
                 point.Y > (this.Min.Y - t) && point.Y < (this.Max.Y + t) &&
                 point.Z > (this.Min.Z - t) && point.Z < (this.Max.Z + t);
+        }
+
+        public bool Intersects(Triangle3D triangle)
+        {
+            if (this.Contains(triangle.CornerA, 0.0001f) ||
+                this.Contains(triangle.CornerB, 0.0001f) ||
+                this.Contains(triangle.CornerC, 0.0001f))
+            {
+                return true;
+            }
+
+            // If the box and triange intersect, at least one box edge must intersect the triangle.
+            return this.Edges.Any(edge =>
+            {
+                var check = VectorCalculator3D.IntersectTriangle(edge, triangle);
+
+                return check.HasIntersection && check.Lambda >= 0 && check.Lambda <= 1;
+            });
         }
     }
 }

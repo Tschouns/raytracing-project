@@ -28,7 +28,7 @@ namespace RayTracing.Model.Octrees
             var max = new Vector3(maxX, maxY, maxZ);
             var boundingBox = new AxisAlignedBoundingBox(min, max);
 
-            var children = PrepOctantsRecursive(boundingBox, allFaces, splitTheshold: 10);
+            var children = PrepOctantsRecursive(boundingBox, allFaces, splitTheshold: 200);
 
             return new Octree(boundingBox, allFaces, children);
         }
@@ -42,7 +42,7 @@ namespace RayTracing.Model.Octrees
             {
                 // TODO: also include faces where none of the corner is contained in the AABB, but the AABB's edges intersect the face triangle!
                 var octantFaces = allFaces
-                    .Where(f => DoesTriangleIntersectBox(f.Triangle, octantBox))
+                    .Where(f => octantBox.Intersects(f.Triangle))
                     .ToList();
 
                 // If the face-count can no longer be reduced for every octant, we stop. This prevents a stack overflow.
@@ -62,14 +62,6 @@ namespace RayTracing.Model.Octrees
             }
 
             return octants;
-        }
-
-        private static bool DoesTriangleIntersectBox(Triangle3D triangle, AxisAlignedBoundingBox box)
-        {
-            return
-                box.Contains(triangle.CornerA, 0.00001f) ||
-                box.Contains(triangle.CornerB, 0.00001f) ||
-                box.Contains(triangle.CornerC, 0.00001f);
         }
     }
 }
