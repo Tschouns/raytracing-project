@@ -128,51 +128,7 @@ namespace RayTracing.Math.Calculations
         /// <returns>
         /// A value indicating whether the ray intersects with the bounding box
         /// </returns>
-        public static AabbIntersectionResult IntersectAabb(Vector3 rayOrigin, Vector3 rayDirection, Vector3 aabbMin, Vector3 aabbMax)
-        {
-            var tMin = aabbMin - rayOrigin;
-            var tMax = aabbMax - rayOrigin;
-
-            // X
-            var incDirX = 1 / rayDirection.X;
-            var t0X = tMin.X * incDirX;
-            var t1X = tMax.X * incDirX;
-
-            if (t1X <= t0X ^ incDirX < 0)
-            {
-                return new AabbIntersectionResult(false, 0, 0);
-            }
-
-            // Y
-            var incDirY = 1 / rayDirection.Y;
-            var t0Y = tMin.Y * incDirY;
-            var t1Y = tMax.Y * incDirY;
-
-            if (t1Y <= t0Y ^ incDirY < 0)
-            {
-                return new AabbIntersectionResult(false, 0, 0);
-            }
-
-            // Z
-            var incDirZ = 1 / rayDirection.Z;
-            var t0Z = tMin.Z * incDirZ;
-            var t1Z = tMax.Z * incDirZ;
-
-            if (t1Z <= t0Z ^ incDirZ < 0)
-            {
-                return new AabbIntersectionResult(false, 0, 0);
-            }
-
-            var t0 = new Vector3(t0X, t0Y, t0Z);
-            var t1 = new Vector3(t1X, t1Y, t1Z);
-
-            return new AabbIntersectionResult(
-                true,
-                t0.Dot(rayDirection),
-                t1.Dot(rayDirection));
-        }
-
-        public static AabbIntersectionResult RayIntersectsAABB(Vector3 rayOrigin, Vector3 rayDirection, Vector3 boxMin, Vector3 boxMax)
+        public static AabbIntersectionResult IntersectAabb(Vector3 rayOrigin, Vector3 rayDirection, Vector3 boxMin, Vector3 boxMax)
         {
             var tMin = float.MinValue;
             var tMax = float.MaxValue;

@@ -50,7 +50,7 @@ namespace RayTracing.Rendering.Rays
         {
             var octreeTests = octrees
                 .Where(o => o.AllFaces.Any())
-                .Select(o => new { Octree = o, Hit = VectorCalculator3D.RayIntersectsAABB(this.Origin, this.Direction, o.BoundingBox.Min, o.BoundingBox.Max) })
+                .Select(o => new { Octree = o, Hit = VectorCalculator3D.IntersectAabb(this.Origin, this.Direction, o.BoundingBox.Min, o.BoundingBox.Max) })
                 .ToList();
                
             var octreeHitsOrdered = octreeTests

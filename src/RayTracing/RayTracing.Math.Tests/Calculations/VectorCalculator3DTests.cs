@@ -249,7 +249,7 @@ namespace RayTracing.Math.Tests.Calculations
             // Arrange
 
             // Act
-            var result = VectorCalculator3D.RayIntersectsAABB(origin, direction, aabbMin, aabbMax);
+            var result = VectorCalculator3D.IntersectAabb(origin, direction, aabbMin, aabbMax);
 
             // Assert
             Assert.Equal(expectedResult, result.DoIntersect);
