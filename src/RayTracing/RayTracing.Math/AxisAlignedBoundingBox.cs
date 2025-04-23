@@ -5,6 +5,15 @@
     /// </summary>
     public class AxisAlignedBoundingBox
     {
+        private readonly Vector3 p000;
+        private readonly Vector3 p00x;
+        private readonly Vector3 p0y0;
+        private readonly Vector3 p0yx;
+        private readonly Vector3 pz00;
+        private readonly Vector3 pz0x;
+        private readonly Vector3 pzy0;
+        private readonly Vector3 pzyx;
+
         public AxisAlignedBoundingBox(Vector3 min, Vector3 max)
         {
             if (min.X > max.X ||
@@ -16,10 +25,44 @@
 
             Min = min;
             Max = max;
+
+            // Helper vectors:
+            var v = this.Max - this.Min;
+            var x = new Vector3(v.X, 0, 0);
+            var y = new Vector3(0, v.Y, 0);
+            var z = new Vector3(0, 0, v.Z);
+
+            // Vertices:
+            this.p000 = min;
+            this.p00x = min + x;
+            this.p0y0 = min + y;
+            this.p0yx = min + y + x;
+            this.pz00 = min + z;
+            this.pz0x = min + z + x;
+            this.pzy0 = min + z + y;
+            this.pzyx = max;
+
+            this.Edges = new Line3D[]
+            {
+                new Line3D(this.p000, this.p00x),
+                new Line3D(this.p000, this.p0y0),
+                new Line3D(this.p000, this.pz00),
+                new Line3D(this.pzyx, this.pzy0),
+                new Line3D(this.pzyx, this.pz0x),
+                new Line3D(this.pzyx, this.p0yx),
+
+                new Line3D(this.pz00, this.pzy0),
+                new Line3D(this.pzy0, this.p0y0),
+                new Line3D(this.p0y0, this.p0yx),
+                new Line3D(this.p0yx, this.p00x),
+                new Line3D(this.p00x, this.pz0x),
+                new Line3D(this.pz0x, this.pz00),
+            };
         }
 
-        public Vector3 Min;
-        public Vector3 Max;
+        public Vector3 Min { get; }
+        public Vector3 Max { get; }
+        public IEnumerable<Line3D> Edges { get; }
 
         public bool Contains(Vector3 point)
         {
