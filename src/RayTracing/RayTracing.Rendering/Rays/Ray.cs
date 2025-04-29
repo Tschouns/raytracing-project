@@ -57,6 +57,8 @@ namespace RayTracing.Rendering.Rays
                 .OrderBy(o => o.Hit.T0)
                 .ToList();
 
+            var hits = new List<RayHit>();
+
             foreach (var octreeHit in octreeHitsOrdered)
             {
                 if (octreeHit.Octree.HasChildren)
@@ -65,7 +67,7 @@ namespace RayTracing.Rendering.Rays
                     var rayHit = this.DetectNearestHit(octreeHit.Octree.Children);
                     if (rayHit != null)
                     {
-                        return rayHit;
+                        hits.Add(rayHit);
                     }
                 }
                 else
@@ -73,12 +75,12 @@ namespace RayTracing.Rendering.Rays
                     var rayHit = this.DetectNearestHit(octreeHit.Octree.AllFaces);
                     if (rayHit != null)
                     {
-                        return rayHit;
+                        hits.Add(rayHit);
                     }
                 }
             }
 
-            return null;
+            return hits.OrderBy(hit => hit.Distance).FirstOrDefault();
         }
 
         private RayHit? DetectNearestHit(IEnumerable<Face> faces)
