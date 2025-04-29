@@ -60,11 +60,33 @@ namespace RayTracing.Math
                 new Line3D(this.p00x, this.pz0x),
                 new Line3D(this.pz0x, this.pz00),
             };
+
+            this.Faces = new Triangle3D[]
+            {
+                new Triangle3D(this.p000, this.p00x, this.p0y0),
+                new Triangle3D(this.p000, this.p0y0, this.pz00),
+
+                new Triangle3D(this.p00x, this.p0yx, this.pzyx),
+                new Triangle3D(this.p00x, this.pzyx, this.pz0x),
+
+                new Triangle3D(this.p0yx, this.p0y0, this.pzy0),
+                new Triangle3D(this.p0yx, this.pzy0, this.pzyx),
+
+                new Triangle3D(this.p0y0, this.p000, this.pz00),
+                new Triangle3D(this.p0y0, this.pz00, this.pzy0),
+
+                new Triangle3D(this.p000, this.p0y0, this.p0yx),
+                new Triangle3D(this.p000, this.p0yx, this.p00x),
+
+                new Triangle3D(this.pz00, this.pz0x, this.pzyx),
+                new Triangle3D(this.pz00, this.pzyx, this.pzy0),
+            };
         }
 
         public Vector3 Min { get; }
         public Vector3 Max { get; }
         public IEnumerable<Line3D> Edges { get; }
+        public IEnumerable<Triangle3D> Faces { get; }
 
         public bool Contains(Vector3 point)
         {
@@ -84,6 +106,7 @@ namespace RayTracing.Math
 
         public bool Intersects(Triangle3D triangle)
         {
+            // The box and triange intersect, if at least one cortner of the triangle is within the box.
             if (this.Contains(triangle.CornerA, 0.00001f) ||
                 this.Contains(triangle.CornerB, 0.00001f) ||
                 this.Contains(triangle.CornerC, 0.00001f))
@@ -91,16 +114,24 @@ namespace RayTracing.Math
                 return true;
             }
 
-            // If the box and triange intersect, at least one box edge must intersect the triangle.
-            return this.Edges.Any(edge =>
-            {
-                var check = VectorCalculator3D.IntersectTriangle(edge, triangle);
+            // The box and triange intersect, if at least one box edge intersects the triangle.
+            if (this.Edges.Any(edge =>
+                {
+                    var check = VectorCalculator3D.IntersectTriangle(edge, triangle);
 
-                return
-                    check.HasIntersection &&
-                    check.Lambda >= -0.00001f &&
-                    check.Lambda <= 1.00001f;
-            });
+                    return
+                        check.HasIntersection &&
+                        check.Lambda >= -0.00001f &&
+                        check.Lambda <= 1.00001f;
+                }))
+            {
+                return true;
+            }
+
+            // The box and triange intersect, if at least one triangle edge intersects any of the box faces.
+
+
+            return false;
         }
     }
 }
