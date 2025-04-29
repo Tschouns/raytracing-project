@@ -40,7 +40,6 @@ namespace RayTracing.Model.Octrees
 
             foreach (var octantBox in octantBoxes)
             {
-                // TODO: also include faces where none of the corner is contained in the AABB, but the AABB's edges intersect the face triangle!
                 var octantFaces = allFaces
                     .Where(f => octantBox.Intersects(f.Triangle))
                     .ToList();
