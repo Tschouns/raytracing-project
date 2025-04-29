@@ -28,16 +28,11 @@ namespace RayTracing.Rendering
             pixelRays = pixelRaysList;
 
             // Render image pixel by pixel.
-            //var tasks = pixelRays
-            //    .Select(pixel => Task.Run(() => SetPixel(faces, scene.LightSources, pixel, target, settings)))
-            //    .ToArray();
+            var tasks = pixelRays
+                .Select(pixel => Task.Run(() => SetPixel(scene.Octree, scene.LightSources, pixel, target, settings)))
+                .ToArray();
 
-            //Task.WaitAll(tasks);
-
-            foreach (var ray in pixelRays)
-            {
-                SetPixel(scene.Octree, scene.LightSources, ray, target, settings);
-            }
+            Task.WaitAll(tasks);
         }
 
         private static void Shuffle<T>(IList<T> list)

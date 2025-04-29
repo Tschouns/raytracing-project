@@ -79,14 +79,14 @@ namespace RayTracing.TestBench
                 },
                 new RenderSettings
                 {
-                    //FillBackground = false,
-                    //ApplyDepthCueing = false,
-                    //ApplyNormalShading = false,
-                    ApplyShadows = false,
-                    ApplyReflections = false,
-                    ApplyTransmission = false,
-                    ApplyGloss = false,
-                    //UseFancyLighting = false,
+                    FillBackground = true,
+                    ApplyDepthCueing = true,
+                    ApplyNormalShading = true,
+                    ApplyShadows = true,
+                    ApplyReflections = true,
+                    ApplyTransmission = true,
+                    ApplyGloss = true,
+                    UseFancyLighting = true,
                     DepthCueingMaxDistance = 20f,
                     MaxRecursionDepth = 5,
                 });
