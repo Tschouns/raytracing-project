@@ -115,23 +115,31 @@ namespace RayTracing.Math
             }
 
             // The box and triange intersect, if at least one box edge intersects the triangle.
-            if (this.Edges.Any(edge =>
-                {
-                    var check = VectorCalculator3D.IntersectTriangle(edge, triangle);
-
-                    return
-                        check.HasIntersection &&
-                        check.Lambda >= -0.00001f &&
-                        check.Lambda <= 1.00001f;
-                }))
+            if (this.Edges.Any(edge => DoIntersect(edge, triangle)))
             {
                 return true;
             }
 
             // The box and triange intersect, if at least one triangle edge intersects any of the box faces.
-
+            if (this.Faces.Any(face =>
+                DoIntersect(new Line3D(triangle.CornerA, triangle.CornerB), face) ||
+                DoIntersect(new Line3D(triangle.CornerB, triangle.CornerC), face) ||
+                DoIntersect(new Line3D(triangle.CornerC, triangle.CornerA), face)))
+            {
+                return true;
+            }
 
             return false;
+        }
+
+        private static bool DoIntersect(Line3D line, Triangle3D triangle)
+        {
+            var check = VectorCalculator3D.IntersectTriangle(line, triangle);
+
+            return
+                check.HasIntersection &&
+                check.Lambda >= -0.00001f &&
+                check.Lambda <= 1.00001f;
         }
     }
 }
