@@ -25,7 +25,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RayTracing.Model", "RayTrac
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RayTracing.Gui", "RayTracing.Gui\RayTracing.Gui.csproj", "{159CC52C-2802-4FEB-A130-E166AD3E6BA2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RayTracing.Targets", "RayTracing.Targets\RayTracing.Targets.csproj", "{FEDC28D3-CDA8-49A7-ACE3-2A1021792865}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RayTracing.Targets", "RayTracing.Targets\RayTracing.Targets.csproj", "{FEDC28D3-CDA8-49A7-ACE3-2A1021792865}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{84940A19-CF50-428D-B17C-D6557F999568}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
