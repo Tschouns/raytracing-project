@@ -12,7 +12,7 @@ namespace RayTracing.Rendering.Settings
         /// Gets a value indicating whether the screen shall be filled with a background
         /// color before rendering actual pixels.
         /// </summary>
-        public bool FillBackground { get;}
+        public bool FillBackground { get; }
 
         /// <summary>
         /// Gets a value indicating whether the rendering shall apply depth cueing.

@@ -72,9 +72,9 @@ namespace RayTracing.Math.Tests
             var pNewActual = rotation.ApplyTo(p);
 
             // Assert
-            Assert.Equal(pNewExpected.X, pNewActual.X, t);
-            Assert.Equal(pNewExpected.Y, pNewActual.Y, t);
-            Assert.Equal(pNewExpected.Z, pNewActual.Z, t);
+            Assert.Equal(pNewExpected.X, pNewActual.X, this.t);
+            Assert.Equal(pNewExpected.Y, pNewActual.Y, this.t);
+            Assert.Equal(pNewExpected.Z, pNewActual.Z, this.t);
         }
 
         [Fact]
@@ -85,13 +85,13 @@ namespace RayTracing.Math.Tests
             var pNewExpected = new Vector3(3, -1, 0);
 
             // Act
-            var rotation = Matrix4x4.RotateX(90 * degreesToRad);
+            var rotation = Matrix4x4.RotateX(90 * this.degreesToRad);
             var pNewActual = rotation.ApplyTo(p);
 
             // Assert
-            Assert.Equal(pNewExpected.X, pNewActual.X, t);
-            Assert.Equal(pNewExpected.Y, pNewActual.Y, t);
-            Assert.Equal(pNewExpected.Z, pNewActual.Z, t);
+            Assert.Equal(pNewExpected.X, pNewActual.X, this.t);
+            Assert.Equal(pNewExpected.Y, pNewActual.Y, this.t);
+            Assert.Equal(pNewExpected.Z, pNewActual.Z, this.t);
         }
 
         [Fact]
@@ -102,13 +102,13 @@ namespace RayTracing.Math.Tests
             var pNewExpected = new Vector3(1, 3, 0);
 
             // Act
-            var rotation = Matrix4x4.RotateY(90 * degreesToRad);
+            var rotation = Matrix4x4.RotateY(90 * this.degreesToRad);
             var pNewActual = rotation.ApplyTo(p);
 
             // Assert
-            Assert.Equal(pNewExpected.X, pNewActual.X, t);
-            Assert.Equal(pNewExpected.Y, pNewActual.Y, t);
-            Assert.Equal(pNewExpected.Z, pNewActual.Z, t);
+            Assert.Equal(pNewExpected.X, pNewActual.X, this.t);
+            Assert.Equal(pNewExpected.Y, pNewActual.Y, this.t);
+            Assert.Equal(pNewExpected.Z, pNewActual.Z, this.t);
         }
 
         [Fact]
@@ -119,13 +119,13 @@ namespace RayTracing.Math.Tests
             var pNewExpected = new Vector3(-1, 0, 3);
 
             // Act
-            var rotation = Matrix4x4.RotateZ(90 * degreesToRad);
+            var rotation = Matrix4x4.RotateZ(90 * this.degreesToRad);
             var pNewActual = rotation.ApplyTo(p);
 
             // Assert
-            Assert.Equal(pNewExpected.X, pNewActual.X, t);
-            Assert.Equal(pNewExpected.Y, pNewActual.Y, t);
-            Assert.Equal(pNewExpected.Z, pNewActual.Z, t);
+            Assert.Equal(pNewExpected.X, pNewActual.X, this.t);
+            Assert.Equal(pNewExpected.Y, pNewActual.Y, this.t);
+            Assert.Equal(pNewExpected.Z, pNewActual.Z, this.t);
         }
 
         [Fact]

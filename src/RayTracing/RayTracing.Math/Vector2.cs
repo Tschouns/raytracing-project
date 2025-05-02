@@ -53,7 +53,7 @@
 
         public float LengthSquared()
         {
-            return this.X * this.X + this.Y * this.Y;
+            return (this.X * this.X) + (this.Y * this.Y);
         }
 
         public Vector2? Norm()
@@ -67,27 +67,27 @@
             return this.Scale(1 / length);
         }
 
-        public static Vector2 operator - (Vector2 v)
+        public static Vector2 operator -(Vector2 v)
         {
             return v.Invert();
         }
 
-        public static Vector2 operator + (Vector2 a, Vector2 b)
+        public static Vector2 operator +(Vector2 a, Vector2 b)
         {
             return a.Add(b);
         }
 
-        public static Vector2 operator - (Vector2 a, Vector2 b)
+        public static Vector2 operator -(Vector2 a, Vector2 b)
         {
             return a.Add(-b);
         }
 
-        public static Vector2 operator * (Vector2 v, float c)
+        public static Vector2 operator *(Vector2 v, float c)
         {
             return v.Scale(c);
         }
 
-        public static Vector2 operator * (float c, Vector2 v)
+        public static Vector2 operator *(float c, Vector2 v)
         {
             return v.Scale(c);
         }

@@ -11,12 +11,12 @@ namespace RayTracing.Rendering.Rays
     /// </summary>
     public class Ray
     {
-        public Ray(Vector3 origin, Vector3 direction, Face? originFace = null, IEnumerable<Geometry> insideObjects = null)
+        public Ray(Vector3 origin, Vector3 direction, Face? originFace = null, IEnumerable<Geometry>? insideObjects = null)
         {
-            Origin = origin;
-            Direction = direction.Norm()!.Value;
-            OriginFace = originFace;
-            InsideObjects = (insideObjects ?? new Geometry[0]).ToArray(); // Make a copy of the list.
+            this.Origin = origin;
+            this.Direction = direction.Norm()!.Value;
+            this.OriginFace = originFace;
+            this.InsideObjects = (insideObjects ?? new Geometry[0]).ToArray(); // Make a copy of the list.
         }
 
         public Vector3 Origin { get; }
@@ -50,7 +50,7 @@ namespace RayTracing.Rendering.Rays
                 .Where(o => o.AllFaces.Any())
                 .Select(o => new { Octree = o, Hit = AabbHelper.IntersectAabb(this.Origin, this.Direction, o.BoundingBox) })
                 .ToList();
-               
+
             var octreeHitsOrdered = octreeTests
                 .Where(o => o.Hit.DoIntersect)
                 .Where(o => o.Hit.T1 >= 0)
@@ -99,12 +99,12 @@ namespace RayTracing.Rendering.Rays
                     {
                         nearestHitPoint = currentHitPoint;
                         nearestHitFace = face;
-                        nearestHitDistanceSquared = (nearestHitPoint.Value - Origin).LengthSquared();
+                        nearestHitDistanceSquared = (nearestHitPoint.Value - this.Origin).LengthSquared();
 
                         continue;
                     }
 
-                    var currentHitDistanceSquared = (currentHitPoint - Origin).LengthSquared();
+                    var currentHitDistanceSquared = (currentHitPoint - this.Origin).LengthSquared();
                     var changeSquared = currentHitDistanceSquared - nearestHitDistanceSquared;
 
                     if (changeSquared < 0)
@@ -126,9 +126,9 @@ namespace RayTracing.Rendering.Rays
             return new RayHit(
                 nearestHitPoint.Value,
                 this.Direction,
-                distance, 
+                distance,
                 nearestHitFace!,
-                isBackFaceHit: InsideObjects.Contains(nearestHitFace.ParentGeometry)); // That means we're hitting the face from inside the object.
+                isBackFaceHit: this.InsideObjects.Contains(nearestHitFace.ParentGeometry)); // That means we're hitting the face from inside the object.
         }
 
         private bool DetectForwardHitInternal(Face face, out Vector3 intersectionPoint)
@@ -147,7 +147,7 @@ namespace RayTracing.Rendering.Rays
             }
 
             // Detect intersection.
-            var hitLine = new Line3D(Origin, Origin + Direction);
+            var hitLine = new Line3D(this.Origin, this.Origin + this.Direction);
             var intersect = VectorCalculator3D.IntersectTriangle(hitLine, face.Triangle);
             if (!intersect.HasIntersection)
             {
@@ -176,7 +176,7 @@ namespace RayTracing.Rendering.Rays
             }
 
             // Regular back-face culling.
-            return (face.Normal.Dot(this.Direction) > 0);
+            return face.Normal.Dot(this.Direction) > 0;
         }
     }
 }

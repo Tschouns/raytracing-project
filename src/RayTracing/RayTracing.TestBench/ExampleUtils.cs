@@ -1,10 +1,9 @@
 ﻿using RayTracing.Base;
+using RayTracing.Model;
 using RayTracing.ModelFiles.ColladaFormat;
+using RayTracing.Rendering;
 using RayTracing.Rendering.Cameras;
 using RayTracing.Rendering.Settings;
-using RayTracing.Rendering;
-using RayTracing.Math;
-using RayTracing.Model;
 using RayTracing.Targets;
 
 namespace RayTracing.TestBench

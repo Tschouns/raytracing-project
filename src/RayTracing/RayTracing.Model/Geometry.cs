@@ -14,9 +14,9 @@ namespace RayTracing.Model
             Argument.AssertNotNull(material, nameof(material));
             Argument.AssertNotNull(faces, nameof(faces));
 
-            Name = name;
-            Material = material;
-            Faces = faces;
+            this.Name = name;
+            this.Material = material;
+            this.Faces = faces;
         }
 
         /// <summary>

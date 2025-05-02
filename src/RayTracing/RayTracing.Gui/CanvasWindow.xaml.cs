@@ -12,9 +12,9 @@ namespace RayTracing.Gui
     /// </summary>
     public partial class CanvasWindow : Window, ICanvas
     {
-        private readonly object sync = new object();
-        private readonly PixelPipeline pipeline = new PixelPipeline();
-        private readonly DispatcherTimer timer = new DispatcherTimer();
+        private readonly object sync = new();
+        private readonly PixelPipeline pipeline = new();
+        private readonly DispatcherTimer timer = new();
 
         private WriteableBitmap bitmap;
 
@@ -35,11 +35,11 @@ namespace RayTracing.Gui
             this.bitmap = InitBitmap(10, 10); // Dummy
             this.Size(640, 480);
 
-            for (int i = 0; i < 256; i++)
+            for (var i = 0; i < 256; i++)
             {
-                for (int j = 0; j < 256; j++)
+                for (var j = 0; j < 256; j++)
                 {
-                    DrawPixelInternal(new Pixel(i, j, System.Drawing.Color.FromArgb(255, i, j)));
+                    this.DrawPixelInternal(new Pixel(i, j, System.Drawing.Color.FromArgb(255, i, j)));
                 }
             }
 
@@ -72,7 +72,7 @@ namespace RayTracing.Gui
                     }
                 }
 
-                this.pipeline.ProcessEach(DrawPixelInternal);
+                this.pipeline.ProcessEach(this.DrawPixelInternal);
             }
         }
 
@@ -100,33 +100,33 @@ namespace RayTracing.Gui
             try
             {
                 // Reserve the back buffer for updates.
-                bitmap.Lock();
+                this.bitmap.Lock();
 
                 unsafe
                 {
                     // Get a pointer to the back buffer.
-                    IntPtr pBackBuffer = bitmap.BackBuffer;
+                    var pBackBuffer = this.bitmap.BackBuffer;
 
                     // Find the address of the pixel to draw.
-                    pBackBuffer += row * bitmap.BackBufferStride;
+                    pBackBuffer += row * this.bitmap.BackBufferStride;
                     pBackBuffer += column * 4;
 
                     // Compute the pixel's color.
-                    int color_data = pixel.Color.R << 16; // R
+                    var color_data = pixel.Color.R << 16; // R
                     color_data |= pixel.Color.G << 8;   // G
                     color_data |= pixel.Color.B << 0;   // B
 
                     // Assign the color data to the pixel.
-                    *((int*)pBackBuffer) = color_data;
+                    *(int*)pBackBuffer = color_data;
                 }
 
                 // Specify the area of the bitmap that changed.
-                bitmap.AddDirtyRect(new Int32Rect(column, row, 1, 1));
+                this.bitmap.AddDirtyRect(new Int32Rect(column, row, 1, 1));
             }
             finally
             {
                 // Release the back buffer and make it available for display.
-                bitmap.Unlock();
+                this.bitmap.Unlock();
             }
         }
 
@@ -137,7 +137,7 @@ namespace RayTracing.Gui
         {
             lock (this.sync)
             {
-                this.pipeline.ProcessEach(DrawPixelInternal);
+                this.pipeline.ProcessEach(this.DrawPixelInternal);
             }
         }
     }

@@ -72,10 +72,10 @@ namespace RayTracing.Math
         public Matrix4x4 Transpose()
         {
             return new Matrix4x4(
-                M00, M10, M20, M30,
-                M01, M11, M21, M31,
-                M02, M12, M22, M32,
-                M03, M13, M23, M33);
+                this.M00, this.M10, this.M20, this.M30,
+                this.M01, this.M11, this.M21, this.M31,
+                this.M02, this.M12, this.M22, this.M32,
+                this.M03, this.M13, this.M23, this.M33);
         }
 
         public Matrix4x4 Add(Matrix4x4 b)
@@ -106,52 +106,52 @@ namespace RayTracing.Math
         {
             return new Matrix4x4(
                 // First row
-                this.M00 * b.M00 + this.M01 * b.M10 + this.M02 * b.M20 + this.M03 * b.M30,
-                this.M00 * b.M01 + this.M01 * b.M11 + this.M02 * b.M21 + this.M03 * b.M31,
-                this.M00 * b.M02 + this.M01 * b.M12 + this.M02 * b.M22 + this.M03 * b.M32,
-                this.M00 * b.M03 + this.M01 * b.M13 + this.M02 * b.M23 + this.M03 * b.M33,
+                (this.M00 * b.M00) + (this.M01 * b.M10) + (this.M02 * b.M20) + (this.M03 * b.M30),
+                (this.M00 * b.M01) + (this.M01 * b.M11) + (this.M02 * b.M21) + (this.M03 * b.M31),
+                (this.M00 * b.M02) + (this.M01 * b.M12) + (this.M02 * b.M22) + (this.M03 * b.M32),
+                (this.M00 * b.M03) + (this.M01 * b.M13) + (this.M02 * b.M23) + (this.M03 * b.M33),
 
                 // Second row
-                this.M10 * b.M00 + this.M11 * b.M10 + this.M12 * b.M20 + this.M13 * b.M30,
-                this.M10 * b.M01 + this.M11 * b.M11 + this.M12 * b.M21 + this.M13 * b.M31,
-                this.M10 * b.M02 + this.M11 * b.M12 + this.M12 * b.M22 + this.M13 * b.M32,
-                this.M10 * b.M03 + this.M11 * b.M13 + this.M12 * b.M23 + this.M13 * b.M33,
+                (this.M10 * b.M00) + (this.M11 * b.M10) + (this.M12 * b.M20) + (this.M13 * b.M30),
+                (this.M10 * b.M01) + (this.M11 * b.M11) + (this.M12 * b.M21) + (this.M13 * b.M31),
+                (this.M10 * b.M02) + (this.M11 * b.M12) + (this.M12 * b.M22) + (this.M13 * b.M32),
+                (this.M10 * b.M03) + (this.M11 * b.M13) + (this.M12 * b.M23) + (this.M13 * b.M33),
 
                 // Third row
-                this.M20 * b.M00 + this.M21 * b.M10 + this.M22 * b.M20 + this.M23 * b.M30,
-                this.M20 * b.M01 + this.M21 * b.M11 + this.M22 * b.M21 + this.M23 * b.M31,
-                this.M20 * b.M02 + this.M21 * b.M12 + this.M22 * b.M22 + this.M23 * b.M32,
-                this.M20 * b.M03 + this.M21 * b.M13 + this.M22 * b.M23 + this.M23 * b.M33,
+                (this.M20 * b.M00) + (this.M21 * b.M10) + (this.M22 * b.M20) + (this.M23 * b.M30),
+                (this.M20 * b.M01) + (this.M21 * b.M11) + (this.M22 * b.M21) + (this.M23 * b.M31),
+                (this.M20 * b.M02) + (this.M21 * b.M12) + (this.M22 * b.M22) + (this.M23 * b.M32),
+                (this.M20 * b.M03) + (this.M21 * b.M13) + (this.M22 * b.M23) + (this.M23 * b.M33),
 
                 // Fourth row
-                this.M30 * b.M00 + this.M31 * b.M10 + this.M32 * b.M20 + this.M33 * b.M30,
-                this.M30 * b.M01 + this.M31 * b.M11 + this.M32 * b.M21 + this.M33 * b.M31,
-                this.M30 * b.M02 + this.M31 * b.M12 + this.M32 * b.M22 + this.M33 * b.M32,
-                this.M30 * b.M03 + this.M31 * b.M13 + this.M32 * b.M23 + this.M33 * b.M33);
+                (this.M30 * b.M00) + (this.M31 * b.M10) + (this.M32 * b.M20) + (this.M33 * b.M30),
+                (this.M30 * b.M01) + (this.M31 * b.M11) + (this.M32 * b.M21) + (this.M33 * b.M31),
+                (this.M30 * b.M02) + (this.M31 * b.M12) + (this.M32 * b.M22) + (this.M33 * b.M32),
+                (this.M30 * b.M03) + (this.M31 * b.M13) + (this.M32 * b.M23) + (this.M33 * b.M33));
         }
 
         public Matrix4x4 Multiply(float s)
         {
             return new Matrix4x4(
-                M00 * s,
-                M01 * s,
-                M02 * s,
-                M03 * s,
+                this.M00 * s,
+                this.M01 * s,
+                this.M02 * s,
+                this.M03 * s,
 
-                M10 * s,
-                M11 * s,
-                M12 * s,
-                M13 * s,
+                this.M10 * s,
+                this.M11 * s,
+                this.M12 * s,
+                this.M13 * s,
 
-                M20 * s,
-                M21 * s,
-                M22 * s,
-                M23 * s,
+                this.M20 * s,
+                this.M21 * s,
+                this.M22 * s,
+                this.M23 * s,
 
-                M30 * s,
-                M31 * s,
-                M32 * s,
-                M33 * s);
+                this.M30 * s,
+                this.M31 * s,
+                this.M32 * s,
+                this.M33 * s);
         }
 
         #endregion
@@ -207,11 +207,11 @@ namespace RayTracing.Math
 
         public Vector3 ApplyTo(Vector3 v)
         {
-            var xw = M00 * v.X + M01 * v.Y + M02 * v.Z + M03;
-            var yw = M10 * v.X + M11 * v.Y + M12 * v.Z + M13;
-            var zw = M20 * v.X + M21 * v.Y + M22 * v.Z + M23;
+            var xw = (this.M00 * v.X) + (this.M01 * v.Y) + (this.M02 * v.Z) + this.M03;
+            var yw = (this.M10 * v.X) + (this.M11 * v.Y) + (this.M12 * v.Z) + this.M13;
+            var zw = (this.M20 * v.X) + (this.M21 * v.Y) + (this.M22 * v.Z) + this.M23;
 
-            var w = M33;
+            var w = this.M33;
 
             if (w == 1)
             {
@@ -231,7 +231,7 @@ namespace RayTracing.Math
 
         public override string ToString()
         {
-            return $"[\n[{M00}, {M01}, {M02}, {M03}],\n[{M10}, {M11}, {M12}, {M13}],\n[{M20}, {M21}, {M22}, {M23}],\n[{M30}, {M31}, {M32}, {M33}]]";
+            return $"[\n[{this.M00}, {this.M01}, {this.M02}, {this.M03}],\n[{this.M10}, {this.M11}, {this.M12}, {this.M13}],\n[{this.M20}, {this.M21}, {this.M22}, {this.M23}],\n[{this.M30}, {this.M31}, {this.M32}, {this.M33}]]";
         }
     }
 }

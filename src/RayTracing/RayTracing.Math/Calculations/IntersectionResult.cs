@@ -8,9 +8,9 @@ namespace RayTracing.Math.Calculations
             Vector3? intersectionPoint,
             float? lambda)
         {
-            HasIntersection = hasIntersection;
-            IntersectionPoint = intersectionPoint;
-            Lambda = lambda;
+            this.HasIntersection = hasIntersection;
+            this.IntersectionPoint = intersectionPoint;
+            this.Lambda = lambda;
         }
 
         public bool HasIntersection { get; }

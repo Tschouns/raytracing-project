@@ -1,8 +1,8 @@
-﻿using System.Xml.Serialization;
-using RayTracing.ModelFiles.ColladaFormat.Xml.Effects;
+﻿using RayTracing.ModelFiles.ColladaFormat.Xml.Effects;
 using RayTracing.ModelFiles.ColladaFormat.Xml.Geometries;
 using RayTracing.ModelFiles.ColladaFormat.Xml.Lights;
 using RayTracing.ModelFiles.ColladaFormat.Xml.Materials;
+using System.Xml.Serialization;
 
 namespace RayTracing.ModelFiles.ColladaFormat.Xml
 {

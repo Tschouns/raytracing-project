@@ -7,8 +7,8 @@
     {
         public Line2D(Vector2 pointA, Vector2 pointB)
         {
-            PointA = pointA;
-            PointB = pointB;
+            this.PointA = pointA;
+            this.PointB = pointB;
         }
 
         public Line2D(float aX, float aY, float bX, float bY)
@@ -21,7 +21,7 @@
 
         public float Length()
         {
-            return (PointB - PointA).Length();
+            return (this.PointB - this.PointA).Length();
         }
     }
 }

@@ -7,7 +7,7 @@ namespace RayTracing.Gui
 {
     public class PixelPipeline : IRenderTarget
     {
-        private readonly ConcurrentQueue<Pixel> queue = new ConcurrentQueue<Pixel>();
+        private readonly ConcurrentQueue<Pixel> queue = new();
 
         public void Pixel(int x, int y, Color color)
         {

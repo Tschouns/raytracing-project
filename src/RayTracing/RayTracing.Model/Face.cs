@@ -13,9 +13,9 @@ namespace RayTracing.Model
             Argument.AssertNotNull(parent, nameof(parent));
             Argument.AssertNotNull(triangle, nameof(triangle));
 
-            ParentGeometry = parent;
-            Triangle = triangle;
-            Normal = normal;
+            this.ParentGeometry = parent;
+            this.Triangle = triangle;
+            this.Normal = normal;
         }
 
         /// <summary>

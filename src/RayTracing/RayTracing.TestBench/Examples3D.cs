@@ -38,7 +38,7 @@ namespace RayTracing.TestBench
                 new Vector3 (194, 250, 34),
             };
 
-            for (int i = 0; i < points.Length / 3; i++)
+            for (var i = 0; i < points.Length / 3; i++)
             {
                 var triangle = new Triangle3D(
                     points[i],
@@ -69,10 +69,10 @@ namespace RayTracing.TestBench
             var steps = 50;
             var stepFactor = 1.0f / steps;
 
-            for (int i = 0; i < steps; i++)
+            for (var i = 0; i < steps; i++)
             {
                 var lambda = i * stepFactor;
-                var r = p + lambda * u;
+                var r = p + (lambda * u);
 
                 target.Pixel((int)r.X, (int)r.Y, Color.BlueViolet);
             }

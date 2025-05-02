@@ -18,7 +18,7 @@
             this.B = Clamp(blue);
         }
 
-        public static ArgbColor Black => new ArgbColor(0f, 0f, 0f, 1f);
+        public static ArgbColor Black => new(0f, 0f, 0f, 1f);
 
         public float R { get; }
         public float G { get; }

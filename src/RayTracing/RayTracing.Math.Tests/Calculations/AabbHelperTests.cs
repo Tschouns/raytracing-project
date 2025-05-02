@@ -25,7 +25,7 @@ namespace RayTracing.Math.Tests.Calculations
         [Fact]
         public void IntersectAabb_RayHitsUpwards_ReturnsTrue()
         {
-            IntersectAabb_GivenRayWithAabb_ReturnsExpectedResult(
+            this.IntersectAabb_GivenRayWithAabb_ReturnsExpectedResult(
                 origin: new Vector3(1, 1, 1),
                 direction: new Vector3(2, 2, 2),
                 aabbMin: new Vector3(3, 3, 3),
@@ -36,7 +36,7 @@ namespace RayTracing.Math.Tests.Calculations
         [Fact]
         public void IntersectAabb_RayHitsDownwards_ReturnsTrue()
         {
-            IntersectAabb_GivenRayWithAabb_ReturnsExpectedResult(
+            this.IntersectAabb_GivenRayWithAabb_ReturnsExpectedResult(
                 origin: new Vector3(4, 4, 4),
                 direction: new Vector3(3, 3, 3),
                 aabbMin: new Vector3(1, 1, 1),
@@ -47,7 +47,7 @@ namespace RayTracing.Math.Tests.Calculations
         [Fact]
         public void IntersectAabb_RayStartsWithinBox_ReturnsTrue()
         {
-            IntersectAabb_GivenRayWithAabb_ReturnsExpectedResult(
+            this.IntersectAabb_GivenRayWithAabb_ReturnsExpectedResult(
                 origin: new Vector3(1.5f, 1.5f, 1.5f),
                 direction: new Vector3(3, 3, 3),
                 aabbMin: new Vector3(1, 1, 1),
@@ -58,7 +58,7 @@ namespace RayTracing.Math.Tests.Calculations
         [Fact]
         public void IntersectAabb_RayMissesForwardToTheLeft_ReturnsFalse()
         {
-            IntersectAabb_GivenRayWithAabb_ReturnsExpectedResult(
+            this.IntersectAabb_GivenRayWithAabb_ReturnsExpectedResult(
                 origin: new Vector3(-1.01f, 1, -5),
                 direction: new Vector3(0, 0, 2),
                 aabbMin: new Vector3(-1, -1, -1),
@@ -69,7 +69,7 @@ namespace RayTracing.Math.Tests.Calculations
         [Fact]
         public void IntersectAabb_RayMissesForwardToTheRight_ReturnsFalse()
         {
-            IntersectAabb_GivenRayWithAabb_ReturnsExpectedResult(
+            this.IntersectAabb_GivenRayWithAabb_ReturnsExpectedResult(
                 origin: new Vector3(3.01f, 1, -5),
                 direction: new Vector3(0, 0, 2),
                 aabbMin: new Vector3(-1, -1, -1),

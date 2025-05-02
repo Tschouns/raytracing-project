@@ -25,12 +25,12 @@ namespace RayTracing.TestBench
             });
 
             // Show as dialog (blocking, until the user closes it).
-            canvasWindow.ShowDialog();
+            _ = canvasWindow.ShowDialog();
 
             //renderTask.Wait();
 
             Console.WriteLine("Done.");
-            Console.ReadLine();
+            _ = Console.ReadLine();
         }
     }
 }

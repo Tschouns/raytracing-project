@@ -13,12 +13,12 @@ namespace RayTracing.TestBench
         {
             Argument.AssertNotNull(target, nameof(target));
 
-            Vector2 p = new Vector2(10, 10);
-            Vector2 u = new Vector2(2, 1);
+            var p = new Vector2(10, 10);
+            var u = new Vector2(2, 1);
 
-            for (int lambda = 0; lambda < 30; lambda++)
+            for (var lambda = 0; lambda < 30; lambda++)
             {
-                var r = p + lambda * u;
+                var r = p + (lambda * u);
                 target.Pixel((int)r.X, (int)r.Y, Color.Orange);
             }
         }
@@ -33,15 +33,15 @@ namespace RayTracing.TestBench
             var q = new Vector2(20, 70);
             var v = new Vector2(1, -2);
 
-            for (int lambda = 0; lambda < 30; lambda++)
+            for (var lambda = 0; lambda < 30; lambda++)
             {
-                var r = p + lambda * u;
+                var r = p + (lambda * u);
                 target.Pixel((int)r.X, (int)r.Y, Color.BlueViolet);
             }
 
-            for (int lambda = 0; lambda < 30; lambda++)
+            for (var lambda = 0; lambda < 30; lambda++)
             {
-                var r = q + lambda * v;
+                var r = q + (lambda * v);
                 target.Pixel((int)r.X, (int)r.Y, Color.GreenYellow);
             }
 

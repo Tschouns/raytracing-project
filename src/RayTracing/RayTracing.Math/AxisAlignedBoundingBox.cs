@@ -25,8 +25,8 @@ namespace RayTracing.Math
                 throw new ArgumentException($"The min ({min}) and max ({max}) arguments must contain the lowest and greatest values along all axes respectively.");
             }
 
-            Min = min;
-            Max = max;
+            this.Min = min;
+            this.Max = max;
 
             // Helper vectors:
             var v = this.Max - this.Min;

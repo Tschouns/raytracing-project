@@ -1,7 +1,6 @@
 ﻿
 using RayTracing.Base;
 using RayTracing.Math;
-using System.Drawing;
 
 namespace RayTracing.Model
 {
@@ -14,10 +13,10 @@ namespace RayTracing.Model
         {
             Argument.AssertNotNull(name, nameof(name));
 
-            Name = name;
-            Location = location;
-            Color = color;
-            Spot = spot;
+            this.Name = name;
+            this.Location = location;
+            this.Color = color;
+            this.Spot = spot;
         }
 
         /// <summary>

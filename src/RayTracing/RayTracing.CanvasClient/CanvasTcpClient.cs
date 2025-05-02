@@ -8,7 +8,7 @@ namespace RayTracing.CanvasClient
 {
     public class CanvasTcpClient : ICanvas, IRenderTarget
     {
-        private TcpClient innerTcpClient;
+        private readonly TcpClient innerTcpClient;
 
         public IRenderTarget Draw => this;
 
@@ -41,7 +41,7 @@ namespace RayTracing.CanvasClient
 
         private static string ColorValueString(byte value)
         {
-            float number = value / 256f;
+            var number = value / 256f;
 
             return number.ToString(CultureInfo.InvariantCulture);
         }
@@ -63,10 +63,10 @@ namespace RayTracing.CanvasClient
             message += "\r\n";
 
             // ASCII-encode message.
-            byte[] data = System.Text.Encoding.ASCII.GetBytes(message);
+            var data = System.Text.Encoding.ASCII.GetBytes(message);
 
             // Get a client stream for reading and writing.
-            NetworkStream stream = this.innerTcpClient.GetStream();
+            var stream = this.innerTcpClient.GetStream();
 
             // Send the message to the connected TcpServer.
             stream.Write(data, 0, data.Length);

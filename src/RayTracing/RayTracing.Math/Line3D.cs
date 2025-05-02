@@ -8,8 +8,8 @@ namespace RayTracing.Math
     {
         public Line3D(Vector3 pointA, Vector3 pointB)
         {
-            PointA = pointA;
-            PointB = pointB;
+            this.PointA = pointA;
+            this.PointB = pointB;
         }
 
         public Line3D(
@@ -26,7 +26,7 @@ namespace RayTracing.Math
 
         public float Length()
         {
-            return (PointB - PointA).Length();
+            return (this.PointB - this.PointA).Length();
         }
     }
 }

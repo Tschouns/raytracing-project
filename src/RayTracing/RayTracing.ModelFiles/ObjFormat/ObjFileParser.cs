@@ -23,7 +23,7 @@ namespace RayTracing.ModelFiles.ObjFormat
             {
                 try
                 {
-                    ProcessLine(line, objData);
+                    this.ProcessLine(line, objData);
                 }
                 catch (Exception ex)
                 {

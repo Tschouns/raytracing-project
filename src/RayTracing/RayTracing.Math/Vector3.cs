@@ -59,16 +59,16 @@ namespace RayTracing.Math
 
         public float Dot(Vector3 b)
         {
-            return this.X * b.X + this.Y * b.Y + this.Z * b.Z;
+            return (this.X * b.X) + (this.Y * b.Y) + (this.Z * b.Z);
         }
 
         public Vector3 Cross(Vector3 b)
         {
             var a = this;
 
-            var x = a.Y * b.Z - a.Z * b.Y;
-            var y = a.Z * b.X - a.X * b.Z;
-            var z = a.X * b.Y - a.Y * b.X;
+            var x = (a.Y * b.Z) - (a.Z * b.Y);
+            var y = (a.Z * b.X) - (a.X * b.Z);
+            var z = (a.X * b.Y) - (a.Y * b.X);
 
             return new Vector3(x, y, z);
         }
@@ -80,7 +80,7 @@ namespace RayTracing.Math
 
         public float LengthSquared()
         {
-            return 
+            return
                   (this.X * this.X)
                 + (this.Y * this.Y)
                 + (this.Z * this.Z);
@@ -124,7 +124,7 @@ namespace RayTracing.Math
 
         public static Vector3 operator /(Vector3 v, float c)
         {
-            return v.Scale(1/c);
+            return v.Scale(1 / c);
         }
     }
 }

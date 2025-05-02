@@ -23,9 +23,8 @@ namespace RayTracing.ModelFiles.ColladaFormat
             using var fileStreamReader = File.OpenText(fileName);
 
             var serializer = new XmlSerializer(typeof(ColladaRoot));
-            var colladaRoot = serializer.Deserialize(fileStreamReader) as ColladaRoot;
 
-            if (colladaRoot == null)
+            if (serializer.Deserialize(fileStreamReader) is not ColladaRoot colladaRoot)
             {
                 throw new ArgumentException("The specified file could not be deserialized.");
             }
@@ -34,7 +33,7 @@ namespace RayTracing.ModelFiles.ColladaFormat
 
             // Process materials.
             IDictionary<string, Material> materialsById = new Dictionary<string, Material>();
-            
+
             foreach (var xmlMaterial in colladaRoot.LibraryMaterials)
             {
                 var material = PrepMaterial(xmlMaterial, colladaRoot.LibraryEffects);
@@ -51,11 +50,11 @@ namespace RayTracing.ModelFiles.ColladaFormat
                     throw new ArgumentException($"The instance geometry URL \"{node.InstanceGeometry.Url}\" is not supported.");
                 }
 
-                var geometryUrl = node.InstanceGeometry.Url.Substring(1);
+                var geometryUrl = node.InstanceGeometry.Url[1..];
                 var xmlGeometry = colladaRoot.LibraryGeometries.Single(g => g.Id == geometryUrl);
                 var transform = PrepTransformMatrix(node.MatrixString);
                 var material = materialsById[xmlGeometry.Mesh.Triangles.MaterialId];
-                
+
                 var modelGeometry = PrepGeometry(xmlGeometry, transform, material);
                 geometries.Add(modelGeometry);
             }
@@ -70,7 +69,7 @@ namespace RayTracing.ModelFiles.ColladaFormat
                     throw new ArgumentException($"The instance light source URL \"{node.InstanceLight.Url}\" is not supported.");
                 }
 
-                var lightUrl = node.InstanceLight.Url.Substring(1);
+                var lightUrl = node.InstanceLight.Url[1..];
                 var xmlLight = colladaRoot.LibraryLights.Single(g => g.Id == lightUrl);
                 var transform = PrepTransformMatrix(node.MatrixString);
 
@@ -92,13 +91,13 @@ namespace RayTracing.ModelFiles.ColladaFormat
         {
             Argument.AssertNotNull(xmlMaterial, nameof(xmlMaterial));
             Argument.AssertNotNull(xmlEffects, nameof(xmlEffects));
-            
+
             if (!xmlMaterial.InstanceEffect.Url.StartsWith('#'))
             {
                 throw new ArgumentException($"The instance effect URL \"{xmlMaterial.InstanceEffect.Url}\" is not supported.");
             }
 
-            var effectId = xmlMaterial.InstanceEffect.Url.Substring(1);
+            var effectId = xmlMaterial.InstanceEffect.Url[1..];
             var effect = xmlEffects.Single(e => e.Id == effectId);
 
             var properties = effect.ProfileCommon?.Technique?.Lambert;
@@ -194,14 +193,14 @@ namespace RayTracing.ModelFiles.ColladaFormat
 
             var geometry = new Model.Geometry(xmlGeometry.Name, material, faces);
 
-            for (var i = 0; i + 2 < vertexIndexes.Count; i = i + 3)
+            for (var i = 0; i + 2 < vertexIndexes.Count; i += 3)
             {
                 var a = verticesTransformed[vertexIndexes[i]];
                 var b = verticesTransformed[vertexIndexes[i + 1]];
                 var c = verticesTransformed[vertexIndexes[i + 2]];
 
                 var triangle = new Triangle3D(a, b, c);
-                var normal = ((b - a).Cross(c - a)).Norm() ?? new Vector3(1,0,0);
+                var normal = (b - a).Cross(c - a).Norm() ?? new Vector3(1, 0, 0);
 
                 faces.Add(new Face(geometry, triangle, normal));
             }
@@ -215,7 +214,7 @@ namespace RayTracing.ModelFiles.ColladaFormat
             Argument.AssertNotNull(meshVertices.Input, nameof(meshVertices.Input));
             Argument.AssertNotNull(sources, nameof(sources));
 
-            var verticesSourceId = meshVertices.Input.Source.Substring(1);
+            var verticesSourceId = meshVertices.Input.Source[1..];
             var source = sources.SingleOrDefault(s => s.Id == verticesSourceId);
             if (source?.FloatArray == null)
             {
@@ -228,7 +227,7 @@ namespace RayTracing.ModelFiles.ColladaFormat
 
             var vertices = new List<Vector3>();
 
-            for (var i = 0; i + 2 < scalarValues.Count; i = i + 3)
+            for (var i = 0; i + 2 < scalarValues.Count; i += 3)
             {
                 var vertex = new Vector3(
                     scalarValues[i],

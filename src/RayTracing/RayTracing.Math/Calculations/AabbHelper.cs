@@ -26,7 +26,7 @@ namespace RayTracing.Math.Calculations
 
             var x = new Vector3(c.X, 0, 0); // the X component of the c vector
             var y = new Vector3(0, c.Y, 0); // the Y component of the c vector
-            var z = new Vector3(0, 0, c.Z); // the Z component of the c vector
+            _ = new Vector3(0, 0, c.Z); // the Z component of the c vector
 
             var box000 = new AxisAlignedBoundingBox(min, center);
             var box00x = new AxisAlignedBoundingBox(min + x, center + x);
@@ -114,9 +114,7 @@ namespace RayTracing.Math.Calculations
 
                     if (t0 > t1)
                     {
-                        var temp = t0;
-                        t0 = t1;
-                        t1 = temp;
+                        (t1, t0) = (t0, t1);
                     }
 
                     tMin = System.Math.Max(tMin, t0);

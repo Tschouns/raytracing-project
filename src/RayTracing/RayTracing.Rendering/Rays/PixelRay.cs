@@ -11,9 +11,9 @@ namespace RayTracing.Rendering.Rays
         {
             Argument.AssertNotNull(ray, nameof(ray));
 
-            Ray = ray;
-            X = x;
-            Y = y;
+            this.Ray = ray;
+            this.X = x;
+            this.Y = y;
         }
 
         public Ray Ray { get; }

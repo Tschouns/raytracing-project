@@ -10,12 +10,12 @@
             float transparency,
             float indexOfRefraction)
         {
-            Name = name;
-            BaseColor = color;
-            Reflectivity = reflectivity;
-            Glossyness = glossyness;
-            Transparency = transparency;
-            IndexOfRefraction = indexOfRefraction;
+            this.Name = name;
+            this.BaseColor = color;
+            this.Reflectivity = reflectivity;
+            this.Glossyness = glossyness;
+            this.Transparency = transparency;
+            this.IndexOfRefraction = indexOfRefraction;
         }
 
         public string Name { get; }

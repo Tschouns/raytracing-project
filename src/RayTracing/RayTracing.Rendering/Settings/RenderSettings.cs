@@ -16,7 +16,7 @@ namespace RayTracing.Rendering.Settings
         public bool UseFancyLighting { get; set; } = true;
         public ArgbColor FillBackgroundColor { get; set; } = Color.CornflowerBlue.ToArgbColor();
         public ArgbColor AmbientLightColor { get; set; } = Color.DarkSlateGray.ToArgbColor();
-        public ArgbColor DepthCueingColor { get; set; } = Color.AliceBlue.ToArgbColor() ;
+        public ArgbColor DepthCueingColor { get; set; } = Color.AliceBlue.ToArgbColor();
         public float DepthCueingMaxDistance { get; set; } = 100f;
         public int MaxRecursionDepth { get; set; } = 10;
     }

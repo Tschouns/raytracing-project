@@ -33,7 +33,7 @@ namespace RayTracing.ModelFiles.Tests.TestTools
 
             // Create the directory.
             var dir = Directory.CreateDirectory(path);
-            FullName = dir.FullName;
+            this.FullName = dir.FullName;
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace RayTracing.ModelFiles.Tests.TestTools
         /// </summary>
         public void Dispose()
         {
-            Directory.Delete(FullName, recursive: true);
+            Directory.Delete(this.FullName, recursive: true);
         }
     }
 }

@@ -39,7 +39,7 @@ namespace RayTracing.Math.Calculations
             }
 
             var lambda = Determinant(q - p, -v) / d;
-            var intersection = p + lambda * u;
+            var intersection = p + (lambda * u);
 
             return intersection;
         }

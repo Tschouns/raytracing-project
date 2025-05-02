@@ -10,8 +10,8 @@ namespace RayTracing.Model
     {
         public Spot(Vector3 pointingDirection, float falloffAngle)
         {
-            PointingDirection = pointingDirection;
-            FalloffAngle = falloffAngle;
+            this.PointingDirection = pointingDirection;
+            this.FalloffAngle = falloffAngle;
         }
 
         /// <summary>

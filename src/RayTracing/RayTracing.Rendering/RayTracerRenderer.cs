@@ -44,9 +44,7 @@ namespace RayTracing.Rendering
             {
                 n--;
                 var k = rng.Next(n + 1);
-                var value = list[k];
-                list[k] = list[n];
-                list[n] = value;
+                (list[n], list[k]) = (list[k], list[n]);
             }
         }
 
@@ -64,13 +62,13 @@ namespace RayTracing.Rendering
             Argument.AssertNotNull(settings, nameof(settings));
 
             var argbColor = DeterminePixelColorRecursive(pixel.Ray, octree, lightSources, settings);
-            
+
             var drawingColor = Color.FromArgb(
                 (byte)(argbColor.A * 255),
                 (byte)(argbColor.R * 255),
                 (byte)(argbColor.G * 255),
                 (byte)(argbColor.B * 255));
-            
+
             target.Pixel(pixel.X, pixel.Y, drawingColor);
         }
 
@@ -155,7 +153,7 @@ namespace RayTracing.Rendering
                 var lightFactor = hit.Face.Normal.Dot(lightSourceDirection);
                 var additionalLight = light.Color * lightFactor;
 
-                totalLightColor = totalLightColor + additionalLight;
+                totalLightColor += additionalLight;
             }
 
             var litColor = baseColor * totalLightColor;
@@ -224,7 +222,7 @@ namespace RayTracing.Rendering
             var insideObjects = originalRay.InsideObjects.ToList();
             if (hit.IsBackFaceHit)
             {
-                insideObjects.Remove(hit.Face.ParentGeometry);
+                _ = insideObjects.Remove(hit.Face.ParentGeometry);
             }
             else
             {
@@ -263,7 +261,7 @@ namespace RayTracing.Rendering
             foreach (var light in lightSources)
             {
                 var lightColor = DetermineLightColorRecursive(hit, light, octree, settings);
-                totalLightColor = totalLightColor + lightColor;
+                totalLightColor += lightColor;
 
                 if (settings.ApplyGloss)
                 {
@@ -280,18 +278,18 @@ namespace RayTracing.Rendering
                     //hit.Face.ParentGeometry.Material.Reflectivity;
 
                     var glossColor = totalLightColor * glossFactor;
-                    totalGlossColor = totalGlossColor + glossColor;
+                    totalGlossColor += glossColor;
                 }
             }
 
             // Apply shadow total.
             if (settings.ApplyShadows)
             {
-                litColor = litColor * totalLightColor;
+                litColor *= totalLightColor;
             }
 
             // Apply - add on top - gloss.
-            litColor = litColor + totalGlossColor;
+            litColor += totalGlossColor;
 
             return litColor;
         }
