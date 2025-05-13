@@ -27,12 +27,12 @@ namespace RayTracing.Model
         /// <summary>
         /// Gets the light source location.
         /// </summary>
-        public Vector3 Location { get; }
+        public Vector3 Location { get; set; }
 
         /// <summary>
         /// Gets the color of the light.
         /// </summary>
-        public ArgbColor Color { get; }
+        public ArgbColor Color { get; set; }
 
         /// <summary>
         /// Gets the spot properties, if it's a spot light; otherwise null.

@@ -196,7 +196,7 @@ namespace RayTracing.Rendering
             var reflectivity = hit.Face.ParentGeometry.Material.Reflectivity;
             var colorWithReflection =
                 (baseColor * (1 - reflectivity)) +
-                (reflectionColor * reflectivity);
+                (reflectionColor * baseColor * reflectivity);
 
             return colorWithReflection;
         }
@@ -240,11 +240,11 @@ namespace RayTracing.Rendering
                 currentRecursionDepth + 1);
 
             var transparency = hit.Face.ParentGeometry.Material.Transparency;
-            var colorWithReflection =
+            var colorWithTransparency =
                 (baseColor * (1 - transparency)) +
                 (refractedColor * transparency);
 
-            return colorWithReflection;
+            return colorWithTransparency;
         }
 
         private static ArgbColor ApplyLighting(
@@ -273,7 +273,7 @@ namespace RayTracing.Rendering
                         normalFactor *
                         normalFactor *
                         normalFactor *
-                        hit.Face.ParentGeometry.Material.Glossyness *
+                        //hit.Face.ParentGeometry.Material.Glossyness *
                         hit.Face.ParentGeometry.Material.Glossyness;
                     //hit.Face.ParentGeometry.Material.Reflectivity;
 

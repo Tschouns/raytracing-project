@@ -22,6 +22,6 @@ namespace RayTracing.Model
         /// <summary>
         /// Gets the falloff angle of the spot light.
         /// </summary>
-        public float FalloffAngle { get; }
+        public float FalloffAngle { get; set; }
     }
 }
